@@ -204,6 +204,9 @@ def style8(title, summary, handle, photo, source):
     if not photo:   # انځور نه وي: لوی لوګو په منځ کې
         big = logo_clean(460)
         img.alpha_composite(big, (px + (pw - big.width) // 2, py + (ph - big.height) // 2 + 30))
+    else:           # د چینل لوګو: د انځور چپ پورته کونج
+        bug = logo_clean(200)
+        img.alpha_composite(bug, (px + 18, py + 14))
     # «ژوندی / تازه خبر» نښه
     s1, s2 = font(HEAD, 30), font(HEAD, 62)
     x2 = px + pw - 40
