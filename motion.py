@@ -243,6 +243,21 @@ def logo_np(width):
     return to_np(lg)
 
 
+def logo3d_tile_np(width=330, radius=22):
+    """د زاهد 3D لوګو (د دېوال موک‌اپ) — ګرد کونجونه او شنه څنډه."""
+    src = Image.open(os.path.join(ASSETS, "logo3d.jpg")).convert("RGB")
+    crop = src.crop((95, 215, 865, 640))
+    hgt = int(width * crop.height / crop.width)
+    crop = crop.resize((width, hgt), Image.LANCZOS)
+    tile = Image.new("RGBA", (width, hgt), (0, 0, 0, 0))
+    mask = Image.new("L", (width, hgt), 0)
+    ImageDraw.Draw(mask).rounded_rectangle((0, 0, width - 1, hgt - 1), radius, fill=255)
+    tile.paste(crop, (0, 0), mask)
+    ImageDraw.Draw(tile).rounded_rectangle((1, 1, width - 2, hgt - 2), radius,
+                                           outline=BLUE + (255,), width=5)
+    return to_np(tile)
+
+
 def logo_card_np(width, pad_ratio=0.16, radius=48):
     """لوګو په شین کارت کې — لکه اصلي لوګو (تور برخه هم ښکاري)."""
     lg = Image.open(os.path.join(ASSETS, "logo.png")).convert("RGBA")
@@ -408,6 +423,9 @@ def outro_frame(t, studio, dur=7.0):
 
 
 # ================= LOWER THIRD =================
+LW = 330   # د 3D لوګو پلن والی په Lower third کې
+
+
 class LowerThird:
     """د خبر لپاره 3D Lower third (RGBA). duration کې: ننوتل، درېدل، وتل."""
 
@@ -433,8 +451,8 @@ class LowerThird:
             self.lines = 2
         self.head = to_np(hl)
         self.tag = to_np(text_layer(tag, HEAD, 50, WHITE))
-        self.sub = to_np(text_layer(f"{sub}  •  {kabul_date()}", BODY, 32, WHITE))
-        self.logo = logo_np(190)
+        self.sub = to_np(text_layer(f"{sub}  •  {kabul_date()}", HEAD, 32, WHITE))
+        self.logo = logo3d_tile_np(LW)
         self.bw = max(900, min(1500, self.head.shape[1] + 120))
         self.bh = 120 if self.lines == 1 else 190
 
@@ -458,22 +476,15 @@ class LowerThird:
         # لوګو بکس (3D څرخېدل)
         p = ease_out_back(prog(t, 0.0, 0.7), 1.4)
         if p > 0:
-            box = Image.new("RGBA", (230, 230), (0, 0, 0, 0))
-            ImageDraw.Draw(box).rounded_rectangle((0, 0, 229, 229), 26, fill=BLUE + (255,))
-            b = to_np(box)
-            lg = self.logo
-            oy, ox = (230 - lg.shape[0]) // 2, (230 - lg.shape[1]) // 2
-            a = lg[..., 3:4]
-            b[oy:oy + lg.shape[0], ox:ox + lg.shape[1], :3] = (
-                lg[..., :3] * a + b[oy:oy + lg.shape[0], ox:ox + lg.shape[1], :3] * (1 - a))
-            put(b, right - 115, base_y + 25, 1.0, ay=(1 - p) * 1.4 + oe * 1.4, alpha=1 - oe)
+            b = self.logo
+            put(b, right - LW / 2, base_y + 40, 1.0, ay=(1 - p) * 1.4 + oe * 1.4, alpha=1 - oe)
 
         # سره نښه
         p2 = ease_out_expo(prog(t, 0.2, 0.6))
         if p2 > 0:
             tw = self.tag.shape[1] + 50
             tag_bg = panel_np(tw, 84, RED, slant=0.45)
-            x = right - 250 - tw / 2 + (1 - p2) * 300 + oe * 300
+            x = right - LW - 20 - tw / 2 + (1 - p2) * 300 + oe * 300
             ty = base_y - 68 - (self.bh - 120)
             put(tag_bg, x, ty, alpha=(1 - oe) * clamp(p2 * 3))
             put(self.tag, x, ty + 2, alpha=(1 - oe) * clamp(p2 * 3))
@@ -483,10 +494,10 @@ class LowerThird:
         if p3 > 0:
             w = max(2, int(self.bw * p3 * (1 - oe)))
             bar = panel_np(w, self.bh, WHITE, slant=0.5 * 120 / self.bh)
-            put(bar, right - 245 - w / 2, base_y + 25 - (self.bh - 120) / 2, ay=-0.05)
+            put(bar, right - LW - 15 - w / 2, base_y + 25 - (self.bh - 120) / 2, ay=-0.05)
             tp = ease_out_cubic(prog(t, 0.65, 0.6))
             if tp > 0:
-                hx = right - 280 - self.head.shape[1] / 2
+                hx = right - LW - 50 - self.head.shape[1] / 2
                 fade = 1 - prog(t, dur - 0.95, 0.3)
                 put(self.head, hx + 60 * (1 - tp), base_y + 25 - (self.bh - 120) / 2,
                     alpha=tp * fade)
@@ -500,8 +511,8 @@ class LowerThird:
             sw_ = self.sub.shape[1] + 60
             w = max(2, int(sw_ * p4 * (1 - oe)))
             strip = panel_np(w, 58, BLUE_D, slant=0.5)
-            put(strip, right - 245 - w / 2 - 30, base_y + 112)
-            put(self.sub, right - 245 - sw_ / 2 - 30, base_y + 112, alpha=clamp(p4 * 2) * (1 - oe))
+            put(strip, right - LW - 15 - w / 2 - 30, base_y + 112)
+            put(self.sub, right - LW - 15 - sw_ / 2 - 30, base_y + 112, alpha=clamp(p4 * 2) * (1 - oe))
         return f
 
 
@@ -621,3 +632,94 @@ def build_outro(path):
                              (4.4, whoosh(0.6)), (4.6, whoosh(0.6))]))
     render(path, lambda t: outro_frame(t, st, dur), dur, wav)
     os.remove(wav)
+
+
+# ================= د زاهد Intro (Veo) + د خبر انځور په شین سکرین کې =================
+INTRO_STUDIO = os.path.join(ASSETS, "intro_studio.mp4")
+
+
+def _order_quad(pts):
+    pts = np.float32(pts).reshape(-1, 2)
+    s, d = pts.sum(1), np.diff(pts, axis=1).ravel()
+    return np.float32([pts[np.argmin(s)], pts[np.argmin(d)], pts[np.argmax(s)], pts[np.argmax(d)]])
+
+
+def _screen_quad(frame_bgr):
+    b, g, r = [frame_bgr[..., k].astype(np.int16) for k in range(3)]
+    mask = ((g > 140) & (g > r + 55) & (g > b + 55)).astype(np.uint8) * 255
+    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, np.ones((9, 9), np.uint8))
+    cnts, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if not cnts:
+        return None
+    c = max(cnts, key=cv2.contourArea)
+    area = cv2.contourArea(c)
+    x, y, w, h = cv2.boundingRect(c)
+    if area < 150000 or area / (w * h) < 0.85:     # یوازې پوره شین سکرین (نه د رڼا ځلا)
+        return None
+    approx = cv2.approxPolyDP(cv2.convexHull(c), 0.02 * cv2.arcLength(c, True), True)
+    if len(approx) == 4:
+        return _order_quad(approx)
+    return np.float32([[x, y], [x + w, y], [x + w, y + h], [x, y + h]])
+
+
+def studio_intro(photo, out_path, src=INTRO_STUDIO):
+    """د زاهد Intro ویډیو کې شین سکرین د خبر په انځور بدلوي (photo: PIL یا None)."""
+    cap = cv2.VideoCapture(src)
+    fps = cap.get(cv2.CAP_PROP_FPS) or 24
+    w, h = int(cap.get(3)), int(cap.get(4))
+    ph = None
+    if photo is not None:
+        ph = cv2.cvtColor(np.asarray(photo.convert("RGB")), cv2.COLOR_RGB2BGR)
+    tmp = out_path + ".v.mp4"
+    p = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "bgr24",
+                          "-s", f"{w}x{h}", "-r", str(fps), "-i", "-", "-c:v", "libx264",
+                          "-preset", "veryfast", "-crf", "18", "-pix_fmt", "yuv420p", tmp],
+                         stdin=subprocess.PIPE)
+    while True:
+        ok, f = cap.read()
+        if not ok:
+            break
+        q = _screen_quad(f) if ph is not None else None
+        if q is not None:
+            # انځور د سکرین اندازې ته (cover) او بیا perspective
+            qw = np.linalg.norm(q[1] - q[0]); qh = np.linalg.norm(q[3] - q[0])
+            sh, sw = ph.shape[:2]
+            r = max(qw / sw, qh / sh)
+            cw, ch = qw / r, qh / r
+            x0, y0 = (sw - cw) / 2, (sh - ch) / 2
+            M = cv2.getPerspectiveTransform(
+                np.float32([[x0, y0], [x0 + cw, y0], [x0 + cw, y0 + ch], [x0, y0 + ch]]), q)
+            warped = cv2.warpPerspective(ph, M, (w, h))
+            ff = f.astype(np.float32)
+            b, g, rr = ff[..., 0], ff[..., 1], ff[..., 2]
+            a = np.clip((g - np.maximum(rr, b) - 35) / 70, 0, 1)
+            inside = np.zeros((h, w), np.uint8)
+            cv2.fillConvexPoly(inside, np.int32(cv2.convexHull(q)), 1)
+            inside = cv2.dilate(inside, np.ones((15, 15), np.uint8)).astype(np.float32)
+            a = cv2.GaussianBlur(a * inside, (0, 0), 1.2)[..., None]
+            # د شنې رڼا لرې کول (despill) په څنډو کې
+            ff[..., 1] = np.where(inside > 0, np.minimum(g, np.maximum(rr, b) + 10), g)
+            out = ff * (1 - a) + warped.astype(np.float32) * a
+            # د فرش انعکاس: پاتې شنه برخه د انځور په تیاره، سرچپه انعکاس ډکه شي
+            mx = np.maximum(np.maximum(rr, b), 1)
+            a2 = np.clip((g / mx - 1.5) / 0.7, 0, 1) * (g > 45) * (1 - inside)
+            if a2.sum() > 2000:
+                ys, xs = np.where(a2 > 0.5)
+                if len(ys):
+                    rx0, rx1, ry0, ry1 = xs.min(), xs.max(), ys.min(), ys.max()
+                    refl = cv2.flip(cv2.resize(ph, (max(2, rx1 - rx0), max(2, int((rx1 - rx0) * sh / sw)))), 0)
+                    refl = cv2.GaussianBlur(refl, (0, 0), 3).astype(np.float32) * 0.45
+                    canvas = np.zeros_like(ff)
+                    hh = min(refl.shape[0], h - ry0)
+                    canvas[ry0:ry0 + hh, rx0:rx0 + refl.shape[1]] = refl[:hh]
+                    a2 = cv2.GaussianBlur(a2, (0, 0), 1.5)[..., None]
+                    out[..., 1] = np.where(a2[..., 0] > 0, np.minimum(out[..., 1], np.maximum(out[..., 0], out[..., 2]) + 10), out[..., 1])
+                    out = out * (1 - a2) + canvas * a2
+            f = out.clip(0, 255).astype(np.uint8)
+        p.stdin.write(f.tobytes())
+    p.stdin.close(); p.wait(); cap.release()
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", tmp, "-i", src, "-map", "0:v",
+                    "-map", "1:a?", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-shortest",
+                    out_path], check=True)
+    os.remove(tmp)
+    return out_path
