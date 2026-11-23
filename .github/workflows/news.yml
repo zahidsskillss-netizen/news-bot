@@ -37,11 +37,19 @@ jobs:
           MAX_PER_RUN: "5"
         run: python bot.py
 
+      - name: Video bulletin (Telegram voices)
+        continue-on-error: true
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python video_bulletin.py tick
+
       - name: Save posted list
         run: |
           git config user.name "news-bot"
           git config user.email "news-bot@users.noreply.github.com"
-          git add posted.json fb_page.enc 2>/dev/null || git add posted.json
+          for f in posted.json bulletin.json fb_page.enc yt_token.enc; do [ -f "$f" ] && git add "$f" || true; done
           git diff --cached --quiet && exit 0
           git commit -m "posted news update"
           # که په همدې وخت کې بل بدلون پورته شوی وي، لومړی یې راښکته او بیا پورته کوو

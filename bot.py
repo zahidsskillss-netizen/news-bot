@@ -161,6 +161,7 @@ def download_image(urls, referer=None):
             r.raise_for_status()
             im = Image.open(BytesIO(r.content)).convert("RGB")
             if im.width >= 250 and im.height >= 150:
+                im.info["src"] = url
                 return im
         except Exception as e:
             print(f"  ⚠️ انځور راښکته نه شو: {str(e)[:80]}")
@@ -459,6 +460,12 @@ def main():
             state["posted"].append(link)
             remember_title(orig_title, state)
             remember_title(title, state)
+            # د ویډیويي راپور لپاره د خبر یادښت
+            state.setdefault("log", []).append({
+                "t": datetime.now(timezone.utc).isoformat(), "title": title, "summary": summary,
+                "img": photo.info.get("src") if photo is not None else None,
+                "source": name, "cat": category, "link": link})
+            state["log"] = state["log"][-150:]
             save_state(state) if not DRY_RUN else None    # سمدستي ساتل، چې بیا خپور نه شي
             print(f"  📤 {title[:60]}")
         time.sleep(3)

@@ -360,7 +360,7 @@ def outro_frame(t, studio, dur=7.0):
 
     tp = ease_out_cubic(prog(t, 1.2, 0.8))
     if tp > 0:
-        tl = to_np(text_layer("مننه چې له موږ سره وئ", HEAD, 70, WHITE, shadow=True))
+        tl = to_np(text_layer("د کتلو مننه", HEAD, 76, WHITE, shadow=True))
         tl[..., 3] *= tp
         f = over(f, plane(tl, W / 2, H * 0.53 + 50 * (1 - tp), 1.0))
 
