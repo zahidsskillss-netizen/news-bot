@@ -20,7 +20,8 @@ RED = (229, 57, 53)
 GREY = (70, 80, 100)
 
 HEAD = "GhoraLalezar.ttf"     # سرلیک (ډیفالټ فونټ)
-BODY = "GhoraMarhey.ttf"      # متن/لنډیز
+BODY = "GhoraMarhey.ttf"      # نېټه او وړې لیکنې
+TEXT = "BahijTheSans-Light.ttf"  # د خبر متن (لنډیز)
 LATIN = "Vazirmatn-Bold.ttf"  # پته (لاتین)
 
 PS_MONTHS = ["جنوري", "فبروري", "مارچ", "اپرېل", "مې", "جون", "جولای",
@@ -152,7 +153,7 @@ def style1(title, summary, handle):
     d.rounded_rectangle((x1, y1, x2, y2), radius=36, fill=WHITE)
     inner = x2 - x1 - 100
     tf, tl = fit(d, title, HEAD, [70, 62, 56, 50, 44], inner, 4)
-    sf, sl = fit(d, summary, BODY, [38, 34, 31], inner, 3) if summary else (None, [])
+    sf, sl = fit(d, summary, TEXT, [38, 34, 31], inner, 3) if summary else (None, [])
     total = block_h(tl, tf, 6) + (60 + block_h(sl, sf, 4) if sl else 0)
     y = y1 + ((y2 - y1) - total) / 2
     y = lines_block(d, tl, tf, W / 2, y, NAVY, 6)
@@ -178,7 +179,7 @@ def style2(title, summary, handle):
 
     inner = W - 160
     tf, tl = fit(d, title, HEAD, [80, 72, 64, 56, 50], inner, 4)
-    sf, sl = fit(d, summary, BODY, [38, 34, 31], inner - 40, 3) if summary else (None, [])
+    sf, sl = fit(d, summary, TEXT, [38, 34, 31], inner - 40, 3) if summary else (None, [])
     total = block_h(tl, tf, 10) + (60 + block_h(sl, sf, 6) if sl else 0)
     y = 300 + ((H - 120 - 300) - total) / 2
     y = lines_block(d, tl, tf, W - 80, y, WHITE, 10, "ra")
@@ -200,7 +201,7 @@ def style3(title, summary, handle):
 
     inner = W - 180
     tf, tl = fit(d, title, HEAD, [76, 68, 60, 54, 48], inner, 4)
-    sf, sl = fit(d, summary, BODY, [38, 34, 31], inner, 3) if summary else (None, [])
+    sf, sl = fit(d, summary, TEXT, [38, 34, 31], inner, 3) if summary else (None, [])
     total = block_h(tl, tf, 8) + (70 + block_h(sl, sf, 4) if sl else 0)
     y = 360 + ((H - 110 - 360) - total) / 2
     y = lines_block(d, tl, tf, W / 2, y, NAVY, 8)
@@ -227,7 +228,7 @@ def style4(title, summary, handle):
 
     inner = W - 160
     tf, tl = fit(d, title, HEAD, [72, 64, 58, 52, 46], inner, 4)
-    sf, sl = fit(d, summary, BODY, [36, 33, 30], inner, 3) if summary else (None, [])
+    sf, sl = fit(d, summary, TEXT, [36, 33, 30], inner, 3) if summary else (None, [])
     total = block_h(tl, tf, 8) + (50 + block_h(sl, sf, 4) if sl else 0)
     y = 470 + ((H - 100 - 470) - total) / 2
     y = lines_block(d, tl, tf, W / 2, y, NAVY, 8)
@@ -249,7 +250,7 @@ def style5(title, summary, handle):
     inner = W - 200
     tf, tl = fit(d, title, HEAD, [70, 62, 56, 50], inner, 4)
     lh = int(tf.size * 1.25) + 28
-    sf, sl = fit(d, summary, BODY, [36, 33, 30], W - 220, 3) if summary else (None, [])
+    sf, sl = fit(d, summary, TEXT, [36, 33, 30], W - 220, 3) if summary else (None, [])
     total = len(tl) * lh + (40 + block_h(sl, sf, 4) + 40 if sl else 0)
     y = 300 + ((H - 110 - 300) - total) / 2
     for ln in tl:
@@ -316,7 +317,7 @@ def style2_photo(title, summary, handle, photo, source):
     tf, tl = fit(d, title, HEAD, [74, 66, 60, 54, 48], inner, 4)
     sl = []
     if summary and len(tl) <= 2:
-        sfont, sl = fit(d, summary, BODY, [32, 30], inner, 2)
+        sfont, sl = fit(d, summary, TEXT, [32, 30], inner, 2)
     total = block_h(tl, tf, 6) + (24 + block_h(sl, sfont, 2) if sl else 0)
     y = top + ((bottom - top) - total) / 2
     y = lines_block(d, tl, tf, W - 70, y, WHITE, 6, "ra")

@@ -6,7 +6,7 @@ import random
 
 from PIL import Image, ImageDraw, ImageFilter
 
-from card import (BLUE, BLUE_DARK, NAVY, WHITE, YELLOW, RED, GREY, HEAD, BODY, LATIN, W, H,
+from card import (BLUE, BLUE_DARK, NAVY, WHITE, YELLOW, RED, GREY, HEAD, BODY, TEXT, LATIN, W, H,
                   font, tw, wrap, fit, rtl, block_h, logo_badge, logo_clean, cover, shade,
                   today)
 
@@ -103,7 +103,7 @@ def style6(title, summary, handle, photo, source):
     if summary and room > 40:
         sf = font(BODY, 28)
         n = max(1, int(room // (int(28 * 1.45) + 2)))
-        sf, sl = fit(d, summary, BODY, [28, 26], W - 110, min(3, n))
+        sf, sl = fit(d, summary, TEXT, [28, 26], W - 110, min(3, n))
         para(d, sl, sf, W - 55, y, INK, 2)
 
     d.rectangle((0, H - 70, W, H), fill=BLUE_DARK)
@@ -132,7 +132,7 @@ def style7(title, summary, handle, photo, source):
         rtl(d, (W / 2, y), ln, tf, BLUE_DARK, "ma")
         y += int(tf.size * 1.28)
     if summary:
-        sf, sl = fit(d, "«" + summary + "»", BODY, [28, 26], W - 260, 2)
+        sf, sl = fit(d, "«" + summary + "»", TEXT, [28, 26], W - 260, 2)
         y = para(d, sl, sf, W / 2, y + 4, INK, 0, "ma")
     d.text((165, 318), "‹", font=font(LATIN, 50), fill=INK, anchor="mm")
     d.text((W - 165, 318), "›", font=font(LATIN, 50), fill=INK, anchor="mm")
@@ -233,8 +233,8 @@ def style8(title, summary, handle, photo, source):
         for size in (28, 26, 24, 22):
             if 3 * int(size * 1.45) <= room:
                 break
-        sf, sl = fit(d, summary, BODY, [size, max(20, size - 2)], pw - 40, 3)
-        para(d, sl, sf, tx, y + 6, (55, 70, 95), 0)
+        sf, sl = fit(d, summary, TEXT, [size, max(20, size - 2)], pw - 40, 3)
+        para(d, sl, sf, tx, y + 6, (30, 40, 62), 0)
     # نېټه: تر ټولو لاندې
     d.line((cx1 + 40, date_y - 14, cx2 - 40, date_y - 14), fill=(185, 210, 232), width=2)
     rtl(d, (tx, date_y + 8), today(), font(BODY, 26), SOFT, "rm")
@@ -326,7 +326,7 @@ def style10(title, summary, handle, photo, source):
     room = (sy2 - 30) - (y + 4)
     if summary and room > 34:
         n = max(1, int(room // int(26 * 1.45)))
-        sf, sl = fit(d, summary, BODY, [26, 24], pw, min(3, n))
+        sf, sl = fit(d, summary, TEXT, [26, 24], pw, min(3, n))
         para(d, sl, sf, sx2 - 45, y + 4, (60, 65, 80), 0)
 
     social_row(d, H - 48, WHITE, handle, x_right=W - 70, size=28)
