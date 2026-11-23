@@ -21,7 +21,7 @@ GREY = (70, 80, 100)
 
 HEAD = "GhoraLalezar.ttf"     # سرلیک (ډیفالټ فونټ)
 BODY = "GhoraMarhey.ttf"      # نېټه او وړې لیکنې
-TEXT = "BahijTheSans-Light.ttf"  # د خبر متن (لنډیز)
+TEXT = "BahijTheSans-Bold.ttf"   # د خبر متن (لنډیز)
 LATIN = "Vazirmatn-Bold.ttf"  # پته (لاتین)
 
 PS_MONTHS = ["جنوري", "فبروري", "مارچ", "اپرېل", "مې", "جون", "جولای",
