@@ -202,7 +202,7 @@ def style8(title, summary, handle, photo, source):
     pic = rounded_photo(photo, pw, ph, 36) if photo else rounded_photo(placeholder(pw, ph), pw, ph, 36)
     img.alpha_composite(pic, (px, py))
     if not photo:   # انځور نه وي: لوی لوګو په منځ کې
-        big = logo_clean(460)
+        big = logo_clean(300)
         img.alpha_composite(big, (px + (pw - big.width) // 2, py + (ph - big.height) // 2 + 30))
     else:           # د چینل لوګو: د انځور چپ پورته کونج
         bug = logo_clean(200)

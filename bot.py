@@ -91,8 +91,12 @@ def find_image(entry):
     for enc in entry.get("enclosures", []) or []:
         if (enc.get("type") or "").startswith("image") and enc.get("href"):
             return enc["href"]
-    m = re.search(r'<img[^>]+src="([^"]+)"', entry.get("summary", "") or "")
-    return m.group(1) if m else None
+    texts = [entry.get("summary", "") or ""] + [c.get("value", "") for c in entry.get("content", []) or []]
+    for tx in texts:
+        m = re.search(r'<img[^>]+src=["\']([^"\']+)', tx)
+        if m:
+            return m.group(1)
+    return None
 
 
 def is_news(entry):
@@ -109,39 +113,59 @@ def is_news(entry):
     return len(title.split()) >= 4
 
 
+def _meta_tags(t):
+    """د پاڼې ټول <meta> ټګونه (د خاصیتونو ترتیب هر ډول چې وي)."""
+    out = {}
+    for tag in re.findall(r"<meta\s[^>]*>", t, re.I):
+        attrs = dict((k.lower(), v) for k, _, v in re.findall(r'([\w:-]+)\s*=\s*(["\'])(.*?)\2', tag))
+        key = (attrs.get("property") or attrs.get("name") or "").lower()
+        if key and "content" in attrs and key not in out:
+            out[key] = html.unescape(attrs["content"])
+    return out
+
+
 def page_info(url):
-    """د خبر له پاڼې لنډیز او لوی انځور (og:image) راخلي."""
-    desc, img = "", None
+    """د خبر له پاڼې لنډیز او انځورونه راخلي → (desc, [image urls])."""
+    desc, imgs = "", []
     try:
         t = requests.get(url, headers=UA, timeout=20).text
-        for pat in (r'<meta[^>]+property="og:description"[^>]+content="([^"]+)"',
-                    r'<meta[^>]+name="description"[^>]+content="([^"]+)"'):
-            m = re.search(pat, t)
-            if m:
-                desc = clean_text(m.group(1))
+        meta = _meta_tags(t)
+        for k in ("og:description", "description", "twitter:description"):
+            if meta.get(k):
+                desc = clean_text(meta[k])
                 break
-        m = re.search(r'<meta[^>]+property="og:image"[^>]+content="([^"]+)"', t)
-        if m:
-            img = html.unescape(m.group(1))
-    except Exception:
-        pass
-    return desc, img
-
-
-def download_image(url):
-    """انځور راښکته کوي؛ که ونه شو، None."""
-    if not url:
-        return None
-    try:
-        from io import BytesIO
-        from PIL import Image
-        r = requests.get(url, headers=UA, timeout=25)
-        r.raise_for_status()
-        im = Image.open(BytesIO(r.content)).convert("RGB")
-        return im if im.width >= 300 else None
+        for k in ("og:image", "og:image:url", "og:image:secure_url", "twitter:image", "twitter:image:src"):
+            if meta.get(k) and meta[k] not in imgs:
+                imgs.append(meta[k])
+        # د مقالې لومړی لوی انځور (که meta نه وي)
+        for src in re.findall(r'<img[^>]+(?:data-src|src)=["\']([^"\']+\.(?:jpe?g|png|webp)[^"\']*)', t, re.I)[:6]:
+            if not any(x in src.lower() for x in ("logo", "icon", "avatar", "banner", "ads")):
+                imgs.append(requests.compat.urljoin(url, src))
     except Exception as e:
-        print(f"  ⚠️ انځور راښکته نه شو: {e}")
-        return None
+        print(f"  ⚠️ پاڼه خلاصه نه شوه: {e}")
+    return desc, imgs
+
+
+def download_image(urls, referer=None):
+    """له لیست څخه لومړی سم انځور راښکته کوي؛ که ونه شو، None."""
+    from io import BytesIO
+    from PIL import Image
+    if isinstance(urls, str):
+        urls = [urls]
+    headers = dict(UA)
+    if referer:
+        headers["Referer"] = referer
+    for url in [u for u in urls if u]:
+        try:
+            r = requests.get(url, headers=headers, timeout=25)
+            r.raise_for_status()
+            im = Image.open(BytesIO(r.content)).convert("RGB")
+            if im.width >= 250 and im.height >= 150:
+                return im
+        except Exception as e:
+            print(f"  ⚠️ انځور راښکته نه شو: {str(e)[:80]}")
+    print("  🖼️ انځور پیدا نه شو")
+    return None
 
 
 CRICKET_WORDS = ("کرکټ", "کریکټ", "کرېکټ", "کرکټ", "cricket", "ICC", "ACB", "T20", "ټي-ټوینټي",
@@ -405,7 +429,7 @@ def main():
             print(f"  ⏭️ متن نه لري، پرېښودل شو: {title[:50]}")
             state["posted"].append(link)
             continue
-        photo = download_image(page_img or find_image(e))
+        photo = download_image(page_img + [find_image(e)], referer=link)
         rewritten = ai_rewrite(title, summary)
         if isinstance(rewritten, str):          # خبر نه دی، یا له اسلامي اصولو سره سمون نه لري
             print(f"  ⏭️ پرېښودل شو ({rewritten[5:]}): {title[:50]}")
