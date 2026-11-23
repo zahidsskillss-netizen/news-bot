@@ -104,7 +104,7 @@ def is_news(entry):
     if any(x in link for x in ("/av/", "/audio/", "/video/", "/z/", "/podcast")):
         return False
     title = entry.get("title", "")
-    if any(x in title for x in ("درسي ساعت", "خبري ګړۍ", "ورځني خبرونه", "خبرونه -", "پروګرام")):
+    if any(x in title for x in ("درسي ساعت", "د درس ساعت", "درس ساعت", "خبري ګړۍ", "ورځني خبرونه", "خبرونه -", "پروګرام")):
         return False
     return len(title.split()) >= 4
 
