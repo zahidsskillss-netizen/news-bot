@@ -52,11 +52,18 @@ def wrap(d, text, f, max_w):
 
 
 def fit(d, text, fname, sizes, max_w, max_lines):
+    first = None
     for size in sizes:
         f = font(fname, size)
         lines = wrap(d, text, f, max_w)
         if len(lines) <= max_lines:
+            # که وروستۍ کرښه یوازې یو لنډ ټکی وي، کوچنی فونټ ازمایو
+            if len(lines) > 1 and len(lines[-1].split()) == 1:
+                first = first or (f, lines)
+                continue
             return f, lines
+    if first:
+        return first
     f = font(fname, sizes[-1])
     lines = wrap(d, text, f, max_w)[:max_lines]
     lines[-1] += " …"
@@ -242,15 +249,78 @@ def style5(title, summary, handle):
     return img
 
 
+# ---------- ۲ د انځور سره ----------
+def cover(photo, w, h):
+    """انځور داسې پرې کوي چې ټوله ساحه ډکه کړي."""
+    r = max(w / photo.width, h / photo.height)
+    im = photo.resize((int(photo.width * r) + 1, int(photo.height * r) + 1), Image.LANCZOS)
+    x, y = (im.width - w) // 2, (im.height - h) // 3
+    return im.crop((x, y, x + w, y + h))
+
+
+def shade(w, h, top_alpha, bottom_alpha):
+    """له پاسه تر لاندې تیاره سیوری."""
+    g = Image.linear_gradient("L").resize((w, h))
+    a = g.point(lambda v: int(top_alpha + (bottom_alpha - top_alpha) * v / 255))
+    layer = Image.new("RGBA", (w, h), (8, 18, 45, 0))
+    layer.putalpha(a)
+    return layer
+
+
+def style2_photo(title, summary, handle, photo, source):
+    img = gradient((8, 18, 45), (20, 45, 100)).convert("RGBA")
+    PH = 580
+    ph = cover(photo, W, PH).convert("RGBA")
+    img.paste(ph, (0, 0))
+    img.alpha_composite(shade(W, 190, 190, 0), (0, 0))          # د لوګو لپاره پاس سیوری
+    img.alpha_composite(shade(W, 160, 0, 170), (0, PH - 160))   # لاندې سیوری
+    d = ImageDraw.Draw(img)
+
+    lg = logo(230)
+    img.paste(lg, (45, 40), lg)
+    f = font(HEAD, 40)
+    w = tw(d, "عاجل خبر", f)
+    d.rectangle((W - 50 - w - 64, 52, W - 50, 126), fill=RED)
+    rtl(d, (W - 82, 89), "عاجل خبر", f, WHITE, "rm")
+
+    # د سرچینې ډېر کوچنی نوم (کیڼ لاندې کونج)
+    if source:
+        sf_ = font(BODY, 22)
+        sw = tw(d, source, sf_)
+        bx, by = 22, PH - 22 - 38
+        d.rounded_rectangle((bx, by, bx + sw + 28, by + 38), radius=10, fill=(0, 0, 0, 150))
+        rtl(d, (bx + 14 + sw, by + 19), source, sf_, (235, 235, 235), "rm")
+
+    d.rectangle((0, PH, W, PH + 8), fill=BLUE)
+
+    # سرلیک: غټ
+    top, bottom = PH + 8, H - 100
+    inner = W - 140
+    tf, tl = fit(d, title, HEAD, [74, 66, 60, 54, 48], inner, 4)
+    sl = []
+    if summary and len(tl) <= 2:
+        sfont, sl = fit(d, summary, BODY, [32, 30], inner, 2)
+    total = block_h(tl, tf, 6) + (24 + block_h(sl, sfont, 2) if sl else 0)
+    y = top + ((bottom - top) - total) / 2
+    y = lines_block(d, tl, tf, W - 70, y, WHITE, 6, "ra")
+    if sl:
+        lines_block(d, sl, sfont, W - 70, y + 14, (200, 215, 240), 2, "ra")
+    footer(d, handle, bg=RED, date_fg=WHITE, h=100)
+    return img.convert("RGB")
+
+
 STYLES = {1: style1, 2: style2, 3: style3, 4: style4, 5: style5}
 
 
-def make_card(title, summary, handle, out_path, style=1):
+def make_card(title, summary, handle, out_path, style=1, photo=None, source=None):
     try:
         style = int(style)
     except (TypeError, ValueError):
         style = 1
-    img = STYLES.get(style, style1)(title, summary or "", handle)
+    if photo is not None and style == 2:
+        img = style2_photo(title, summary or "", handle, photo, source)
+    else:
+        img = STYLES.get(style, style1)(title, summary or "", handle)
     img.save(out_path, "JPEG", quality=92)
     return out_path
 

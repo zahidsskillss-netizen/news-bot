@@ -107,18 +107,39 @@ def is_news(entry):
     return len(title.split()) >= 4
 
 
-def page_description(url):
-    """که په فیډ کې متن نه وي، د خبر له پاڼې لنډیز راخلي."""
+def page_info(url):
+    """د خبر له پاڼې لنډیز او لوی انځور (og:image) راخلي."""
+    desc, img = "", None
     try:
-        r = requests.get(url, headers=UA, timeout=20)
+        t = requests.get(url, headers=UA, timeout=20).text
         for pat in (r'<meta[^>]+property="og:description"[^>]+content="([^"]+)"',
                     r'<meta[^>]+name="description"[^>]+content="([^"]+)"'):
-            m = re.search(pat, r.text)
+            m = re.search(pat, t)
             if m:
-                return clean_text(m.group(1))
+                desc = clean_text(m.group(1))
+                break
+        m = re.search(r'<meta[^>]+property="og:image"[^>]+content="([^"]+)"', t)
+        if m:
+            img = html.unescape(m.group(1))
     except Exception:
         pass
-    return ""
+    return desc, img
+
+
+def download_image(url):
+    """انځور راښکته کوي؛ که ونه شو، None."""
+    if not url:
+        return None
+    try:
+        from io import BytesIO
+        from PIL import Image
+        r = requests.get(url, headers=UA, timeout=25)
+        r.raise_for_status()
+        im = Image.open(BytesIO(r.content)).convert("RGB")
+        return im if im.width >= 300 else None
+    except Exception as e:
+        print(f"  ⚠️ انځور راښکته نه شو: {e}")
+        return None
 
 
 def entry_time(entry):
@@ -294,25 +315,26 @@ def main():
         summary = clean_text(e.get("summary", ""))
         if summary == title:
             summary = ""
+        page_desc, page_img = page_info(link)
         if len(summary) < 40:
-            summary = page_description(link) or summary
+            summary = page_desc or summary
         if not summary:
             print(f"  ⏭️ متن نه لري، پرېښودل شو: {title[:50]}")
             state["posted"].append(link)
             continue
+        photo = download_image(page_img or find_image(e))
         rewritten = ai_rewrite(title, summary)
+        n = len(state["posted"])
+        style = (n % 5) + 1 if CARD_STYLE == "auto" else CARD_STYLE
+        card_path = os.path.join("/tmp", f"card_{n}.jpg")
         if rewritten:
-            # نوې بڼه: بې سرچینې، د بسرام ټي وي کارت سره
+            # نوې بڼه: په متن کې سرچینه نشته؛ یوازې په انځور کې ډېر کوچنی نوم
             title, summary = rewritten
-            n = len(state['posted'])
-            style = (n % 5) + 1 if CARD_STYLE == "auto" else CARD_STYLE
-            card = make_card(title, summary, HANDLE, os.path.join("/tmp", f"card_{n}.jpg"), style)
+            card = make_card(title, summary, HANDLE, card_path, style, photo=photo, source=name)
             ok = publish(build_message(title, summary), card_path=card)
         else:
-            # که AI نه وي: کارت جوړېږي، خو سرچینه په متن کې ښودل کېږي (چې کاپي نه شي)
-            n = len(state['posted'])
-            style = (n % 5) + 1 if CARD_STYLE == "auto" else CARD_STYLE
-            card = make_card(title, summary, HANDLE, os.path.join("/tmp", f"card_{n}.jpg"), style)
+            # که AI نه وي: اصلي متن، نو سرچینه په متن کې هم ښودل کېږي
+            card = make_card(title, summary, HANDLE, card_path, style, photo=photo, source=name)
             ok = publish(build_message(title, summary, name, link), card_path=card)
         if ok:
             state["posted"].append(link)
