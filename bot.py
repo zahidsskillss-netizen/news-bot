@@ -14,6 +14,7 @@ import feedparser
 import requests
 
 from card import make_card
+import fb
 
 _CFG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
 try:
@@ -32,6 +33,7 @@ TOKEN = setting("TELEGRAM_BOT_TOKEN")
 CHANNEL = setting("TELEGRAM_CHANNEL")          # لکه: @mynewschannel
 SIGNATURE = setting("CHANNEL_SIGNATURE")       # د هر پوسټ په پای کې (اختیاري)
 CARD_STYLE = setting("CARD_STYLE") or "1"   # 1-5، یا "auto" چې هر ځل بدل شي
+FB_PAGE_NAME = setting("FB_PAGE_NAME")         # که څو پاڼې لرئ، د پاڼې نوم
 HANDLE = setting("CARD_HANDLE") or ("t.me/" + CHANNEL.lstrip("@") if CHANNEL else "")  # پر کارت لیکل کېږي
 MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "5") or 5)        # په هر ځل څو خبرونه
 GEMINI_KEY = setting("GEMINI_API_KEY")         # اختیاري: د AI لنډیز/ژباړې لپاره
@@ -247,6 +249,16 @@ def tg(method, data, files=None):
     return False
 
 
+def fb_caption(title, summary, source=None):
+    parts = [title]
+    if summary:
+        parts.append(summary)
+    if source:
+        parts.append(f"سرچینه: {source}")
+    parts.append(f"📢 ټلګرام: {HANDLE}")
+    return "\n\n".join(parts)
+
+
 def build_message(title, summary, source=None, link=None):
     parts = [f"<b>{html.escape(title)}</b>"]
     if summary:
@@ -274,6 +286,9 @@ def publish(text, card_path=None, image_url=None):
                               "disable_web_page_preview": "true"})
 
 
+FB = None
+
+
 # ---------- اصلي کار ----------
 def main():
     if not DRY_RUN and (not TOKEN or not CHANNEL):
@@ -284,6 +299,11 @@ def main():
         if not me.get("ok"):
             sys.exit(f"❌ د روباټ Token سم نه دی: {me.get('description')}")
         print(f"🤖 روباټ: @{me['result']['username']} | AI: {'هو' if GEMINI_KEY else 'نه'}")
+
+    global FB
+    FB = fb.get_page(TOKEN, FB_PAGE_NAME) if (TOKEN and not DRY_RUN) else None
+    if FB:
+        print(f"📘 فیسبوک: {FB[2]}")
 
     state = load_state()
     seen = set(state["posted"])
@@ -332,10 +352,15 @@ def main():
             title, summary = rewritten
             card = make_card(title, summary, HANDLE, card_path, style, photo=photo, source=name)
             ok = publish(build_message(title, summary), card_path=card)
+            fb_text = fb_caption(title, summary)
         else:
             # که AI نه وي: اصلي متن، نو سرچینه په متن کې هم ښودل کېږي
             card = make_card(title, summary, HANDLE, card_path, style, photo=photo, source=name)
             ok = publish(build_message(title, summary, name, link), card_path=card)
+            fb_text = fb_caption(title, summary, name)
+        if ok and FB and not DRY_RUN:
+            if fb.post_photo(FB[0], FB[1], card, fb_text):
+                print("  📘 فیسبوک ته هم ولېږل شو")
         if ok:
             state["posted"].append(link)
             print(f"  📤 {title[:60]}")
