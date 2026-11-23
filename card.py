@@ -99,6 +99,23 @@ def logo_badge(width, pad=24, radius=28):
     return badge
 
 
+def logo_clean(width):
+    """لوګو پرته له شالید؛ یوازې نرۍ سپینه ځلا چې تورې برخې یې په تیاره ځای کې هم ښکاره شي."""
+    from PIL import ImageFilter
+    lg = logo(width)
+    pad = 12
+    out = Image.new("RGBA", (lg.width + pad * 2, lg.height + pad * 2), (0, 0, 0, 0))
+    a = lg.getchannel("A")
+    glow = Image.new("RGBA", out.size, (255, 255, 255, 0))
+    m = Image.new("L", out.size, 0)
+    m.paste(a, (pad, pad))
+    m = m.filter(ImageFilter.MaxFilter(5)).filter(ImageFilter.GaussianBlur(4)).point(lambda v: int(v * 0.55))
+    glow.putalpha(m)
+    out.alpha_composite(glow)
+    out.alpha_composite(lg, (pad, pad))
+    return out
+
+
 def gradient(c1, c2, vertical=True):
     g = Image.linear_gradient("L").resize((W, H))
     if not vertical:
@@ -151,7 +168,7 @@ def style1(title, summary, handle):
 def style2(title, summary, handle):
     img = gradient((8, 18, 45), (20, 45, 100))
     d = ImageDraw.Draw(img)
-    bd = logo_badge(150, pad=14, radius=18)
+    bd = logo_clean(170)
     img.paste(bd, (50, 60), bd)
     f = font(HEAD, 42)
     w = tw(d, "عاجل خبر", f)
@@ -276,7 +293,7 @@ def style2_photo(title, summary, handle, photo, source):
     img.alpha_composite(shade(W, 160, 0, 170), (0, PH - 160))   # لاندې سیوری
     d = ImageDraw.Draw(img)
 
-    bd = logo_badge(150, pad=14, radius=18)     # کوچنی لوګو په شین بکس کې
+    bd = logo_clean(170)                         # کوچنی لوګو، پرته له شالید
     img.paste(bd, (40, 40), bd)
     f = font(HEAD, 40)
     w = tw(d, "عاجل خبر", f)
