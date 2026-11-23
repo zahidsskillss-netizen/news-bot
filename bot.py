@@ -1,0 +1,334 @@
+"""
+د خبرونو اتومات روباټ — Ghora Graphics
+له RSS فیډونو تازه خبرونه راټولوي او په ټلګرام چینل کې یې خپروي.
+"""
+import html
+import json
+import os
+import re
+import sys
+import time
+from datetime import datetime, timezone
+
+import feedparser
+import requests
+
+from card import make_card
+
+_CFG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "config.json")
+try:
+    with open(_CFG_PATH, encoding="utf-8") as _f:
+        _CFG = json.load(_f)
+except (FileNotFoundError, json.JSONDecodeError):
+    _CFG = {}
+
+
+def setting(name):
+    """لومړی GitHub Secrets، که نه وي نو config.json"""
+    return (os.environ.get(name) or _CFG.get(name) or "").strip()
+
+
+TOKEN = setting("TELEGRAM_BOT_TOKEN")
+CHANNEL = setting("TELEGRAM_CHANNEL")          # لکه: @mynewschannel
+SIGNATURE = setting("CHANNEL_SIGNATURE")       # د هر پوسټ په پای کې (اختیاري)
+CARD_STYLE = setting("CARD_STYLE") or "1"   # 1-5، یا "auto" چې هر ځل بدل شي
+HANDLE = setting("CARD_HANDLE") or ("t.me/" + CHANNEL.lstrip("@") if CHANNEL else "")  # پر کارت لیکل کېږي
+MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "5") or 5)        # په هر ځل څو خبرونه
+GEMINI_KEY = setting("GEMINI_API_KEY")         # اختیاري: د AI لنډیز/ژباړې لپاره
+GEMINI_MODELS = [m for m in [setting("GEMINI_MODEL"), "gemini-flash-latest", "gemini-3.8-flash", "gemini-flash-lite-latest"] if m]
+DRY_RUN = os.environ.get("DRY_RUN") == "1"                        # یوازې ازموینه، نشر نه کوي
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+STATE_FILE = os.path.join(HERE, "posted.json")
+FEEDS_FILE = os.path.join(HERE, "feeds.txt")
+UA = {"User-Agent": "Mozilla/5.0 (GhoraNewsBot)"}
+
+
+# ---------- مرستندویه ----------
+def load_feeds():
+    feeds = []
+    with open(FEEDS_FILE, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line or line.startswith("#") or "|" not in line:
+                continue
+            name, url = [p.strip() for p in line.split("|", 1)]
+            feeds.append((name, url))
+    return feeds
+
+
+def load_state():
+    try:
+        with open(STATE_FILE, encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {"posted": []}
+
+
+def save_state(state):
+    state["posted"] = state["posted"][-3000:]
+    with open(STATE_FILE, "w", encoding="utf-8") as f:
+        json.dump(state, f, ensure_ascii=False, indent=0)
+
+
+def clean_text(raw, limit=350):
+    text = re.sub(r"<[^>]+>", " ", raw or "")
+    text = html.unescape(text)
+    text = re.sub(r"\s+", " ", text).strip()
+    if len(text) > limit:
+        cut = text[:limit].rsplit(" ", 1)[0]
+        text = cut + "…"
+    return text
+
+
+def find_image(entry):
+    for key in ("media_content", "media_thumbnail"):
+        for m in entry.get(key, []) or []:
+            if m.get("url"):
+                return m["url"]
+    for enc in entry.get("enclosures", []) or []:
+        if (enc.get("type") or "").startswith("image") and enc.get("href"):
+            return enc["href"]
+    m = re.search(r'<img[^>]+src="([^"]+)"', entry.get("summary", "") or "")
+    return m.group(1) if m else None
+
+
+def is_news(entry):
+    """راډیويي/ویډیويي پروګرامونه او ډېر لنډ سرلیکونه پرېږدي."""
+    for enc in entry.get("enclosures", []) or []:
+        if (enc.get("type") or "").startswith(("audio", "video")):
+            return False
+    link = entry.get("link", "") or ""
+    if any(x in link for x in ("/av/", "/audio/", "/video/", "/z/", "/podcast")):
+        return False
+    title = entry.get("title", "")
+    if any(x in title for x in ("درسي ساعت", "خبري ګړۍ", "ورځني خبرونه", "خبرونه -", "پروګرام")):
+        return False
+    return len(title.split()) >= 4
+
+
+def page_description(url):
+    """که په فیډ کې متن نه وي، د خبر له پاڼې لنډیز راخلي."""
+    try:
+        r = requests.get(url, headers=UA, timeout=20)
+        for pat in (r'<meta[^>]+property="og:description"[^>]+content="([^"]+)"',
+                    r'<meta[^>]+name="description"[^>]+content="([^"]+)"'):
+            m = re.search(pat, r.text)
+            if m:
+                return clean_text(m.group(1))
+    except Exception:
+        pass
+    return ""
+
+
+def entry_time(entry):
+    t = entry.get("published_parsed") or entry.get("updated_parsed")
+    return time.mktime(t) if t else 0
+
+
+# ---------- AI ----------
+GH_TOKEN = os.environ.get("GITHUB_TOKEN", "").strip()            # په GitHub Actions کې پخپله شته
+GH_MODEL = os.environ.get("GH_MODEL", "openai/gpt-4.1-mini").strip()
+
+PROMPT = (
+    "ته د «بسرام ټي وي» خبري چینل لیکوال یې. لاندې خبر په بشپړه توګه په خپلو نویو ټکو او "
+    "نوې جملې جوړښت سره په روانه، سمه پښتو کې بیا ولیکه. د اصلي متن جملې مه کاپي کوه. "
+    "که خبر په بله ژبه وي، پښتو ته یې وژباړه. حقایق، نومونه او شمېرې مه بدلوه، "
+    "هېڅ شی ورته مه زیاتوه، خپل نظر مه ورکوه، او د خبري اژانس نوم مه یادوه. "
+    "د متن د نشتوالي یا کمښت په اړه هېڅ مه لیکه؛ یوازې له موجودو معلوماتو کار واخله.\n"
+    "ځواب یوازې په دې بڼه ورکړه:\n"
+    "سرلیک: (تر ۱۴ ټکو لنډ)\n"
+    "لنډیز: (۲ یا ۳ لنډې جملې)\n\n"
+)
+
+
+def _parse(out):
+    t = re.search(r"سرلیک\s*[:：]\s*(.+)", out)
+    s = re.search(r"لنډیز\s*[:：]\s*(.+)", out, re.S)
+    if t and s:
+        return t.group(1).strip().strip("*"), s.group(1).strip().strip("*")
+    return None
+
+
+def _github_models(prompt):
+    r = requests.post(
+        "https://models.github.ai/inference/chat/completions",
+        headers={"Authorization": f"Bearer {GH_TOKEN}", "Content-Type": "application/json",
+                 "Accept": "application/vnd.github+json", "X-GitHub-Api-Version": "2022-11-28"},
+        json={"model": GH_MODEL, "messages": [{"role": "user", "content": prompt}],
+              "temperature": 0.7},
+        timeout=60,
+    )
+    if r.status_code != 200 or not r.text.strip().startswith("{"):
+        raise RuntimeError(f"HTTP {r.status_code}: {r.text[:300]}")
+    return r.json()["choices"][0]["message"]["content"]
+
+
+def _gemini(prompt):
+    last = None
+    for model in GEMINI_MODELS * 2:
+        for cfg in ({"thinkingConfig": {"thinkingLevel": "low"}}, {}):
+            try:
+                r = requests.post(
+                    f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
+                    headers={"x-goog-api-key": GEMINI_KEY, "Content-Type": "application/json"},
+                    json={"contents": [{"parts": [{"text": prompt}]}], "generationConfig": cfg},
+                    timeout=50,
+                )
+            except requests.RequestException as e:
+                last = f"{model}: {e.__class__.__name__}"
+                break
+            if r.status_code == 200:
+                parts = r.json()["candidates"][0]["content"]["parts"]
+                return "".join(p.get("text", "") for p in parts if not p.get("thought"))
+            last = f"{model}: HTTP {r.status_code}: {r.text[:200]}"
+            if r.status_code in (401, 403):
+                raise RuntimeError(last)
+            if r.status_code != 400:
+                break
+        time.sleep(3)
+    raise RuntimeError(last)
+
+
+def ai_rewrite(title, summary):
+    """خبر په نویو ټکو بیا لیکي. که ناکام شي، None ورکوي."""
+    prompt = PROMPT + f"سرلیک: {title}\nمتن: {summary}"
+    for name, fn, ok in (("Gemini", _gemini, GEMINI_KEY),):
+        if not ok:
+            continue
+        try:
+            res = _parse(fn(prompt))
+            if res:
+                return res
+            print(f"  ⚠️ {name}: ځواب سم نه و")
+        except Exception as e:
+            print(f"  ⚠️ {name} AI ناکام شو: {e}")
+    return None
+
+
+# ---------- ټلګرام ----------
+def tg(method, data, files=None):
+    url = f"https://api.telegram.org/bot{TOKEN}/{method}"
+    for _ in range(3):
+        r = requests.post(url, data=data, files=files, timeout=60)
+        if files:
+            for f in files.values():
+                f.seek(0)
+        res = r.json()
+        if res.get("ok"):
+            return True
+        wait = (res.get("parameters") or {}).get("retry_after")
+        if wait:
+            time.sleep(int(wait) + 1)
+            continue
+        print(f"  ❌ ټلګرام تېروتنه ({method}): {res.get('description')}")
+        return False
+    return False
+
+
+def build_message(title, summary, source=None, link=None):
+    parts = [f"<b>{html.escape(title)}</b>"]
+    if summary:
+        parts.append(html.escape(summary))
+    if source and link:
+        parts.append(f"📰 سرچینه: {html.escape(source)}\n🔗 <a href=\"{html.escape(link)}\">بشپړ خبر</a>")
+    if SIGNATURE:
+        parts.append(html.escape(SIGNATURE))
+    return "\n\n".join(parts)
+
+
+def publish(text, card_path=None, image_url=None):
+    if DRY_RUN:
+        print("---- (DRY RUN) ----\n" + text + f"\n[کارت: {card_path}]\n")
+        return True
+    if card_path and len(text) <= 1024:
+        with open(card_path, "rb") as f:
+            if tg("sendPhoto", {"chat_id": CHANNEL, "caption": text, "parse_mode": "HTML"},
+                  files={"photo": f}):
+                return True
+    if image_url and len(text) <= 1024:
+        if tg("sendPhoto", {"chat_id": CHANNEL, "photo": image_url, "caption": text, "parse_mode": "HTML"}):
+            return True
+    return tg("sendMessage", {"chat_id": CHANNEL, "text": text, "parse_mode": "HTML",
+                              "disable_web_page_preview": "true"})
+
+
+# ---------- اصلي کار ----------
+def main():
+    if not DRY_RUN and (not TOKEN or not CHANNEL):
+        sys.exit("TELEGRAM_BOT_TOKEN او TELEGRAM_CHANNEL په Secrets کې ورکړئ.")
+
+    if not DRY_RUN:
+        me = requests.get(f"https://api.telegram.org/bot{TOKEN}/getMe", timeout=20).json()
+        if not me.get("ok"):
+            sys.exit(f"❌ د روباټ Token سم نه دی: {me.get('description')}")
+        print(f"🤖 روباټ: @{me['result']['username']} | AI: {'هو' if GEMINI_KEY else 'نه'}")
+
+    state = load_state()
+    seen = set(state["posted"])
+    first_run = not state["posted"]
+    items = []
+
+    for name, url in load_feeds():
+        try:
+            r = requests.get(url, headers=UA, timeout=30)
+            r.raise_for_status()
+            feed = feedparser.parse(r.content)
+            print(f"✅ {name}: {len(feed.entries)} خبرونه")
+        except Exception as e:
+            print(f"⚠️ {name} راونه رسېد: {e}")
+            continue
+        for e in feed.entries:
+            if not is_news(e):
+                continue
+            link = e.get("link") or e.get("id")
+            if link and link not in seen:
+                items.append((entry_time(e), name, e, link))
+
+    items.sort(key=lambda x: x[0], reverse=True)       # نوي خبرونه لومړی
+    to_post = items[:MAX_PER_RUN]
+    print(f"\n🆕 نوي خبرونه: {len(items)} — اوس خپرېږي: {len(to_post)}")
+
+    for _, name, e, link in reversed(to_post):         # زوړ لومړی، چې نوی په سر کې پاتې شي
+        title = clean_text(e.get("title", ""), 200)
+        summary = clean_text(e.get("summary", ""))
+        if summary == title:
+            summary = ""
+        if len(summary) < 40:
+            summary = page_description(link) or summary
+        if not summary:
+            print(f"  ⏭️ متن نه لري، پرېښودل شو: {title[:50]}")
+            state["posted"].append(link)
+            continue
+        rewritten = ai_rewrite(title, summary)
+        if rewritten:
+            # نوې بڼه: بې سرچینې، د بسرام ټي وي کارت سره
+            title, summary = rewritten
+            n = len(state['posted'])
+            style = (n % 5) + 1 if CARD_STYLE == "auto" else CARD_STYLE
+            card = make_card(title, summary, HANDLE, os.path.join("/tmp", f"card_{n}.jpg"), style)
+            ok = publish(build_message(title, summary), card_path=card)
+        else:
+            # که AI نه وي: کارت جوړېږي، خو سرچینه په متن کې ښودل کېږي (چې کاپي نه شي)
+            n = len(state['posted'])
+            style = (n % 5) + 1 if CARD_STYLE == "auto" else CARD_STYLE
+            card = make_card(title, summary, HANDLE, os.path.join("/tmp", f"card_{n}.jpg"), style)
+            ok = publish(build_message(title, summary, name, link), card_path=card)
+        if ok:
+            state["posted"].append(link)
+            print(f"  📤 {title[:60]}")
+        time.sleep(3)
+
+    # پاتې زاړه خبرونه هم «لیدل شوي» ګڼو چې بیا را نه شي
+    for _, _, _, link in items[MAX_PER_RUN:]:
+        state["posted"].append(link)
+    if first_run:
+        print("ℹ️ لومړی ځل: یوازې تر ټولو تازه خبرونه خپاره شول.")
+
+    state["last_run"] = datetime.now(timezone.utc).isoformat()
+    if not DRY_RUN:
+        save_state(state)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,8 @@
+# د خبرونو سرچینې — هره کرښه: نوم | د RSS لینک
+# نوې سرچینه زیاتوئ، یا د کرښې مخې ته # کېږدئ چې بنده شي.
+
+ازادي راډیو | https://pa.azadiradio.com/api/
+امریکا غږ پښتو | https://www.pashtovoa.com/api/
+مشال راډیو | https://www.mashaalradio.com/api/
+شمشاد نیوز | https://shamshadnews.com/feed/
+اریانا نیوز پښتو | https://www.ariananews.af/ps/feed/
