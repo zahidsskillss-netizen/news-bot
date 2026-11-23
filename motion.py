@@ -24,7 +24,7 @@ RED = (229, 57, 53)
 WHITE = (255, 255, 255)
 YELLOW = (255, 202, 40)
 
-HEAD = os.path.join(ASSETS, "GhoraMarhey.ttf")
+HEAD = os.path.join(ASSETS, "GhoraLalezar.ttf")
 BODY = os.path.join(ASSETS, "GhoraMessiri.ttf")
 LATIN = os.path.join(ASSETS, "Vazirmatn-Bold.ttf")
 PS_MONTHS = ["جنوري", "فبروري", "مارچ", "اپرېل", "مې", "جون", "جولای",

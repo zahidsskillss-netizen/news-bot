@@ -144,6 +144,17 @@ def download_image(url):
         return None
 
 
+CRICKET_WORDS = ("کرکټ", "کریکټ", "کرېکټ", "کرکټ", "cricket", "ICC", "ACB", "T20", "ټي-ټوینټي",
+                 "ټي ټوینټي", "ورلډ کپ", "نړیوال جام", "راشد خان", "نبي", "ګرباز", "ابراهیم زدران",
+                 "اکرم", "لوبډله", "ویکټ", "منډې")
+
+
+def is_cricket(entry):
+    text = (entry.get("title", "") + " " + entry.get("summary", ""))[:600]
+    return any(w.lower() in text.lower() for w in CRICKET_WORDS[:9]) or \
+        sum(w in text for w in CRICKET_WORDS[9:]) >= 2
+
+
 def entry_time(entry):
     t = entry.get("published_parsed") or entry.get("updated_parsed")
     return time.mktime(t) if t else 0
@@ -159,7 +170,17 @@ PROMPT = (
     "که خبر په بله ژبه وي، پښتو ته یې وژباړه. حقایق، نومونه او شمېرې مه بدلوه، "
     "هېڅ شی ورته مه زیاتوه، خپل نظر مه ورکوه، او د خبري اژانس نوم مه یادوه. "
     "د متن د نشتوالي یا کمښت په اړه هېڅ مه لیکه؛ یوازې له موجودو معلوماتو کار واخله.\n"
+    "په دیني موضوعاتو کې درناوی وساته.\n"
+    "همدارنګه وټاکه:\n"
+    "- ډول: که دا ریښتینی خبر وي «خبر» ولیکه؛ که درس، پروګرام، اعلان، مرکه‌یي خپرونه، "
+    "ورځنۍ لنډیز، سرګرمي یا بل شی وي «نه» ولیکه.\n"
+    "- اسلامي: که خبر له اسلامي اصولو سره په ټکر کې وي (لکه شراب، قمار، فحشا، نڅا او موسیقي محفلونه، "
+    "بې‌حیا سرګرمي، یا د دین سپکاوی) «نامناسب» ولیکه، که نه «مناسب».\n"
+    "- برخه: یوه کلمه — سیاست، اقتصاد، امنیت، ټولنه، کرکټ، سپورت، روغتیا، ټکنالوژي، نړۍ، نور.\n"
     "ځواب یوازې په دې بڼه ورکړه:\n"
+    "ډول: خبر/نه\n"
+    "اسلامي: مناسب/نامناسب\n"
+    "برخه: ...\n"
     "سرلیک: (تر ۱۴ ټکو لنډ)\n"
     "لنډیز: (۲ یا ۳ لنډې جملې)\n\n"
 )
@@ -168,8 +189,16 @@ PROMPT = (
 def _parse(out):
     t = re.search(r"سرلیک\s*[:：]\s*(.+)", out)
     s = re.search(r"لنډیز\s*[:：]\s*(.+)", out, re.S)
+    k = re.search(r"ډول\s*[:：]\s*(\S+)", out)
+    i = re.search(r"اسلامي\s*[:：]\s*(\S+)", out)
+    c = re.search(r"برخه\s*[:：]\s*(\S+)", out)
     if t and s:
-        return t.group(1).strip().strip("*"), s.group(1).strip().strip("*")
+        if k and "نه" in k.group(1):
+            return "SKIP:خبر نه دی"
+        if i and "نامناسب" in i.group(1):
+            return "SKIP:اسلامي اصول"
+        cat = c.group(1).strip("*") if c else ""
+        return t.group(1).strip().strip("*"), s.group(1).strip().strip("*"), cat
     return None
 
 
@@ -326,7 +355,8 @@ def main():
             if link and link not in seen:
                 items.append((entry_time(e), name, e, link))
 
-    items.sort(key=lambda x: x[0], reverse=True)       # نوي خبرونه لومړی
+    # کرکټ ته لومړیتوب، بیا نوي خبرونه لومړی
+    items.sort(key=lambda x: (is_cricket(x[2]), x[0]), reverse=True)
     to_post = items[:MAX_PER_RUN]
     print(f"\n🆕 نوي خبرونه: {len(items)} — اوس خپرېږي: {len(to_post)}")
 
@@ -344,20 +374,22 @@ def main():
             continue
         photo = download_image(page_img or find_image(e))
         rewritten = ai_rewrite(title, summary)
+        if isinstance(rewritten, str):          # خبر نه دی، یا له اسلامي اصولو سره سمون نه لري
+            print(f"  ⏭️ پرېښودل شو ({rewritten[5:]}): {title[:50]}")
+            state["posted"].append(link)
+            continue
+        if not rewritten:
+            # AI نه وي نو د خبر ډول او اسلامي اصول نه شو کتلای — راتلونکي ځل بیا کوشش
+            print(f"  ⏸️ AI ځواب ورنه کړ، وروسته: {title[:50]}")
+            continue
+        title, summary, category = rewritten
         n = len(state["posted"])
         style = (n % 5) + 1 if CARD_STYLE == "auto" else CARD_STYLE
         card_path = os.path.join("/tmp", f"card_{n}.jpg")
-        if rewritten:
-            # نوې بڼه: په متن کې سرچینه نشته؛ یوازې په انځور کې ډېر کوچنی نوم
-            title, summary = rewritten
-            card = make_card(title, summary, HANDLE, card_path, style, photo=photo, source=name)
-            ok = publish(build_message(title, summary), card_path=card)
-            fb_text = fb_caption(title, summary)
-        else:
-            # که AI نه وي: اصلي متن، نو سرچینه په متن کې هم ښودل کېږي
-            card = make_card(title, summary, HANDLE, card_path, style, photo=photo, source=name)
-            ok = publish(build_message(title, summary, name, link), card_path=card)
-            fb_text = fb_caption(title, summary, name)
+        # په متن کې سرچینه نشته؛ یوازې په انځور کې ډېر کوچنی نوم
+        card = make_card(title, summary, HANDLE, card_path, style, photo=photo, source=name)
+        ok = publish(build_message(title, summary), card_path=card)
+        fb_text = fb_caption(title, summary)
         if ok and FB and not DRY_RUN:
             if fb.post_photo(FB[0], FB[1], card, fb_text):
                 print("  📘 فیسبوک ته هم ولېږل شو")

@@ -1,8 +1,6 @@
 # د خبرونو سرچینې — هره کرښه: نوم | د RSS لینک
-# نوې سرچینه زیاتوئ، یا د کرښې مخې ته # کېږدئ چې بنده شي.
+# یوازې دا درې سرچینې (د زاهد پرېکړه). نوې سرچینه یوازې د مالک په اجازه.
 
-ازادي راډیو | https://pa.azadiradio.com/api/
-امریکا غږ پښتو | https://www.pashtovoa.com/api/
-مشال راډیو | https://www.mashaalradio.com/api/
+بي بي سي پښتو | https://feeds.bbci.co.uk/pashto/rss.xml
 شمشاد نیوز | https://shamshadnews.com/feed/
 اریانا نیوز پښتو | https://www.ariananews.af/ps/feed/

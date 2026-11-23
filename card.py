@@ -19,7 +19,7 @@ YELLOW = (255, 202, 40)
 RED = (229, 57, 53)
 GREY = (70, 80, 100)
 
-HEAD = "GhoraMarhey.ttf"      # سرلیک
+HEAD = "GhoraLalezar.ttf"     # سرلیک (ډیفالټ فونټ)
 BODY = "GhoraMessiri.ttf"     # لنډیز
 LATIN = "Vazirmatn-Bold.ttf"  # پته (لاتین)
 
@@ -151,8 +151,8 @@ def style1(title, summary, handle):
 def style2(title, summary, handle):
     img = gradient((8, 18, 45), (20, 45, 100))
     d = ImageDraw.Draw(img)
-    lg = logo(260)
-    img.paste(lg, (60, 55), lg)
+    bd = logo_badge(150, pad=14, radius=18)
+    img.paste(bd, (50, 60), bd)
     f = font(HEAD, 42)
     w = tw(d, "عاجل خبر", f)
     d.rectangle((W - 60 - w - 70, 75, W - 60, 155), fill=RED)
@@ -276,8 +276,8 @@ def style2_photo(title, summary, handle, photo, source):
     img.alpha_composite(shade(W, 160, 0, 170), (0, PH - 160))   # لاندې سیوری
     d = ImageDraw.Draw(img)
 
-    lg = logo(230)
-    img.paste(lg, (45, 40), lg)
+    bd = logo_badge(150, pad=14, radius=18)     # کوچنی لوګو په شین بکس کې
+    img.paste(bd, (40, 40), bd)
     f = font(HEAD, 40)
     w = tw(d, "عاجل خبر", f)
     d.rectangle((W - 50 - w - 64, 52, W - 50, 126), fill=RED)
