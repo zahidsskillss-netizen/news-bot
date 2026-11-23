@@ -10,6 +10,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
   models: read
 
 concurrency: news-bot
@@ -49,3 +50,13 @@ jobs:
             sleep $((i * 3))
           done
           exit 1
+
+      # GitHub خپل مهالوېش (cron) په باوري ډول نه چلوي، نو هر ځل پای کې راتلونکی ځل پخپله پیلوو.
+      # concurrency له امله تل یوازې یو روان او یو انتظار کې وي، نو تکرار نه زیاتیږي.
+      - name: Schedule next run
+        if: always()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          sleep 210
+          gh workflow run news.yml --ref main -R "${{ github.repository }}"
