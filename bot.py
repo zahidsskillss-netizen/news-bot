@@ -155,6 +155,35 @@ def is_cricket(entry):
         sum(w in text for w in CRICKET_WORDS[9:]) >= 2
 
 
+STOP = set("د په کې ته له او چې دې یې هم دا هغه یو پر سره څخه نه شو شوی شوې شوي کړ کړي کوي وايي ویل وویل "
+             "یا تر باندې لپاره اړه کال ورځ نن".split())
+
+
+def title_words(t):
+    t = re.sub(r"[^\w\s]", " ", t or "")
+    return {w for w in t.split() if len(w) > 1 and w not in STOP}
+
+
+def is_duplicate(title, state):
+    """که همدا خبر (له بلې سرچینې یا په بل ډول لیکل شوی) مخکې خپور شوی وي."""
+    a = title_words(title)
+    if len(a) < 2:
+        return False
+    for old in state.get("titles", [])[-250:]:
+        b = set(old)
+        if not b:
+            continue
+        common = len(a & b)
+        if common / max(1, min(len(a), len(b))) >= 0.6 and common >= 2:
+            return True
+    return False
+
+
+def remember_title(title, state):
+    state.setdefault("titles", []).append(sorted(title_words(title)))
+    state["titles"] = state["titles"][-400:]
+
+
 def entry_time(entry):
     t = entry.get("published_parsed") or entry.get("updated_parsed")
     return time.mktime(t) if t else 0
@@ -362,6 +391,10 @@ def main():
 
     for _, name, e, link in reversed(to_post):         # زوړ لومړی، چې نوی په سر کې پاتې شي
         title = clean_text(e.get("title", ""), 200)
+        if is_duplicate(title, state):
+            print(f"  ♻️ دا خبر مخکې خپور شوی، پرېښودل شو: {title[:50]}")
+            state["posted"].append(link)
+            continue
         summary = clean_text(e.get("summary", ""))
         if summary == title:
             summary = ""
@@ -382,7 +415,12 @@ def main():
             # AI نه وي نو د خبر ډول او اسلامي اصول نه شو کتلای — راتلونکي ځل بیا کوشش
             print(f"  ⏸️ AI ځواب ورنه کړ، وروسته: {title[:50]}")
             continue
+        orig_title = title
         title, summary, category = rewritten
+        if is_duplicate(title, state):
+            print(f"  ♻️ ورته خبر مخکې خپور شوی، پرېښودل شو: {title[:50]}")
+            state["posted"].append(link)
+            continue
         n = len(state["posted"])
         style = (n % 5) + 1 if CARD_STYLE == "auto" else CARD_STYLE
         card_path = os.path.join("/tmp", f"card_{n}.jpg")
@@ -395,6 +433,9 @@ def main():
                 print("  📘 فیسبوک ته هم ولېږل شو")
         if ok:
             state["posted"].append(link)
+            remember_title(orig_title, state)
+            remember_title(title, state)
+            save_state(state) if not DRY_RUN else None    # سمدستي ساتل، چې بیا خپور نه شي
             print(f"  📤 {title[:60]}")
         time.sleep(3)
 

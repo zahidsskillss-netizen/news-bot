@@ -25,7 +25,7 @@ WHITE = (255, 255, 255)
 YELLOW = (255, 202, 40)
 
 HEAD = os.path.join(ASSETS, "GhoraLalezar.ttf")
-BODY = os.path.join(ASSETS, "GhoraMessiri.ttf")
+BODY = os.path.join(ASSETS, "GhoraMarhey.ttf")
 LATIN = os.path.join(ASSETS, "Vazirmatn-Bold.ttf")
 PS_MONTHS = ["جنوري", "فبروري", "مارچ", "اپرېل", "مې", "جون", "جولای",
              "اګست", "سپتمبر", "اکتوبر", "نومبر", "دسمبر"]
@@ -451,7 +451,7 @@ class LowerThird:
             self.lines = 2
         self.head = to_np(hl)
         self.tag = to_np(text_layer(tag, HEAD, 50, WHITE))
-        self.sub = to_np(text_layer(f"{sub}  •  {kabul_date()}", HEAD, 32, WHITE))
+        self.sub = to_np(text_layer(f"{sub}  •  {kabul_date()}", BODY, 32, WHITE))
         self.logo = logo3d_tile_np(LW)
         self.bw = max(900, min(1500, self.head.shape[1] + 120))
         self.bh = 120 if self.lines == 1 else 190

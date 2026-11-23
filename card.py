@@ -20,7 +20,7 @@ RED = (229, 57, 53)
 GREY = (70, 80, 100)
 
 HEAD = "GhoraLalezar.ttf"     # سرلیک (ډیفالټ فونټ)
-BODY = "GhoraMessiri.ttf"     # لنډیز
+BODY = "GhoraMarhey.ttf"      # متن/لنډیز
 LATIN = "Vazirmatn-Bold.ttf"  # پته (لاتین)
 
 PS_MONTHS = ["جنوري", "فبروري", "مارچ", "اپرېل", "مې", "جون", "جولای",
