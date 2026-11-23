@@ -1,0 +1,74 @@
+name: Render Motion (3D)
+on:
+  workflow_dispatch:
+    inputs:
+      scenes:
+        description: "صحنې (intro,outro,lt_in,lt_hold,lt_out,stinger)"
+        default: "intro,outro,lt_in,lt_hold,lt_out,stinger"
+permissions:
+  contents: write
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      chunks: ${{ steps.p.outputs.chunks }}
+    steps:
+      - id: p
+        run: |
+          python3 - <<'PY' >> $GITHUB_OUTPUT
+          import json, os
+          frames = {"intro": 180, "outro": 180, "lt_in": 30, "lt_hold": 1, "lt_out": 18, "stinger": 26}
+          want = [s.strip() for s in "${{ github.event.inputs.scenes }}".split(",") if s.strip()]
+          chunks = []
+          for s in want:
+              n = frames[s]; step = 9 if n > 30 else n
+              for a in range(1, n + 1, step):
+                  chunks.append(f"{s}:{a}:{min(n, a + step - 1)}")
+          print("chunks=" + json.dumps(chunks))
+          PY
+  render:
+    needs: plan
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix:
+        chunk: ${{ fromJson(needs.plan.outputs.chunks) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: motion/requirements-blender.txt
+      - run: pip install -r motion/requirements-blender.txt
+      - name: Render
+        run: |
+          IFS=: read S A B <<< "${{ matrix.chunk }}"
+          python motion/scenes.py $S frames/$S $A $B 2>&1 | grep -E "RENDERED|Error|Traceback" || true
+          ls frames/$S | wc -l
+      - uses: actions/upload-artifact@v4
+        with:
+          name: f-${{ strategy.job-index }}
+          path: frames/
+          retention-days: 2
+  encode:
+    needs: render
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: frames_all
+          pattern: f-*
+          merge-multiple: true
+      - run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg >/dev/null
+      - name: Encode
+        run: bash motion/encode.sh frames_all motion/out
+      - name: Commit
+        run: |
+          git config user.name "news-bot"
+          git config user.email "news-bot@users.noreply.github.com"
+          git add motion/out
+          git commit -m "Rendered 3D motion graphics" || exit 0
+          for i in 1 2 3; do git pull --rebase -q && git push && break; sleep 5; done
