@@ -335,7 +335,10 @@ def make_card(title, summary, handle, out_path, style=1, photo=None, source=None
         style = int(style)
     except (TypeError, ValueError):
         style = 1
-    if photo is not None and style == 2:
+    if style >= 6:
+        from card_designs import DESIGNS          # ۶–۱۰ نوي ډیزاینونه (انځور نه وي هم کار کوي)
+        img = DESIGNS.get(style, DESIGNS[8])(title, summary or "", handle, photo, source)
+    elif photo is not None and style == 2:
         img = style2_photo(title, summary or "", handle, photo, source)
     else:
         img = STYLES.get(style, style1)(title, summary or "", handle)
