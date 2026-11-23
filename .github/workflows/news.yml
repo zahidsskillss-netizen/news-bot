@@ -2,7 +2,7 @@ name: News Bot
 
 on:
   schedule:
-    - cron: "*/30 * * * *"   # هر ۳۰ دقیقې
+    - cron: "*/5 * * * *"   # هر ۵ دقیقې
   workflow_dispatch:         # په لاس چلول (Run workflow تڼۍ)
   push:
     branches: [main]
