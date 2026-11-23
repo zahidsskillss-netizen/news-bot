@@ -171,9 +171,9 @@ def style2(title, summary, handle):
     bd = logo_clean(170)
     img.paste(bd, (50, 60), bd)
     f = font(HEAD, 42)
-    w = tw(d, "عاجل خبر", f)
+    w = tw(d, "تازه خبر", f)
     d.rectangle((W - 60 - w - 70, 75, W - 60, 155), fill=RED)
-    rtl(d, (W - 95, 115), "عاجل خبر", f, WHITE, "rm")
+    rtl(d, (W - 95, 115), "تازه خبر", f, WHITE, "rm")
     d.rectangle((0, 250, W, 258), fill=BLUE)
 
     inner = W - 160
@@ -296,9 +296,9 @@ def style2_photo(title, summary, handle, photo, source):
     bd = logo_clean(170)                         # کوچنی لوګو، پرته له شالید
     img.paste(bd, (40, 40), bd)
     f = font(HEAD, 40)
-    w = tw(d, "عاجل خبر", f)
+    w = tw(d, "تازه خبر", f)
     d.rectangle((W - 50 - w - 64, 52, W - 50, 126), fill=RED)
-    rtl(d, (W - 82, 89), "عاجل خبر", f, WHITE, "rm")
+    rtl(d, (W - 82, 89), "تازه خبر", f, WHITE, "rm")
 
     # د سرچینې ډېر کوچنی نوم (کیڼ لاندې کونج)
     if source:
