@@ -208,27 +208,34 @@ def style8(title, summary, handle, photo, source):
     sticker = Image.new("RGBA", (w2 + 20, 150), (0, 0, 0, 0))
     sd = ImageDraw.Draw(sticker)
     sd.polygon([(w2 - 120, 0), (w2 + 10, 0), (w2, 44), (w2 - 130, 44)], fill=BLUE + (255,))
-    sd.text((w2 - 60, 22), "ژوندی", font=s1, fill=WHITE, anchor="mm", direction="rtl", language="ps")
+    sd.text((w2 - 60, 22), "LIVE", font=font(LATIN, 28), fill=WHITE, anchor="mm")
     sd.polygon([(20, 52), (w2 + 20, 52), (w2, 140), (0, 140)], fill=WHITE + (255,))
     sd.text((w2 / 2 + 10, 96), "تازه خبر", font=s2, fill=BLUE_DARK, anchor="mm", direction="rtl", language="ps")
     img.alpha_composite(sticker, (x2 - sticker.width, py + 30))
-    if source:
-        rtl(d, (px + 30, py + ph - 20), source, font(BODY, 22), WHITE, "ld")
+    if source:   # سرچینه: کوچنی متن په تور شالید
+        sf_ = font(BODY, 22)
+        sw = tw(d, source, sf_)
+        bx, by = px + 22, py + ph - 22 - 38
+        d.rounded_rectangle((bx, by, bx + sw + 28, by + 38), 10, fill=(0, 0, 0, 170))
+        rtl(d, (bx + 14 + sw, by + 19), source, sf_, (240, 240, 240), "rm")
 
-    y = py + ph + 34
-    rtl(d, (cx2 - 40, y), "تازه خبر", font(BODY, 30), BLUE_DARK)
-    y += 50
+    # سرلیک او متن (پرته له «تازه خبر» او «نور ولولئ»)
+    tx = cx2 - 40
+    y = py + ph + 26
     tf, tl = fit(d, title, HEAD, [56, 50, 46, 42], pw - 40, 2)
     for ln in tl:
-        rtl(d, (cx2 - 40, y), ln, tf, INK)
-        y += int(tf.size * 1.3)
-    f = font(HEAD, 34)
-    bw = tw(d, "نور ولولئ", f) + 70
-    by = min(y + 20, cy2 - 100)
-    d.rounded_rectangle((cx2 - 40 - bw, by, cx2 - 40, by + 66), 33, fill=(12, 70, 110))
-    rtl(d, (cx2 - 40 - bw / 2, by + 33), "نور ولولئ", f, WHITE, "mm")
-    d.text((cx1 + 40, by + 33), today(), font=font(BODY, 28), fill=SOFT, anchor="lm",
-           direction="rtl", language="ps")
+        rtl(d, (tx, y), ln, tf, INK)
+        y += int(tf.size * 1.28)
+    date_y = cy2 - 44
+    room = (date_y - 24) - (y + 6)
+    if summary and room > 30:
+        n = max(1, int(room // int(28 * 1.45)))
+        sf, sl = fit(d, summary, BODY, [28, 26, 24], pw - 40, min(3, n))
+        para(d, sl, sf, tx, y + 6, (55, 70, 95), 0)
+    # نېټه: تر ټولو لاندې
+    d.line((cx1 + 40, date_y - 14, cx2 - 40, date_y - 14), fill=(185, 210, 232), width=2)
+    rtl(d, (tx, date_y + 8), today(), font(BODY, 26), SOFT, "rm")
+    d.text((cx1 + 40, date_y + 8), handle, font=font(LATIN, 26), fill=SOFT, anchor="lm")
     return img.convert("RGB")
 
 
