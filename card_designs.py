@@ -99,8 +99,11 @@ def style6(title, summary, handle, photo, source):
         rtl(d, (W - 55, y), ln, tf, BLUE_DARK)
         y += int(tf.size * 1.3)
     y += 4
-    sf, sl = fit(d, summary or "", BODY, [30, 28, 26], W - 110, 3) if summary else (None, [])
-    if sl:
+    room = (H - 70 - 14) - y
+    if summary and room > 40:
+        sf = font(BODY, 28)
+        n = max(1, int(room // (int(28 * 1.45) + 2)))
+        sf, sl = fit(d, summary, BODY, [28, 26], W - 110, min(3, n))
         para(d, sl, sf, W - 55, y, INK, 2)
 
     d.rectangle((0, H - 70, W, H), fill=BLUE_DARK)
@@ -257,7 +260,7 @@ def style9(title, summary, handle, photo, source):
         rtl(d, (W - 70, y), ln, tf, RED if i == len(tl) - 1 and len(tl) > 1 else WHITE)
         y += int(tf.size * 1.25)
     if source:
-        rtl(d, (70, H - 250), "انځور: " + source, font(BODY, 26), (220, 220, 220), "la")
+        rtl(d, (70, H - 175), "انځور: " + source, font(BODY, 24), (190, 200, 220), "la")
     social_row(d, H - 95, WHITE, handle, x_right=W - 70, size=28)
     rtl(d, (W / 2, H - 40), today(), font(BODY, 24), (170, 190, 220), "mm")
     return img.convert("RGB")
@@ -295,7 +298,9 @@ def style10(title, summary, handle, photo, source):
     y += 150
     d.line((sx1 + 45, y, sx2 - 45, y), fill=INK, width=3)
 
-    pw, ph = sx2 - sx1 - 90, 340
+    pw = sx2 - sx1 - 90
+    tf0, tl0 = fit(d, title, HEAD, [48, 44, 40], pw, 2)
+    ph = 340 if len(tl0) == 1 else 300
     py = y + 26
     pic = cover(photo, pw, ph) if photo else placeholder(pw, ph)
     img.paste(pic, (sx1 + 45, py))
@@ -308,8 +313,10 @@ def style10(title, summary, handle, photo, source):
     for ln in tl:
         rtl(d, (sx2 - 45, y), ln, tf, INK)
         y += int(tf.size * 1.3)
-    if summary:
-        sf, sl = fit(d, summary, BODY, [26, 24], pw, 3)
+    room = (sy2 - 30) - (y + 4)
+    if summary and room > 34:
+        n = max(1, int(room // int(26 * 1.45)))
+        sf, sl = fit(d, summary, BODY, [26, 24], pw, min(3, n))
         para(d, sl, sf, sx2 - 45, y + 4, (60, 65, 80), 0)
 
     social_row(d, H - 48, WHITE, handle, x_right=W - 70, size=28)
