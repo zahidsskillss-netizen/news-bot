@@ -127,9 +127,10 @@
 "https://www.bbc.com/pashto/articles/c39w9g4ed2vzo?at_medium=RSS&at_campaign=rss",
 "https://www.ariananews.af/ps/%d8%af-%d8%a7%d9%81%d8%ba%d8%a7%d9%86%d8%b3%d8%aa%d8%a7%d9%86-%d8%a7%d9%88-%d8%a7%d8%b2%d8%a8%da%a9%d8%b3%d8%aa%d8%a7%d9%86-%d8%af-%d8%b3%d9%88%d8%af%d8%a7%da%ab%d8%b1%db%8d-%da%a9%da%86%d9%87-%db%b1/",
 "https://www.ariananews.af/ps/%d9%85%d9%86%da%81%d9%86%db%8c-%d8%ae%d8%aa%db%8c%da%81-%d8%af-%d8%a7%d9%85%d8%b1%db%8c%da%a9%d8%a7-%d8%a7%d9%88-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%af-%da%a9%da%93%da%a9%db%90%da%86%d9%88%d9%86%d9%88/",
-"https://www.bbc.com/pashto/articles/ckj059lq86evo?at_medium=RSS&at_campaign=rss"
+"https://www.bbc.com/pashto/articles/ckj059lq86evo?at_medium=RSS&at_campaign=rss",
+"https://shamshadnews.com/%d8%af-%d9%86%db%8c%d8%a7%d9%84-%da%a9%db%90%d9%86%d9%88%d9%84%d9%88-%d8%ae%d8%b2%d8%a7%d9%86%d9%8a-%da%a9%d9%85%d9%be%d8%a7%db%8c%d9%86%d8%9b-%da%a9%d8%a7%d8%a8%d9%84-%da%9a%d8%a7%d8%b1%d9%88%d8%a7/"
 ],
-"last_run": "2026-11-24T09:18:44.840194+00:00",
+"last_run": "2026-11-24T09:22:49.417736+00:00",
 "titles": [
 [
 "اندېښ",
@@ -652,6 +653,27 @@
 "لوی",
 "پاکستان",
 "ګل"
+],
+[
+"خزاني",
+"زره",
+"نوي",
+"نیال",
+"نیالګي",
+"ښاروالي",
+"کابل",
+"کمپاین",
+"کېنولو",
+"کېنوي",
+"۱۸۰"
+],
+[
+"زره",
+"نیالګي",
+"ښاروالي",
+"کابل",
+"کېنوي",
+"۱۸۰"
 ]
 ],
 "log": [
@@ -780,6 +802,15 @@
 "source": "بي بي سي پښتو",
 "cat": "امنیت",
 "link": "https://www.bbc.com/pashto/articles/ckj059lq86evo?at_medium=RSS&at_campaign=rss"
+},
+{
+"t": "2026-11-24T09:22:46.416875+00:00",
+"title": "کابل ښاروالي ۱۸۰ زره نیالګي کېنوي",
+"summary": "کابل ښاروالي د ښار د زرغونولو او هوا د پاکوالي په موخه یو لړ هڅې پیل کړې دي. د دې کمپاین په ترڅ کې به د ښار په بېلابېلو سیمو کې ۱۸۰ زره نوي نیالګي کېښودل شي. مسؤولین له ښاریانو غواړي چې د یادو بوټو په ساتنه او پالنه کې له شاروالۍ سره مرسته وکړي.",
+"img": "https://shamshadnews.com/wp-content/uploads/2026/11/نهال-شاني.jpg",
+"source": "شمشاد نیوز",
+"cat": "ټولنه",
+"link": "https://shamshadnews.com/%d8%af-%d9%86%db%8c%d8%a7%d9%84-%da%a9%db%90%d9%86%d9%88%d9%84%d9%88-%d8%ae%d8%b2%d8%a7%d9%86%d9%8a-%da%a9%d9%85%d9%be%d8%a7%db%8c%d9%86%d8%9b-%da%a9%d8%a7%d8%a8%d9%84-%da%9a%d8%a7%d8%b1%d9%88%d8%a7/"
 }
 ]
 }
