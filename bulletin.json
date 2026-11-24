@@ -1,5 +1,5 @@
 {
- "offset": 68976440,
+ "offset": 68976442,
  "owner": 440243088,
  "current": {
   "id": "20261124-1257",
@@ -44,8 +44,13 @@
    }
   ],
   "voices": {},
-  "status": "waiting",
-  "redo": null
+  "status": "rendering",
+  "redo": null,
+  "full": {
+   "file_id": "AwACAgUAAxkBAALgIWsFSg91wJWtvLodLMpXJzCATDr1AAK7JwACN-0xVCkHUI-Q3W40PQQ",
+   "dur": 151
+  },
+  "render_started": 1795509080.7254832
  },
  "done": [],
  "yt_device": null,
