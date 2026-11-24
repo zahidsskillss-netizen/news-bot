@@ -136,9 +136,10 @@
 "https://shamshadnews.com/%d8%aa%db%90%d8%b1%d9%87-%d9%85%db%8c%d8%a7%d8%b4%d8%aa-%d9%84%d9%87-%d9%87%d8%b1%d8%a7%d8%aa-%d9%88%d9%84%d8%a7%db%8c%d8%aa-%da%85%d8%ae%d9%87-%d8%af-%db%b2%db%b1-%d9%85%db%8c%d9%84%db%8c%d9%88%d9%86/",
 "https://www.ariananews.af/ps/%d9%be%d9%87-%d8%aa%db%90%d8%b1%d9%87-%db%8c%d9%88%d9%87-%d9%85%db%8c%d8%a7%d8%b4%d8%aa-%da%a9%db%90-%d9%84%d9%87-%d9%87%d8%b1%d8%a7%d8%aa-%da%85%d8%ae%d9%87-%d8%af-%db%b2%db%b1-%d9%85%db%8c%d9%84/",
 "https://www.ariananews.af/ps/former-pakistani-envoy-urges-islamabad-to-pursue-dialogue-with-afghanistan/",
-"https://www.ariananews.af/ps/%d8%af-%d9%be%d8%a7%da%a9%d8%b3%d8%aa%d8%a7%d9%86-%d9%be%d8%ae%d9%88%d8%a7%d9%86%db%8c-%d8%b3%d9%81%db%8c%d8%b1-%d9%84%d9%87-%d8%a7%d9%81%d8%ba%d8%a7%d9%86%d8%b3%d8%aa%d8%a7%d9%86-%d8%b3%d8%b1%d9%87/"
+"https://www.ariananews.af/ps/%d8%af-%d9%be%d8%a7%da%a9%d8%b3%d8%aa%d8%a7%d9%86-%d9%be%d8%ae%d9%88%d8%a7%d9%86%db%8c-%d8%b3%d9%81%db%8c%d8%b1-%d9%84%d9%87-%d8%a7%d9%81%d8%ba%d8%a7%d9%86%d8%b3%d8%aa%d8%a7%d9%86-%d8%b3%d8%b1%d9%87/",
+"https://www.bbc.com/pashto/articles/cw30g8gvn0pmo?at_medium=RSS&at_campaign=rss"
 ],
-"last_run": "2026-11-24T13:15:32.107989+00:00",
+"last_run": "2026-11-24T13:20:04.266663+00:00",
 "titles": [
 [
 "اندېښ",
@@ -801,6 +802,28 @@
 "منصور",
 "وکړي",
 "کابل"
+],
+[
+"استوګنځي",
+"الرحمان",
+"شاوخوا",
+"شمېر",
+"فضل",
+"لاهور",
+"لوی",
+"مولانا",
+"پوليس",
+"ځای"
+],
+[
+"الرحمان",
+"فضل",
+"لاهور",
+"محاصره",
+"مولانا",
+"پولیسو",
+"کلکه",
+"کور"
 ]
 ],
 "log": [
@@ -992,6 +1015,15 @@
 "source": "اریانا نیوز پښتو",
 "cat": "سیاست",
 "link": "https://www.ariananews.af/ps/%d8%af-%d9%be%d8%a7%da%a9%d8%b3%d8%aa%d8%a7%d9%86-%d9%be%d8%ae%d9%88%d8%a7%d9%86%db%8c-%d8%b3%d9%81%db%8c%d8%b1-%d9%84%d9%87-%d8%a7%d9%81%d8%ba%d8%a7%d9%86%d8%b3%d8%aa%d8%a7%d9%86-%d8%b3%d8%b1%d9%87/"
+},
+{
+"t": "2026-11-24T13:20:01.265829+00:00",
+"title": "لاهور کې د مولانا فضل الرحمان پر کور د پولیسو کلکه محاصره",
+"summary": "د جمعيت علمای اسلام ګوند چارواکي وايي چې په لاهور کې د مولانا فضل الرحمان د استوګنځي شاوخوا ګڼ شمېر پولیس پر دنده ګومارل شوي دي. د دوی په خبره, امنیتي ځواکونو هغو کسانو ته هم د ورتګ او وتلو اجازه نه ورکوي چې غواړي یادې ودانۍ ته تګ راتګ وکړي.",
+"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/29de/live/c30c4430-e7f9-11f1-99b6-a35a62fa4264.jpg",
+"source": "بي بي سي پښتو",
+"cat": "سیاست",
+"link": "https://www.bbc.com/pashto/articles/cw30g8gvn0pmo?at_medium=RSS&at_campaign=rss"
 }
 ]
 }
