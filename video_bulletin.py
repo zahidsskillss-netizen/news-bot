@@ -207,10 +207,12 @@ def tick():
         return
     st = load(STATE_FILE, {"offset": 0, "owner": None, "current": None, "done": []})
     res = tg("getUpdates", offset=st.get("offset", 0), timeout=0, allowed_updates='["message"]')
+    if not res.get("ok") and res.get("error_code") == 409:
+        # زاړه سایټ (geniusclub) سره اړیکه غوڅول — د مالک په اجازه
+        print("deleteWebhook:", tg("deleteWebhook"))
+        res = tg("getUpdates", offset=st.get("offset", 0), timeout=0, allowed_updates='["message"]')
     if not res.get("ok"):
         print("getUpdates:", res)
-        wh = tg("getWebhookInfo")
-        print("webhook:", (wh.get("result") or {}).get("url"))
     else:
         print("updates:", len(res.get("result", [])))
     for u in res.get("result", []):
