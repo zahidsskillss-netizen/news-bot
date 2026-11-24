@@ -134,9 +134,10 @@
 "https://www.ariananews.af/ps/cpj-urges-us-to-release-detained-afghan-journalist/",
 "https://www.ariananews.af/ps/%d8%af-%d8%ae%d8%a8%d8%b1%db%8c%d8%a7%d9%84%d8%a7%d9%86%d9%88-%d8%af-%d8%ae%d9%88%d9%86%d8%af%db%8c%d8%aa%d9%88%d8%a8-%da%a9%d9%85%db%8c%d9%bc%db%90-%d8%af-%d8%a7%d9%85%d8%b1%db%8c%da%a9%d8%a7-%d9%84/",
 "https://shamshadnews.com/%d8%aa%db%90%d8%b1%d9%87-%d9%85%db%8c%d8%a7%d8%b4%d8%aa-%d9%84%d9%87-%d9%87%d8%b1%d8%a7%d8%aa-%d9%88%d9%84%d8%a7%db%8c%d8%aa-%da%85%d8%ae%d9%87-%d8%af-%db%b2%db%b1-%d9%85%db%8c%d9%84%db%8c%d9%88%d9%86/",
-"https://www.ariananews.af/ps/%d9%be%d9%87-%d8%aa%db%90%d8%b1%d9%87-%db%8c%d9%88%d9%87-%d9%85%db%8c%d8%a7%d8%b4%d8%aa-%da%a9%db%90-%d9%84%d9%87-%d9%87%d8%b1%d8%a7%d8%aa-%da%85%d8%ae%d9%87-%d8%af-%db%b2%db%b1-%d9%85%db%8c%d9%84/"
+"https://www.ariananews.af/ps/%d9%be%d9%87-%d8%aa%db%90%d8%b1%d9%87-%db%8c%d9%88%d9%87-%d9%85%db%8c%d8%a7%d8%b4%d8%aa-%da%a9%db%90-%d9%84%d9%87-%d9%87%d8%b1%d8%a7%d8%aa-%da%85%d8%ae%d9%87-%d8%af-%db%b2%db%b1-%d9%85%db%8c%d9%84/",
+"https://www.ariananews.af/ps/former-pakistani-envoy-urges-islamabad-to-pursue-dialogue-with-afghanistan/"
 ],
-"last_run": "2026-11-24T11:31:44.201652+00:00",
+"last_run": "2026-11-24T11:36:37.742504+00:00",
 "titles": [
 [
 "اندېښ",
@@ -756,6 +757,27 @@
 "هرات",
 "ډالرو",
 "۲۱"
+],
+[
+"Afghanistan",
+"Former",
+"Islamabad",
+"Pakistani",
+"dialogue",
+"envoy",
+"pursue",
+"to",
+"urges",
+"with"
+],
+[
+"خبرو",
+"وکړ",
+"ټینګار",
+"پاکستان",
+"پخواني",
+"ډیپلومات",
+"کابل"
 ]
 ],
 "log": [
@@ -929,6 +951,15 @@
 "source": "شمشاد نیوز",
 "cat": "اقتصاد",
 "link": "https://shamshadnews.com/%d8%aa%db%90%d8%b1%d9%87-%d9%85%db%8c%d8%a7%d8%b4%d8%aa-%d9%84%d9%87-%d9%87%d8%b1%d8%a7%d8%aa-%d9%88%d9%84%d8%a7%db%8c%d8%aa-%da%85%d8%ae%d9%87-%d8%af-%db%b2%db%b1-%d9%85%db%8c%d9%84%db%8c%d9%88%d9%86/"
+},
+{
+"t": "2026-11-24T11:36:34.741289+00:00",
+"title": "د پاکستان پخواني ډیپلومات له کابل سره پر خبرو ټینګار وکړ",
+"summary": "د پاکستان پخواني استازي ویلي چې اسلام‌آباد باید له افغانستان سره د خبرو اترو لاره خپله کړي. نوموړي زیاته کړې چې د تحریک طالبان پاکستان (ټي‌ټي‌پي) او بلوکستان ازادۍ پوځ (بي‌اېل‌اې) په ګډون د اسلام‌آباد اندېښنې د ګډو امنیتي همکاریو او مثبتو تعاملاتو له لارې حل کېدای شي.",
+"img": "https://www.ariananews.af/wp-content/uploads/2026/11/Mansoor-Ahmad-Khan.jpg",
+"source": "اریانا نیوز پښتو",
+"cat": "سیاست",
+"link": "https://www.ariananews.af/ps/former-pakistani-envoy-urges-islamabad-to-pursue-dialogue-with-afghanistan/"
 }
 ]
 }
