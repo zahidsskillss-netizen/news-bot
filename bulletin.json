@@ -44,13 +44,14 @@
    }
   ],
   "voices": {},
-  "status": "rendering",
+  "status": "done",
   "redo": null,
   "full": {
    "file_id": "AwACAgUAAxkBAALgIWsFSg91wJWtvLodLMpXJzCATDr1AAK7JwACN-0xVCkHUI-Q3W40PQQ",
    "dur": 151
   },
-  "render_started": 1795509080.7254832
+  "render_started": 1795509080.7254832,
+  "video": "https://youtu.be/y7wjKPtkHuY"
  },
  "done": [],
  "yt_device": null,
