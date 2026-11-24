@@ -77,7 +77,8 @@ def say(st, text, **kw):
 NARRATE = (
     "ته د «بصرام ټي وي» خبري ویاند لپاره متن لیکې. لاندې خبر د غږیز لوستلو لپاره "
     "په روانه، ساده او رسمي پښتو کې په ۴۰ تر ۶۵ ټکو کې ولیکه. جملې لنډې وي، چې په اسانۍ ولوستل شي. "
-    "حقایق مه بدلوه، څه مه ورزیاتوه، خپل نظر مه ورکوه. یوازې متن ولیکه، بل هېڅ نه.\n\n"
+    "حقایق مه بدلوه، څه مه ورزیاتوه، خپل نظر مه ورکوه. سلام، ښه راغلاست یا د ځان پېژندنه مه لیکه؛ "
+    "یوازې د خبر متن ولیکه، بل هېڅ نه.\n\n"
 )
 
 
@@ -101,7 +102,7 @@ def pick_news(hours=14):
     out, seen = [], []
     for x in fresh:
         w = bot.title_words(x["title"])
-        if any(len(w & s) / max(1, min(len(w), len(s))) >= 0.6 for s in seen):
+        if any(len(w & s) / max(1, min(len(w), len(s))) >= 0.45 for s in seen):
             continue
         seen.append(w)
         out.append(x)
@@ -158,7 +159,10 @@ def handle(st, msg):
         return
     cur = st.get("current")
     if text == "/new":
-        prepare(st, "manual")
+        if cur and cur.get("status") in ("ready", "rendering"):
+            say(st, "⏳ اوسنۍ ویډیو جوړېږي. چې خلاصه شي، بیا /new ولیکئ.")
+        else:
+            prepare(st, "manual")
     elif text == "/status":
         if not cur:
             say(st, "اوس هېڅ راپور روان نه دی. نوی: /new")
