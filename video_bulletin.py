@@ -475,11 +475,18 @@ def ts(sec):
 
 def render():
     import motion as m
-    st = load(STATE_FILE, {})
-    cur = st.get("current")
-    if not cur or cur.get("status") not in ("rendering", "ready") or cur["id"] in load(DONE_FILE, {}):
-        print("هېڅ راپور د جوړېدو لپاره نشته")
-        return
+    # د خبرونو روباټ ښايي لا خپل وضعیت نه وي ساتلی — تر ۶ دقیقو انتظار
+    for attempt in range(19):
+        st = load(STATE_FILE, {})
+        cur = st.get("current")
+        if cur and cur.get("status") in ("rendering", "ready") and cur["id"] not in load(DONE_FILE, {}):
+            break
+        if attempt == 18:
+            print("هېڅ راپور د جوړېدو لپاره نشته")
+            return
+        time.sleep(20)
+        subprocess.run("git fetch -q origin main && git checkout -q origin/main -- bulletin.json bulletin_done.json "
+                       "2>/dev/null || git checkout -q origin/main -- bulletin.json", shell=True, cwd=HERE)
     os.makedirs(WORK, exist_ok=True)
     say(st, "🎬 ویډیو جوړېږي…")
     parts, chapters, t = [], [], 0.0
