@@ -333,7 +333,36 @@ def silences(wav):
                          capture_output=True, text=True).stderr
     st = [float(x) for x in re.findall(r"silence_start: ([\d.]+)", out)]
     en = [float(x) for x in re.findall(r"silence_end: ([\d.]+)", out)]
-    return list(zip(st, en))
+    found = list(zip(st, en))
+    if len(found) >= 2:
+        return found
+    # د شاتني غږ سره: د غږ کچې له مخې (د هر ثبت لپاره جلا حد)
+    import numpy as np
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-i", wav, "-ac", "1", "-ar", "16000", "-f", "s16le", "-"],
+                         capture_output=True).stdout
+    a = np.frombuffer(raw, np.int16).astype(np.float32) / 32768
+    hop = 800                                                  # 50ms
+    n = len(a) // hop
+    if n < 20:
+        return found
+    rms = np.sqrt((a[:n * hop].reshape(n, hop) ** 2).mean(1) + 1e-10)
+    db = 20 * np.log10(rms)
+    db = np.convolve(db, np.ones(3) / 3, mode="same")
+    floor, speech = np.percentile(db, 10), np.percentile(db, 70)
+    thr = floor + max(4.0, (speech - floor) * 0.3)
+    low = db < thr
+    out2, i = [], 0
+    while i < n:
+        if low[i]:
+            j = i
+            while j < n and low[j]:
+                j += 1
+            if (j - i) * 0.05 >= 0.6:
+                out2.append((i * 0.05, j * 0.05))
+            i = j
+        else:
+            i += 1
+    return out2
 
 
 def split_full(wav, scripts, outdir):
@@ -343,6 +372,19 @@ def split_full(wav, scripts, outdir):
     w = [max(1, len(s.split())) for s in scripts]
     cum = [sum(w[:k + 1]) / sum(w) for k in range(n - 1)]
     sil = [(a, b) for a, b in silences(wav) if b - a >= 0.7 and 2 < a < total - 2]
+    # ۱) ارادي وقفې (تر ټولو اوږدې چوپتیاوې) — که کافي وي، همدا پرې کول
+    longest = sorted(sil, key=lambda x: x[1] - x[0], reverse=True)[:n - 1]
+    if len(longest) == n - 1 and min(b - a for a, b in longest) >= 1.2:
+        cuts = sorted((a + b) / 2 for a, b in longest)
+        sil = []                                   # لاندې اټکل ته اړتیا نشته
+    else:
+        cuts = None
+    if cuts is None:
+        cuts = _estimate_cuts(total, cum, sil, n)
+    return _cut(wav, total, cuts, n, outdir, len(sil))
+
+
+def _estimate_cuts(total, cum, sil, n):
     cuts, last = [], 0.0
     for k, c in enumerate(cum):
         exp = total * c
@@ -356,8 +398,12 @@ def split_full(wav, scripts, outdir):
             cut = max(exp, last + 3)
         cuts.append(cut)
         last = cut
+    return cuts
+
+
+def _cut(wav, total, cuts, n, outdir, nsil):
     edges = [0.0] + cuts + [total]
-    print("cuts:", [round(x, 1) for x in cuts], "total:", round(total, 1), "silences:", len(sil))
+    print("cuts:", [round(x, 1) for x in cuts], "total:", round(total, 1), "silences:", nsil)
     parts = []
     for i in range(n):
         out = f"{outdir}/v{i + 1}.wav"
