@@ -75,7 +75,7 @@ def say(st, text, **kw):
 
 # ---------------- د راپور چمتو کول ----------------
 NARRATE = (
-    "ته د «بسرام ټي وي» خبري ویاند لپاره متن لیکې. لاندې خبر د غږیز لوستلو لپاره "
+    "ته د «بصرام ټي وي» خبري ویاند لپاره متن لیکې. لاندې خبر د غږیز لوستلو لپاره "
     "په روانه، ساده او رسمي پښتو کې په ۴۰ تر ۶۵ ټکو کې ولیکه. جملې لنډې وي، چې په اسانۍ ولوستل شي. "
     "حقایق مه بدلوه، څه مه ورزیاتوه، خپل نظر مه ورکوه. یوازې متن ولیکه، بل هېڅ نه.\n\n"
 )
@@ -120,7 +120,7 @@ def prepare(st, slot):
     for i, it in enumerate(items):
         script = narration(it)
         if i == 0:
-            script = (f"السلام علیکم! د بسرام ټي وي {label} خبرونو ته ښه راغلاست. "
+            script = (f"السلام علیکم! د بصرام ټي وي {label} خبرونو ته ښه راغلاست. "
                       f"نن {ps_date()} ده. لومړی خبر: ") + script
         if i == len(items) - 1:
             script += " دا وو د نن خبرونه. له موږ سره د ملګرتیا مننه، د الله په امان."
@@ -129,11 +129,18 @@ def prepare(st, slot):
     st["current"] = {"id": now_kabul().strftime("%Y%m%d-%H%M"), "slot": slot, "label": label,
                      "created": time.time(), "segs": segs, "voices": {}, "status": "waiting",
                      "redo": None}
-    say(st, f"🎙️ <b>د بسرام ټي وي {label} ویډیويي خبرونه</b> — {ps_date()}\n\n"
-            f"لاندې {len(segs)} برخې دي. هره برخه په <b>جلا Voice</b> کې ولولئ او د نمبر په ترتیب یې راولېږئ."
-            f"\nکه یوه برخه بیا ثبتول غواړئ: <code>/redo 2</code>")
-    for i, sg in enumerate(segs, 1):
-        say(st, f"📰 <b>{str(i).translate(PS)}/{str(len(segs)).translate(PS)}</b> — {sg['title']}\n\n{sg['script']}")
+    head = (f"🎙️ <b>د بصرام ټي وي {label} ویډیويي خبرونه</b> — {ps_date()}\n\n"
+            "📌 ټول خبرونه په <b>یوه ثبت</b> کې ولولئ (Voice یا د مایک فایل mp3/m4a).\n"
+            "⏸️ د هر خبر ترمنځ <b>۲ ثانیې چوپ</b> شئ، چې روباټ یې سم جلا کړي.\n"
+            "(که غواړئ، هر خبر په جلا Voice کې هم لېږلای شئ.)\n")
+    body = "\n\n".join(f"<b>{str(i).translate(PS)}.</b> {sg['script']}" for i, sg in enumerate(segs, 1))
+    msg = head + "\n" + body
+    if len(msg) <= 4000:
+        say(st, msg)
+    else:
+        say(st, head)
+        for i, sg in enumerate(segs, 1):
+            say(st, f"<b>{str(i).translate(PS)}.</b> {sg['script']}")
 
 
 # ---------------- ټلګرام: امرونه او Voice ----------------
@@ -143,7 +150,7 @@ def handle(st, msg):
     if text.startswith("/start"):
         if OWNER_CODE in text.lower() and not st.get("owner"):
             st["owner"] = chat
-            say(st, "✅ تاسو د بسرام ټي وي د ویډیويي راپور مالک ثبت شوئ.\n"
+            say(st, "✅ تاسو د بصرام ټي وي د ویډیويي راپور مالک ثبت شوئ.\n"
                     "هره ورځ سهار ۷ او ماښام ۶ بجې به د خبرونو متن درته راشي.\n"
                     "همدا اوس د ازموینې لپاره: /new")
         return
@@ -166,7 +173,7 @@ def handle(st, msg):
             sg = cur["segs"][cur["redo"] - 1]
             say(st, f"🔁 د {cur['redo']} برخې نوی Voice راولېږئ:\n\n{sg['script']}")
     elif text == "/build":
-        if cur and cur["voices"]:
+        if cur and (cur["voices"] or cur.get("full")):
             cur["status"] = "ready"
     elif text == "/channel":
         st["check_channel"] = True
@@ -188,9 +195,20 @@ def handle(st, msg):
                     f"۲. دا کوډ ولیکئ: <code>{dev['user_code']}</code>\n"
                     f"۳. د یوټیوب چینل Gmail وټاکئ او <b>Allow</b> ووهئ.\n\n"
                     f"(که «Google hasn't verified this app» ولیکل شو: Advanced ← Go to Bisram News)")
-    elif (msg.get("voice") or msg.get("audio")) and cur and cur["status"] == "waiting":
-        f = msg.get("voice") or msg.get("audio")
+    elif (msg.get("voice") or msg.get("audio") or msg.get("document")) and cur and cur["status"] == "waiting":
+        f = msg.get("voice") or msg.get("audio") or msg.get("document")
         n = len(cur["segs"])
+        is_doc = bool(msg.get("document"))
+        long_one = is_doc or (f.get("duration") or 0) >= 45
+        if long_one and not cur["voices"] and not cur.get("redo"):
+            # ټول راپور په یوه ثبت کې
+            if (f.get("file_size") or 0) > 20 * 1024 * 1024:
+                say(st, "⚠️ فایل له ۲۰MB لوی دی. مهرباني وکړئ mp3 یا m4a ولېږئ، یا Voice.")
+                return
+            cur["full"] = {"file_id": f["file_id"], "dur": f.get("duration", 0)}
+            cur["status"] = "ready"
+            say(st, "✅ ثبت ترلاسه شو! روباټ یې په خبرونو وېشي او ویډیو جوړوي… (۵ تر ۱۰ دقیقې)")
+            return
         idx = cur.pop("redo", None) or next((i for i in range(1, n + 1) if str(i) not in cur["voices"]), None)
         cur["redo"] = None
         if not idx:
@@ -303,6 +321,48 @@ def tg_download(file_id, out):
     with open(out, "wb") as f:
         f.write(requests.get(f"https://api.telegram.org/file/bot{KEY}/{path}", timeout=120).content)
     return out
+
+
+def silences(wav):
+    """د چوپتیا ځایونه → [(start, end)]"""
+    out = subprocess.run(["ffmpeg", "-i", wav, "-af", "silencedetect=noise=-33dB:d=0.7", "-f", "null", "-"],
+                         capture_output=True, text=True).stderr
+    st = [float(x) for x in re.findall(r"silence_start: ([\d.]+)", out)]
+    en = [float(x) for x in re.findall(r"silence_end: ([\d.]+)", out)]
+    return list(zip(st, en))
+
+
+def split_full(wav, scripts, outdir):
+    """یو اوږد ثبت د خبرونو په شمېر وېشي: د متن اوږدوالي له مخې اټکل، بیا نږدې چوپتیا ته."""
+    total = dur(wav)
+    n = len(scripts)
+    w = [max(1, len(s.split())) for s in scripts]
+    cum = [sum(w[:k + 1]) / sum(w) for k in range(n - 1)]
+    sil = [(a, b) for a, b in silences(wav) if b - a >= 0.7 and 2 < a < total - 2]
+    cuts, last = [], 0.0
+    for k, c in enumerate(cum):
+        exp = total * c
+        win = max(10.0, total / n * 0.45)
+        cand = [(a, b) for a, b in sil if abs((a + b) / 2 - exp) <= win and (a + b) / 2 > last + 3]
+        if cand:
+            # اوږده چوپتیا او نږدې ځای غوره
+            a, b = max(cand, key=lambda x: (x[1] - x[0]) * 2 - abs((x[0] + x[1]) / 2 - exp) / win)
+            cut = (a + b) / 2
+        else:
+            cut = max(exp, last + 3)
+        cuts.append(cut)
+        last = cut
+    edges = [0.0] + cuts + [total]
+    print("cuts:", [round(x, 1) for x in cuts], "total:", round(total, 1), "silences:", len(sil))
+    parts = []
+    for i in range(n):
+        out = f"{outdir}/v{i + 1}.wav"
+        ff("-i", wav, "-ss", f"{edges[i]:.2f}", "-to", f"{edges[i + 1]:.2f}",
+           "-af", "silenceremove=start_periods=1:start_threshold=-40dB:start_silence=0.2,"
+                  "areverse,silenceremove=start_periods=1:start_threshold=-40dB:start_silence=0.3,areverse",
+           "-ar", "48000", "-ac", "2", out)
+        parts.append(out)
+    return parts
 
 
 def write_rgba_clip(path, frames_fn, n):
@@ -419,7 +479,14 @@ def render():
     os.makedirs(WORK, exist_ok=True)
     say(st, "🎬 ویډیو جوړېږي…")
     parts, chapters, t = [], [], 0.0
-    segs = [(i, sg) for i, sg in enumerate(cur["segs"], 1) if str(i) in cur["voices"]]
+    full_parts = None
+    if cur.get("full"):
+        src = tg_download(cur["full"]["file_id"], f"{WORK}/full_src")
+        ff("-i", src, "-vn", "-ar", "48000", "-ac", "2", f"{WORK}/full.wav")
+        full_parts = split_full(f"{WORK}/full.wav", [sg["script"] for sg in cur["segs"]], WORK)
+        segs = list(enumerate(cur["segs"], 1))
+    else:
+        segs = [(i, sg) for i, sg in enumerate(cur["segs"], 1) if str(i) in cur["voices"]]
     photos = {}
     for i, sg in segs:
         photos[i] = bot.download_image([sg.get("img")]) if sg.get("img") else None
@@ -431,9 +498,12 @@ def render():
     chapters.append(("00:00", "پیل"))
     # ۲) هر خبر
     for i, sg in segs:
-        ogg = tg_download(cur["voices"][str(i)]["file_id"], f"{WORK}/v{i}.ogg")
-        wav = f"{WORK}/v{i}.wav"
-        ff("-i", ogg, "-ar", "48000", "-ac", "2", wav)
+        if full_parts:
+            wav = full_parts[i - 1]
+        else:
+            ogg = tg_download(cur["voices"][str(i)]["file_id"], f"{WORK}/v{i}.ogg")
+            wav = f"{WORK}/v{i}.wav"
+            ff("-i", ogg, "-ar", "48000", "-ac", "2", wav)
         chapters.append((ts(t), sg["title"]))
         t += segment(i, sg, wav, photos.get(i), f"{WORK}/p{i}.mp4")
         parts.append(f"{WORK}/p{i}.mp4")
@@ -448,16 +518,16 @@ def render():
     thumb = thumbnail(cur, first_photo, f"{WORK}/thumb.jpg")
 
     # ۴) سرلیک، Description، Tags، Hashtags
-    title = f"بسرام ټي وي | {cur['label']} خبرونه | {ps_date()} — {cur['segs'][0]['title']}"
+    title = f"بصرام ټي وي | {cur['label']} خبرونه | {ps_date()} — {cur['segs'][0]['title']}"
     cats = {sg.get("cat") for _, sg in segs if sg.get("cat")}
-    hashtags = ["#بسرام_ټي_وي", "#پښتو_خبرونه", "#افغانستان", "#تازه_خبرونه"] + \
+    hashtags = ["#بصرام_ټي_وي", "#پښتو_خبرونه", "#افغانستان", "#تازه_خبرونه"] + \
                [f"#{c}" for c in cats if c and c != "نور"][:3]
-    desc = (f"د بسرام ټي وي {cur['label']} خبرونه — {ps_date()}\n\n"
+    desc = (f"د بصرام ټي وي {cur['label']} خبرونه — {ps_date()}\n\n"
             "په دې خپرونه کې:\n" + "\n".join(f"{a} {b}" for a, b in chapters) +
             f"\n\n📢 ټلګرام: https://t.me/bisramtv\n📘 فیسبوک: Bisram TV\n\n"
             "زموږ چینل سبسکرایب کړئ او د زنګ تڼۍ ووهئ، چې هره ورځ تازه خبرونه ترلاسه کړئ.\n\n" +
             " ".join(hashtags))
-    tags = ["بسرام ټي وي", "Bisram TV", "پښتو خبرونه", "افغانستان خبرونه", "تازه خبرونه", "Pashto news",
+    tags = ["بصرام ټي وي", "Bisram TV", "پښتو خبرونه", "افغانستان خبرونه", "تازه خبرونه", "Pashto news",
             "Afghanistan news", f"{cur['label']} خبرونه"] + [c for c in cats if c and c != "نور"]
     # ۵) اپلوډ
     link = None

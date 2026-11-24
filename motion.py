@@ -283,7 +283,7 @@ def panel_np(w, h, color, slant=0.0, radius=0, alpha=255):
 
 
 # ================= INTRO =================
-def intro_frame(t, studio, title="د بسرام ټي وي خبري خپرونه", dur=6.0):
+def intro_frame(t, studio, title="د بصرام ټي وي خبري خپرونه", dur=6.0):
     cam = ease_in_out(prog(t, 0, dur))
     f = studio.frame(t, cam)
 
@@ -612,7 +612,7 @@ def render(path, frame_fn, dur, audio=None, alpha=False):
     p.wait()
 
 
-def build_intro(path, title="د بسرام ټي وي خبري خپرونه"):
+def build_intro(path, title="د بصرام ټي وي خبري خپرونه"):
     dur = 6.0
     st = Studio(3)
     wav = path + ".wav"

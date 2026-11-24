@@ -264,9 +264,9 @@ def style9(title, summary, handle, photo, source):
     rtl(d, (x0, 70), a, f, RED)
     rtl(d, (x0 - wa, 70), b, f, WHITE)
     pf = font(BODY, 40)
-    pw_ = tw(d, "بسرام ټي وي", pf) + 60
+    pw_ = tw(d, "بصرام ټي وي", pf) + 60
     d.rounded_rectangle((x0 - wa - wb + 10, 230, x0 - wa - wb + 10 + pw_, 292), 10, fill=(240, 80, 80))
-    rtl(d, (x0 - wa - wb + 10 + pw_ / 2, 261), "بسرام ټي وي", pf, WHITE, "mm")
+    rtl(d, (x0 - wa - wb + 10 + pw_ / 2, 261), "بصرام ټي وي", pf, WHITE, "mm")
     lg = logo_clean(170)
     img.alpha_composite(lg, (40, 40))
 
@@ -310,7 +310,7 @@ def style10(title, summary, handle, photo, source):
     y += 52
     d.line((sx1 + 45, y, sx2 - 45, y), fill=INK, width=4)
     d.line((sx1 + 45, y + 10, sx2 - 45, y + 10), fill=INK, width=2)
-    rtl(d, (W / 2, y + 18), "بسرام خبرونه", font(HEAD, 92), INK, "ma")
+    rtl(d, (W / 2, y + 18), "بصرام خبرونه", font(HEAD, 92), INK, "ma")
     y += 150
     d.line((sx1 + 45, y, sx2 - 45, y), fill=INK, width=3)
 
