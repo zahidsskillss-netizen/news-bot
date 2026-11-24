@@ -185,6 +185,18 @@ def handle(st, msg):
     elif text == "/cancel":
         st["current"] = None
         say(st, "❌ راپور لغوه شو.")
+    elif text.startswith("/facebook"):
+        tok = text.split(maxsplit=1)[1].strip() if len(text.split()) > 1 else ""
+        try:
+            tg("deleteMessage", chat_id=chat, message_id=msg.get("message_id"))  # Token په چټ کې پاتې نه شي
+        except Exception:
+            pass
+        if not tok:
+            say(st, "📘 نوی Token داسې ولېږئ:\n<code>/facebook EAAxxxx…</code>")
+        else:
+            import fb
+            ok, info = fb.reconnect(KEY, tok, "Bisram")
+            say(st, f"✅ فیسبوک بیا وصل شو: {info}" if ok else f"⚠️ فیسبوک وصل نه شو: {info}")
     elif text == "/youtube":
         try:
             dev = yt.start_device(KEY)
@@ -401,16 +413,37 @@ def _estimate_cuts(total, cum, sil, n):
     return cuts
 
 
+def speech_bounds(wav, start, end, head=0.12, tail=0.25):
+    """د یوې برخې د خبرو لومړی او وروستی ځای (د شاتني غږ له مخې) — وقفه پرې کېږي."""
+    import numpy as np
+    raw = subprocess.run(["ffmpeg", "-v", "error", "-ss", f"{start:.3f}", "-to", f"{end:.3f}", "-i", wav,
+                          "-ac", "1", "-ar", "16000", "-f", "s16le", "-"], capture_output=True).stdout
+    x = np.frombuffer(raw, np.int16).astype(np.float32) / 32768
+    hop = 320                                                   # 20ms
+    n = len(x) // hop
+    if n < 25:
+        return start, end
+    db = 20 * np.log10(np.sqrt((x[:n * hop].reshape(n, hop) ** 2).mean(1) + 1e-10))
+    db = np.convolve(np.pad(db, 2, mode="edge"), np.ones(5) / 5, mode="valid")
+    floor, speech = np.percentile(db, 8), np.percentile(db, 75)
+    thr = floor + max(6.0, (speech - floor) * 0.35)
+    on = np.where(db > thr)[0]
+    if len(on) == 0:
+        return start, end
+    a = max(0.0, on[0] * 0.02 - head)
+    b = min(n * 0.02, (on[-1] + 1) * 0.02 + tail)
+    return start + a, start + b
+
+
 def _cut(wav, total, cuts, n, outdir, nsil):
     edges = [0.0] + cuts + [total]
     print("cuts:", [round(x, 1) for x in cuts], "total:", round(total, 1), "silences:", nsil)
     parts = []
     for i in range(n):
         out = f"{outdir}/v{i + 1}.wav"
-        ff("-i", wav, "-ss", f"{edges[i]:.2f}", "-to", f"{edges[i + 1]:.2f}",
-           "-af", "silenceremove=start_periods=1:start_threshold=-40dB:start_silence=0.2,"
-                  "areverse,silenceremove=start_periods=1:start_threshold=-40dB:start_silence=0.3,areverse",
-           "-ar", "48000", "-ac", "2", out)
+        a, b = speech_bounds(wav, edges[i], edges[i + 1])
+        ff("-i", wav, "-ss", f"{a:.3f}", "-to", f"{b:.3f}", "-ar", "48000", "-ac", "2", out)
+        print(f"  part {i + 1}: {edges[i]:.2f}-{edges[i + 1]:.2f} → {a:.2f}-{b:.2f}")
         parts.append(out)
     return parts
 
@@ -432,7 +465,7 @@ def segment(i, sg, voice_wav, photo, out):
     import motion as m
     from card import cover
     vd = dur(voice_wav)
-    D = round(vd + 1.4, 2)
+    D = round(vd + 0.55, 2)
     d = f"{WORK}/s{i}"
     os.makedirs(d, exist_ok=True)
     # شالید: انځور (cover) + لاندې تیاره + کیڼ پاس لوګو
@@ -471,8 +504,8 @@ def segment(i, sg, voice_wav, photo, out):
         f"[b2][3:v]overlay=0:0:enable='between(t,1.7,{t_out})'[b3];"
         f"[4:v]setpts=PTS+{t_out}/TB[lo];[b3][lo]overlay=0:0:enable='gte(t,{t_out})':eof_action=pass[b4];"
         f"[b4]fade=t=in:st=0:d=0.3,fade=t=out:st={D - 0.3}:d=0.3,format=yuv420p[v];"
-        f"[5:a]adelay=500|500,loudnorm=I=-16:TP=-1.5:LRA=11[va];[6:a]volume=0.10[mu];"
-        f"[va][mu]amix=inputs=2:duration=longest:normalize=0,atrim=0:{D},afade=t=out:st={D - 0.4}:d=0.4[a]"
+        f"[5:a]adelay=200|200,loudnorm=I=-16:TP=-1.5:LRA=11[va];[6:a]volume=0.10[mu];"
+        f"[va][mu]amix=inputs=2:duration=longest:normalize=0,atrim=0:{D},afade=t=out:st={D - 0.2}:d=0.2[a]"
     )
     ff("-loop", "1", "-t", str(D), "-i", f"{d}/bg.jpg", "-loop", "1", "-t", str(D), "-i", f"{d}/over.png",
        "-i", f"{d}/lt_in.mov", "-loop", "1", "-t", str(D), "-i", f"{d}/lt_hold.png", "-i", f"{d}/lt_out.mov",

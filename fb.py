@@ -65,6 +65,26 @@ def get_page(key_source, page_name=""):
     return chosen["id"], chosen["access_token"], chosen["name"]
 
 
+def reconnect(key_source, user_token, page_name=""):
+    """نوی User Token → اوږدمهاله → د پاڼې نوی Token. (ok, پیغام) ورکوي."""
+    sec = _decrypt(SECRET_FILE, key_source)
+    if not sec:
+        return False, "د App معلومات نشته"
+    sec["user_token"] = user_token
+    old_page = PAGE_FILE + ".bak"
+    if os.path.exists(PAGE_FILE):
+        os.replace(PAGE_FILE, old_page)
+    encrypt_to(SECRET_FILE, sec, key_source)
+    page = get_page(key_source, page_name)
+    if not page:
+        if os.path.exists(old_page):
+            os.replace(old_page, PAGE_FILE)
+        return False, "Token سم نه و، یا پاڼې ته اجازه نه وه ورکړل شوې"
+    if os.path.exists(old_page):
+        os.remove(old_page)
+    return True, page[2]
+
+
 def post_photo(page_id, token, image_path, caption):
     with open(image_path, "rb") as f:
         r = requests.post(f"{API}/{page_id}/photos",

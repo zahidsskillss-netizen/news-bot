@@ -49,7 +49,7 @@ jobs:
         run: |
           git config user.name "news-bot"
           git config user.email "news-bot@users.noreply.github.com"
-          for f in posted.json bulletin.json fb_page.enc yt_token.enc; do [ -f "$f" ] && git add "$f" || true; done
+          for f in posted.json bulletin.json fb_page.enc fb_secret.enc yt_token.enc; do [ -f "$f" ] && git add "$f" || true; done
           git diff --cached --quiet && exit 0
           git commit -m "posted news update"
           # که په همدې وخت کې بل بدلون پورته شوی وي، لومړی یې راښکته او بیا پورته کوو
@@ -67,4 +67,8 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           sleep 210
-          gh workflow run news.yml --ref main -R "${{ github.repository }}"
+          for i in 1 2 3 4 5 6; do
+            timeout 60 gh workflow run news.yml --ref main -R "${{ github.repository }}" && exit 0
+            echo "retry $i"; sleep 20
+          done
+          exit 1
