@@ -119,9 +119,10 @@
 "https://www.ariananews.af/ps/%d8%a7%d9%81%d8%ba%d8%a7%d9%86-%d8%a7%d9%84%d9%81-%d9%84%d9%88%d8%a8%da%89%d9%84%db%90-%d9%87%d8%a7%d9%86%da%ab-%da%a9%d8%a7%d9%86%da%ab-%d8%aa%d9%87-%d8%af-%d8%a7%d9%88%d9%88%d9%87-%d9%88%db%8c%da%a9/",
 "https://shamshadnews.com/%d8%aa%db%90%d8%b1%d9%88-%d8%af%d8%b1%db%90%db%8c%d9%88-%da%a9%d9%84%d9%88%d9%86%d9%88-%da%a9%db%90-%da%85%d9%87-%d8%a8%d8%a7%d9%86%d8%af%db%90-%db%b6-%db%b5-%d9%85%db%8c%d9%84%db%8c%d9%88%d9%86%d9%87/",
 "https://www.ariananews.af/ps/%d8%af%db%8c%d8%af%d8%a7%d8%b1-%d8%aa%d8%b1%d9%85%d9%be-%d8%a8%d8%a7-%d8%b3%d8%b1%d9%85%d9%86%d8%b4%db%8c-%d9%86%d8%a7%d8%aa%d9%88-%d8%af%d8%b1-%d9%81%d9%84%d9%88%d8%b1%db%8c%d8%af%d8%a7%d8%9b-%d8%a2/",
-"https://www.bbc.com/pashto/articles/cry49kzk8ng4o?at_medium=RSS&at_campaign=rss"
+"https://www.bbc.com/pashto/articles/cry49kzk8ng4o?at_medium=RSS&at_campaign=rss",
+"https://shamshadnews.com/%d8%a7%d9%81%d8%ba%d8%a7%d9%86%d8%b3%d8%aa%d8%a7%d9%86-%d8%aa%d9%87-%d8%b1%d8%a7%d8%ba%d9%84%db%8c-%d8%a7%d9%85%d8%b1%db%8c%da%a9%d8%a7%d9%8a%d9%8a-%db%8c%d9%88%d9%bc%db%8c%d9%88%d8%a8%d8%b1-%d8%af/"
 ],
-"last_run": "2026-11-24T07:12:18.337606+00:00",
+"last_run": "2026-11-24T07:16:43.286912+00:00",
 "titles": [
 [
 "اندېښ",
@@ -508,6 +509,28 @@
 "شک",
 "نوي",
 "ولګېدل"
+],
+[
+"افغانستان",
+"امریکايي",
+"ای",
+"اېف",
+"بي",
+"توقیف",
+"خوا",
+"راغلی",
+"پوښتل",
+"یوټیوبر"
+],
+[
+"افغانستان",
+"امریکايي",
+"ای",
+"اېف",
+"بي",
+"لخوا",
+"نیول",
+"یوټیوبر"
 ]
 ],
 "log": [
@@ -582,6 +605,15 @@
 "source": "بي بي سي پښتو",
 "cat": "نړۍ",
 "link": "https://www.bbc.com/pashto/articles/cry49kzk8ng4o?at_medium=RSS&at_campaign=rss"
+},
+{
+"t": "2026-11-24T07:16:40.285952+00:00",
+"title": "افغانستان کې یو امریکايي یوټیوبر د اېف‌بي‌ای لخوا نیول شوی",
+"summary": "یو امریکايي یوټیوبر چې افغانستان ته سفر کړی و، د امریکايي استخباراتي او امنیتي ادارې (اېف‌بي‌ای) له لوري تر پوښتنو ګروېږنو لاندې نیول شوی او توقیف شوی دی. په دې اړه تر اوسه نور جزئیات نه دي خپاره شوي.",
+"img": "https://shamshadnews.com/wp-content/uploads/2026/11/سنیکو.jpg",
+"source": "شمشاد نیوز",
+"cat": "نړۍ",
+"link": "https://shamshadnews.com/%d8%a7%d9%81%d8%ba%d8%a7%d9%86%d8%b3%d8%aa%d8%a7%d9%86-%d8%aa%d9%87-%d8%b1%d8%a7%d8%ba%d9%84%db%8c-%d8%a7%d9%85%d8%b1%db%8c%da%a9%d8%a7%d9%8a%d9%8a-%db%8c%d9%88%d9%bc%db%8c%d9%88%d8%a8%d8%b1-%d8%af/"
 }
 ]
 }
