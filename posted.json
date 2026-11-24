@@ -138,9 +138,10 @@
 "https://www.ariananews.af/ps/former-pakistani-envoy-urges-islamabad-to-pursue-dialogue-with-afghanistan/",
 "https://www.ariananews.af/ps/%d8%af-%d9%be%d8%a7%da%a9%d8%b3%d8%aa%d8%a7%d9%86-%d9%be%d8%ae%d9%88%d8%a7%d9%86%db%8c-%d8%b3%d9%81%db%8c%d8%b1-%d9%84%d9%87-%d8%a7%d9%81%d8%ba%d8%a7%d9%86%d8%b3%d8%aa%d8%a7%d9%86-%d8%b3%d8%b1%d9%87/",
 "https://www.bbc.com/pashto/articles/cw30g8gvn0pmo?at_medium=RSS&at_campaign=rss",
-"https://www.bbc.com/pashto/articles/cq782082grklo?at_medium=RSS&at_campaign=rss"
+"https://www.bbc.com/pashto/articles/cq782082grklo?at_medium=RSS&at_campaign=rss",
+"https://www.bbc.com/pashto/articles/cv62p622g4y9o?at_medium=RSS&at_campaign=rss"
 ],
-"last_run": "2026-11-24T15:17:03.769997+00:00",
+"last_run": "2026-11-24T15:21:12.772495+00:00",
 "titles": [
 [
 "اندېښ",
@@ -825,6 +826,30 @@
 "پولیسو",
 "کلکه",
 "کور"
+],
+[
+"افغان",
+"باروړونکي",
+"بند",
+"دوه",
+"دي",
+"زره",
+"ټرانسپورت",
+"ټولنه",
+"پاتې",
+"پاکستان",
+"کډوالو",
+"ګاډي"
+],
+[
+"افغان",
+"باروړونکي",
+"بند",
+"دي",
+"زرګونه",
+"موټر",
+"پاتې",
+"پاکستان"
 ]
 ],
 "log": [
@@ -1025,6 +1050,15 @@
 "source": "بي بي سي پښتو",
 "cat": "سیاست",
 "link": "https://www.bbc.com/pashto/articles/cw30g8gvn0pmo?at_medium=RSS&at_campaign=rss"
+},
+{
+"t": "2026-11-24T15:21:09.771460+00:00",
+"title": "په پاکستان کې زرګونه افغان باروړونکي موټر بند پاتې دي",
+"summary": "د افغان کډوالو د ترانسپورټ ټولنې د معلوماتو له مخې، په پاکستان کې د حکومتي اقداماتو له امله نږدې دوه زره افغان باروړونکي موټر আটک پاتې دي. دغه موټر د کډوالو پر ضد د وروستیو پرېکړو او پلټنو په ترڅ کې په تمځایونو کې ولاړ دي.",
+"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/6b58/live/ca7b0460-e80b-11f1-bbd3-7da3a9d481ea.jpg",
+"source": "بي بي سي پښتو",
+"cat": "اقتصاد",
+"link": "https://www.bbc.com/pashto/articles/cv62p622g4y9o?at_medium=RSS&at_campaign=rss"
 }
 ]
 }
