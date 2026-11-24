@@ -1,6 +1,14 @@
 {
- "offset": 68976431,
+ "offset": 68976432,
  "owner": 440243088,
  "current": null,
- "done": []
+ "done": [],
+ "yt_device": {
+  "device_code": "AF7uZ7C3fGU6BgMnghgXipoL1IpOEHFT-G0oPUVoK1bkl6x6lXfeG5BLpaRueX6_CpBMnHPTs0ThhFIGTKRr9j0",
+  "user_code": "MRT-NVR-NGDD",
+  "expires_in": 1800,
+  "interval": 5,
+  "verification_url": "https://www.google.com/device",
+  "started": 1795504841.9930074
+ }
 }
