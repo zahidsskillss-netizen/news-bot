@@ -484,10 +484,23 @@ def segment(i, sg, voice_wav, photo, out):
 
 
 def normalize(src, out):
-    ff("-i", src, "-vf", f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},format=yuv420p",
+    """هر برخه: 1080p/30fps، او غږ دقیق د ویډیو هومره اوږد (چې غږ او انځور سره برابر پاتې شي)."""
+    vd = float(subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries",
+                               "stream=duration", "-of", "csv=p=0", src], capture_output=True, text=True).stdout
+               .strip() or dur(src))
+    n = round(vd * FPS) / FPS
+    has_audio = bool(subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a", "-show_entries",
+                                     "stream=index", "-of", "csv=p=0", src], capture_output=True, text=True).stdout.strip())
+    a_in = [] if has_audio else ["-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo"]
+    ff("-i", src, *a_in,
+       "-filter_complex",
+       f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={FPS},"
+       f"tpad=stop_mode=clone:stop_duration=1,trim=0:{n},setpts=PTS-STARTPTS,format=yuv420p[v];"
+       f"[{0 if has_audio else 1}:a]aresample=48000,apad,atrim=0:{n},asetpts=PTS-STARTPTS[a]",
+       "-map", "[v]", "-map", "[a]", "-t", f"{n}",
        "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-video_track_timescale", "15360",
        "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2", out)
-    return dur(out)
+    return n
 
 
 def thumbnail(cur, photo, out):
@@ -600,6 +613,26 @@ def render():
             say(st, f"⚠️ یوټیوب ته پورته نه شوه: {str(e)[:300]}")
     else:
         say(st, "ℹ️ یوټیوب لا وصل نه دی (/youtube). ویډیو درته دلته لېږم.")
+    # فیسبوک پاڼې ته هم
+    try:
+        import fb
+        page = fb.get_page(KEY)
+        if page:
+            fb_desc = (f"🎬 د بصرام ټي وي {cur['label']} ویډیويي خبرونه — {ps_date()}\n\n"
+                       + "\n".join(f"• {sg['title']}" for _, sg in segs)
+                       + (f"\n\n▶️ یوټیوب: {link}" if link else "") + "\n📢 ټلګرام: t.me/bisramtv\n\n"
+                       + " ".join(hashtags))
+            with open(final, "rb") as f:
+                r = requests.post(f"https://graph-video.facebook.com/v23.0/{page[0]}/videos",
+                                  data={"access_token": page[1], "title": title[:250], "description": fb_desc},
+                                  files={"source": f}, timeout=1800).json()
+            if r.get("id"):
+                say(st, f"📘 ویډیو فیسبوک پاڼې ته هم پورته شوه: https://facebook.com/{r['id']}")
+            else:
+                print("facebook video:", r)
+                say(st, f"⚠️ فیسبوک ته پورته نه شوه: {(r.get('error') or {}).get('message', '')[:200]}")
+    except Exception as e:
+        print("facebook video error:", e)
     # ویډیو مالک ته (که له ۵۰MB کمه وي)
     if os.path.getsize(final) < 49 * 1024 * 1024:
         with open(final, "rb") as f:
