@@ -503,6 +503,29 @@ def normalize(src, out):
     return n
 
 
+def vdur(path):
+    out = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-count_packets", "-show_entries",
+                          "stream=nb_read_packets", "-of", "csv=p=0", path], capture_output=True, text=True).stdout
+    return int(out.strip()) / FPS
+
+
+def assemble(parts, final):
+    """دقیق یوځای کول: انځور بې له بدلون، او غږ د هرې برخې د انځور تر دقیق اوږدوالي پرې/ډک کېږي
+    (PCM)، بیا یوازې یو ځل AAC — نو په ټوله ویډیو کې غږ یو ملي ثانیه هم مخکې/وروسته نه ځي."""
+    vl, al = f"{WORK}/vlist.txt", f"{WORK}/alist.txt"
+    with open(vl, "w") as fv, open(al, "w") as fa:
+        for k, p in enumerate(parts):
+            n = vdur(p)
+            wav = f"{WORK}/a{k}.wav"
+            ff("-i", p, "-vn", "-af", f"aresample=48000,apad,atrim=end_sample={round(n * 48000)}",
+               "-ar", "48000", "-ac", "2", "-c:a", "pcm_s16le", wav)
+            fv.write(f"file '{p}'\n")
+            fa.write(f"file '{wav}'\n")
+    ff("-f", "concat", "-safe", "0", "-i", vl, "-f", "concat", "-safe", "0", "-i", al,
+       "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
+       "-movflags", "+faststart", final)
+
+
 def thumbnail(cur, photo, out):
     from PIL import Image, ImageDraw
     from card import cover, logo_clean, font, HEAD, tw, rtl, fit, shade
@@ -562,8 +585,16 @@ def render():
         photos[i] = bot.download_image([sg.get("img")]) if sg.get("img") else None
     # ۱) Intro: د لومړي خبر انځور په شین سکرین کې
     first_photo = next((photos[i] for i, _ in segs if photos.get(i)), None)
-    m.studio_intro(first_photo, f"{WORK}/intro_raw.mp4")
-    t += normalize(f"{WORK}/intro_raw.mp4", f"{WORK}/p0.mp4")
+    intro = os.path.join(HERE, "assets", "intro.mp4")
+    if not os.path.exists(intro):
+        m.studio_intro(first_photo, f"{WORK}/intro_raw.mp4")
+        intro = f"{WORK}/intro_raw.mp4"
+    t += normalize(intro, f"{WORK}/p0.mp4")
+    trans = os.path.join(HERE, "assets", "transition.mp4")
+    tr_part = None
+    if os.path.exists(trans):
+        normalize(trans, f"{WORK}/tr.mp4")
+        tr_part = f"{WORK}/tr.mp4"
     parts.append(f"{WORK}/p0.mp4")
     chapters.append(("00:00", "پیل"))
     # ۲) هر خبر
@@ -574,6 +605,9 @@ def render():
             ogg = tg_download(cur["voices"][str(i)]["file_id"], f"{WORK}/v{i}.ogg")
             wav = f"{WORK}/v{i}.wav"
             ff("-i", ogg, "-ar", "48000", "-ac", "2", wav)
+        if tr_part and len(parts) > 1:  # د دوو خبرونو ترمنځ ټرانزیشن
+            parts.append(tr_part)
+            t += vdur(tr_part)
         chapters.append((ts(t), sg["title"]))
         t += segment(i, sg, wav, photos.get(i), f"{WORK}/p{i}.mp4")
         parts.append(f"{WORK}/p{i}.mp4")
@@ -581,10 +615,8 @@ def render():
     # ۳) Outro
     t += normalize(os.path.join(HERE, "assets", "outro.mp4"), f"{WORK}/pz.mp4")
     parts.append(f"{WORK}/pz.mp4")
-    with open(f"{WORK}/list.txt", "w") as f:
-        f.write("".join(f"file '{p}'\n" for p in parts))
     final = f"{WORK}/bisram_{cur['id']}.mp4"
-    ff("-f", "concat", "-safe", "0", "-i", f"{WORK}/list.txt", "-c", "copy", "-movflags", "+faststart", final)
+    assemble(parts, final)
     thumb = thumbnail(cur, first_photo, f"{WORK}/thumb.jpg")
 
     # ۴) سرلیک، Description، Tags، Hashtags
