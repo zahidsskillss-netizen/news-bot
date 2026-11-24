@@ -128,9 +128,10 @@
 "https://www.ariananews.af/ps/%d8%af-%d8%a7%d9%81%d8%ba%d8%a7%d9%86%d8%b3%d8%aa%d8%a7%d9%86-%d8%a7%d9%88-%d8%a7%d8%b2%d8%a8%da%a9%d8%b3%d8%aa%d8%a7%d9%86-%d8%af-%d8%b3%d9%88%d8%af%d8%a7%da%ab%d8%b1%db%8d-%da%a9%da%86%d9%87-%db%b1/",
 "https://www.ariananews.af/ps/%d9%85%d9%86%da%81%d9%86%db%8c-%d8%ae%d8%aa%db%8c%da%81-%d8%af-%d8%a7%d9%85%d8%b1%db%8c%da%a9%d8%a7-%d8%a7%d9%88-%d8%a7%db%8c%d8%b1%d8%a7%d9%86-%d8%af-%da%a9%da%93%da%a9%db%90%da%86%d9%88%d9%86%d9%88/",
 "https://www.bbc.com/pashto/articles/ckj059lq86evo?at_medium=RSS&at_campaign=rss",
-"https://shamshadnews.com/%d8%af-%d9%86%db%8c%d8%a7%d9%84-%da%a9%db%90%d9%86%d9%88%d9%84%d9%88-%d8%ae%d8%b2%d8%a7%d9%86%d9%8a-%da%a9%d9%85%d9%be%d8%a7%db%8c%d9%86%d8%9b-%da%a9%d8%a7%d8%a8%d9%84-%da%9a%d8%a7%d8%b1%d9%88%d8%a7/"
+"https://shamshadnews.com/%d8%af-%d9%86%db%8c%d8%a7%d9%84-%da%a9%db%90%d9%86%d9%88%d9%84%d9%88-%d8%ae%d8%b2%d8%a7%d9%86%d9%8a-%da%a9%d9%85%d9%be%d8%a7%db%8c%d9%86%d8%9b-%da%a9%d8%a7%d8%a8%d9%84-%da%9a%d8%a7%d8%b1%d9%88%d8%a7/",
+"https://www.ariananews.af/ps/%d8%af-%d9%85%d8%b9%db%8c%d8%a7%d8%b1-%d8%a7%d9%88-%da%a9%db%8c%d9%81%db%8c%d8%aa-%d8%a7%d8%af%d8%a7%d8%b1%db%90-%d9%be%d9%84%d8%a7%d9%88%d9%8a-%d9%84%d9%87-%d8%a7%db%8c%d8%b1%d8%a7%d9%86%d9%8a-%d8%a8/"
 ],
-"last_run": "2026-11-24T09:22:49.417736+00:00",
+"last_run": "2026-11-24T09:27:00.857757+00:00",
 "titles": [
 [
 "اندېښ",
@@ -674,6 +675,26 @@
 "کابل",
 "کېنوي",
 "۱۸۰"
+],
+[
+"ادارې",
+"ایراني",
+"بنسټونو",
+"خبرې",
+"خنډونو",
+"صادراتي",
+"معیار",
+"وارداتي",
+"وکړې",
+"پلاوي",
+"کیفیت"
+],
+[
+"ایراني",
+"خبرې",
+"خنډونو",
+"سوداګریزو",
+"لوري"
 ]
 ],
 "log": [
@@ -811,6 +832,15 @@
 "source": "شمشاد نیوز",
 "cat": "ټولنه",
 "link": "https://shamshadnews.com/%d8%af-%d9%86%db%8c%d8%a7%d9%84-%da%a9%db%90%d9%86%d9%88%d9%84%d9%88-%d8%ae%d8%b2%d8%a7%d9%86%d9%8a-%da%a9%d9%85%d9%be%d8%a7%db%8c%d9%86%d8%9b-%da%a9%d8%a7%d8%a8%d9%84-%da%9a%d8%a7%d8%b1%d9%88%d8%a7/"
+},
+{
+"t": "2026-11-24T09:26:57.856743+00:00",
+"title": "له ایراني لوري سره پر سوداګریزو خنډونو خبرې شوې",
+"summary": "د معیار او کیفیت ادارې مشرانو د ایران د سوداګرۍ خونې له غړیو سره کتلي دي. په دې ناسته کې د دواړو هېوادونو ترمنځ پر سوداګریزو اړیکو، د معیارونو پر همغږۍ او د وارداتي او صادراتي ستونزو پر حل خبرې اترې شوې دي.",
+"img": "https://www.ariananews.af/wp-content/uploads/2026/11/standar-Iran.jpg",
+"source": "اریانا نیوز پښتو",
+"cat": "اقتصاد",
+"link": "https://www.ariananews.af/ps/%d8%af-%d9%85%d8%b9%db%8c%d8%a7%d8%b1-%d8%a7%d9%88-%da%a9%db%8c%d9%81%db%8c%d8%aa-%d8%a7%d8%af%d8%a7%d8%b1%db%90-%d9%be%d9%84%d8%a7%d9%88%d9%8a-%d9%84%d9%87-%d8%a7%db%8c%d8%b1%d8%a7%d9%86%d9%8a-%d8%a8/"
 }
 ]
 }
