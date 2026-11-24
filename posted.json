@@ -118,9 +118,10 @@
 "https://www.ariananews.af/ps/%d8%aa%db%8c%d9%85-%d8%a7%d9%84%d9%81-%da%a9%d8%b1%db%8c%da%a9%d8%aa-%d8%a7%d9%81%d8%ba%d8%a7%d9%86%d8%b3%d8%aa%d8%a7%d9%86-%d8%a8%d8%a7-%d8%aa%d9%81%d8%a7%d9%88%d8%aa-%d9%87%d9%81%d8%aa-%d9%88%db%8c/",
 "https://www.ariananews.af/ps/%d8%a7%d9%81%d8%ba%d8%a7%d9%86-%d8%a7%d9%84%d9%81-%d9%84%d9%88%d8%a8%da%89%d9%84%db%90-%d9%87%d8%a7%d9%86%da%ab-%da%a9%d8%a7%d9%86%da%ab-%d8%aa%d9%87-%d8%af-%d8%a7%d9%88%d9%88%d9%87-%d9%88%db%8c%da%a9/",
 "https://shamshadnews.com/%d8%aa%db%90%d8%b1%d9%88-%d8%af%d8%b1%db%90%db%8c%d9%88-%da%a9%d9%84%d9%88%d9%86%d9%88-%da%a9%db%90-%da%85%d9%87-%d8%a8%d8%a7%d9%86%d8%af%db%90-%db%b6-%db%b5-%d9%85%db%8c%d9%84%db%8c%d9%88%d9%86%d9%87/",
-"https://www.ariananews.af/ps/%d8%af%db%8c%d8%af%d8%a7%d8%b1-%d8%aa%d8%b1%d9%85%d9%be-%d8%a8%d8%a7-%d8%b3%d8%b1%d9%85%d9%86%d8%b4%db%8c-%d9%86%d8%a7%d8%aa%d9%88-%d8%af%d8%b1-%d9%81%d9%84%d9%88%d8%b1%db%8c%d8%af%d8%a7%d8%9b-%d8%a2/"
+"https://www.ariananews.af/ps/%d8%af%db%8c%d8%af%d8%a7%d8%b1-%d8%aa%d8%b1%d9%85%d9%be-%d8%a8%d8%a7-%d8%b3%d8%b1%d9%85%d9%86%d8%b4%db%8c-%d9%86%d8%a7%d8%aa%d9%88-%d8%af%d8%b1-%d9%81%d9%84%d9%88%d8%b1%db%8c%d8%af%d8%a7%d8%9b-%d8%a2/",
+"https://www.bbc.com/pashto/articles/cry49kzk8ng4o?at_medium=RSS&at_campaign=rss"
 ],
-"last_run": "2026-11-24T07:03:35.014484+00:00",
+"last_run": "2026-11-24T07:08:29.605434+00:00",
 "titles": [
 [
 "اندېښ",
@@ -485,6 +486,28 @@
 "لیدنه",
 "ناټو",
 "ټرمپ"
+],
+[
+"ایران",
+"بریدونو",
+"بندیزونه",
+"بېړیو",
+"تهران",
+"سایبري",
+"شک",
+"نوي",
+"ولګېدل",
+"۵۰"
+],
+[
+"ایران",
+"بریدونو",
+"بندیزونه",
+"بېړیو",
+"سایبري",
+"شک",
+"نوي",
+"ولګېدل"
 ]
 ],
 "log": [
@@ -550,6 +573,15 @@
 "source": "اریانا نیوز پښتو",
 "cat": "نړۍ",
 "link": "https://www.ariananews.af/ps/%d8%af%db%8c%d8%af%d8%a7%d8%b1-%d8%aa%d8%b1%d9%85%d9%be-%d8%a8%d8%a7-%d8%b3%d8%b1%d9%85%d9%86%d8%b4%db%8c-%d9%86%d8%a7%d8%aa%d9%88-%d8%af%d8%b1-%d9%81%d9%84%d9%88%d8%b1%db%8c%d8%af%d8%a7%d8%9b-%d8%a2/"
+},
+{
+"t": "2026-11-24T07:08:26.604351+00:00",
+"title": "پر بېړیو د سایبري بریدونو شک؛ پر ایران نوي بندیزونه ولګېدل",
+"summary": "امریکايي رسنیو خبر ورکړی چې هېواد یې پر بېړیو او د انرژۍ پر ټانکرونو د سایبري بریدونو په قضیه کې د ایران د ممکنې لاسوهنې په اړه څېړنې کوي. د همدې اندېښنو له امله، پر تهران تازه بندیزونه هم وضع شوي دي.",
+"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/b3a2/live/de6907e0-e7b8-11f1-99a1-253766e7ad8b.jpg",
+"source": "بي بي سي پښتو",
+"cat": "نړۍ",
+"link": "https://www.bbc.com/pashto/articles/cry49kzk8ng4o?at_medium=RSS&at_campaign=rss"
 }
 ]
 }
