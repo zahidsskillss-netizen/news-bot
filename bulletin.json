@@ -44,13 +44,14 @@
    }
   ],
   "voices": {},
-  "status": "rendering",
+  "status": "done",
   "redo": null,
   "full": {
    "file_id": "AwACAgUAAxkBAALgKWsFoY0zIrmnqHulVyJAGb_l-QxsAAKnKAACN-0xVNampSqs2LpiPQQ",
    "dur": 102
   },
-  "render_started": 1795531205.6286728
+  "render_started": 1795531205.6286728,
+  "video": "https://youtu.be/n84z3ZLsEtw"
  },
  "done": [
   "2026-11-24-evening"
