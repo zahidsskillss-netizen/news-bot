@@ -168,6 +168,9 @@ def handle(st, msg):
     elif text == "/build":
         if cur and cur["voices"]:
             cur["status"] = "ready"
+    elif text == "/channel":
+        st["check_channel"] = True
+        st["yt_channel"] = None
     elif text == "/cancel":
         st["current"] = None
         say(st, "❌ راپور لغوه شو.")
@@ -232,10 +235,26 @@ def tick():
             print("poll:", e)
         if ok:
             st["yt_device"] = None
+            st["yt_channel"] = None
             say(st, "✅ یوټیوب وصل شو! له اوس وروسته ویډیوګانې پخپله اپلوډ کېږي.")
         elif ok is False:
             st["yt_device"] = None
             say(st, "⚠️ د یوټیوب اجازې وخت تېر شو. بیا: /youtube")
+    # کوم چینل وصل دی؟ (یو ځل یې مالک ته ووایه)
+    if st.get("owner") and yt.connected(KEY) and (not st.get("yt_channel") or st.pop("check_channel", False)):
+        try:
+            chans, err = yt.my_channels(KEY)
+            print("channels:", chans, err)
+            if chans:
+                st["yt_channel"] = chans[0][1]
+                say(st, f"📺 ویډیوګانې به دې یوټیوب چینل ته ځي: <b>{chans[0][1]}</b>\n"
+                        f"https://youtube.com/channel/{chans[0][0]}\n\n"
+                        "که دا سم چینل نه وي: /youtube بیا ولیکئ او په حساب ټاکلو کې د Bisram TV چینل وټاکئ.")
+            else:
+                st["yt_channel"] = "-"
+                say(st, "⚠️ په دې Gmail کې یوټیوب چینل ونه موندل شو. /youtube بیا ولیکئ او هغه حساب وټاکئ چې Bisram TV چینل لري.")
+        except Exception as e:
+            print("channel check:", e)
     # سهار او ماښام
     k = now_kabul()
     for slot, (hh, mm, _) in SLOTS.items():

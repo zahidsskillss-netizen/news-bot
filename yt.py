@@ -95,3 +95,12 @@ def upload(key, path, title, description, tags, privacy="public", thumb=None):
         except Exception as e:
             print("thumbnail error:", e)
     return vid, r.json().get("status", {}).get("privacyStatus")
+
+
+def my_channels(key):
+    """هغه چینل(ونه) چې دا اجازه ورته ده → [(id, title)]"""
+    tok = access_token(key)
+    r = requests.get("https://www.googleapis.com/youtube/v3/channels",
+                     params={"part": "snippet", "mine": "true"},
+                     headers={"Authorization": f"Bearer {tok}"}, timeout=30).json()
+    return [(c["id"], c["snippet"]["title"]) for c in r.get("items", [])], r.get("error")
