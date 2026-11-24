@@ -585,11 +585,7 @@ def render():
         photos[i] = bot.download_image([sg.get("img")]) if sg.get("img") else None
     # ۱) Intro: د لومړي خبر انځور په شین سکرین کې
     first_photo = next((photos[i] for i, _ in segs if photos.get(i)), None)
-    intro = os.path.join(HERE, "assets", "intro.mp4")
-    if not os.path.exists(intro):
-        m.studio_intro(first_photo, f"{WORK}/intro_raw.mp4")
-        intro = f"{WORK}/intro_raw.mp4"
-    t += normalize(intro, f"{WORK}/p0.mp4")
+    t += normalize(os.path.join(HERE, "assets", "intro.mp4"), f"{WORK}/p0.mp4")
     trans = os.path.join(HERE, "assets", "transition.mp4")
     tr_part = None
     if os.path.exists(trans):
