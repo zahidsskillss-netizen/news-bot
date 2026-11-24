@@ -123,9 +123,10 @@
 "https://shamshadnews.com/%d8%a7%d9%81%d8%ba%d8%a7%d9%86%d8%b3%d8%aa%d8%a7%d9%86-%d8%aa%d9%87-%d8%b1%d8%a7%d8%ba%d9%84%db%8c-%d8%a7%d9%85%d8%b1%db%8c%da%a9%d8%a7%d9%8a%d9%8a-%db%8c%d9%88%d9%bc%db%8c%d9%88%d8%a8%d8%b1-%d8%af/",
 "https://www.ariananews.af/ps/%d9%bc%d8%b1%d9%85%d9%be-%d9%be%d9%87-%d9%81%d9%84%d9%88%d8%b1%db%8c%da%89%d8%a7-%da%a9%db%90-%d8%af-%d9%86%d8%a7%d9%bc%d9%88-%d9%84%d9%87-%d8%b3%d8%b1%d9%85%d9%86%d8%b4%d9%8a-%d8%b3%d8%b1%d9%87/",
 "https://www.ariananews.af/ps/%d9%82%d8%b7%d8%b1-%d8%ae%d8%a7%d9%88%d8%b1%d9%85%db%8c%d8%a7%d9%86%d9%87-%d8%aa%d9%88%d8%a7%d9%86-%d8%aa%d8%b4%d8%af%db%8c%d8%af-%d8%af%d9%88%d8%a8%d8%a7%d8%b1%d9%87-%d8%aa%d9%86%d8%b4/",
-"https://www.ariananews.af/ps/%d8%ad%d8%ac%d9%85-%d8%aa%d8%ac%d8%a7%d8%b1%d8%aa-%d8%a7%d9%81%d8%ba%d8%a7%d9%86%d8%b3%d8%aa%d8%a7%d9%86-%d9%88-%d8%a7%d8%b2%d8%a8%da%a9%d8%b3%d8%aa%d8%a7%d9%86-%d8%a8%d9%87-%db%b1-%db%b3%db%b8-%d9%85/"
+"https://www.ariananews.af/ps/%d8%ad%d8%ac%d9%85-%d8%aa%d8%ac%d8%a7%d8%b1%d8%aa-%d8%a7%d9%81%d8%ba%d8%a7%d9%86%d8%b3%d8%aa%d8%a7%d9%86-%d9%88-%d8%a7%d8%b2%d8%a8%da%a9%d8%b3%d8%aa%d8%a7%d9%86-%d8%a8%d9%87-%db%b1-%db%b3%db%b8-%d9%85/",
+"https://www.bbc.com/pashto/articles/c39w9g4ed2vzo?at_medium=RSS&at_campaign=rss"
 ],
-"last_run": "2026-11-24T07:44:03.763408+00:00",
+"last_run": "2026-11-24T07:48:11.339449+00:00",
 "titles": [
 [
 "اندېښ",
@@ -586,6 +587,24 @@
 "ورسېد",
 "ډالرو",
 "۳۸"
+],
+[
+"اخلي",
+"تاجکستان",
+"جرمونو",
+"غړیتوبه",
+"لاس",
+"محکمې",
+"نړیوالې"
+],
+[
+"تاجکستان",
+"جزا",
+"محکمې",
+"نړیوالې",
+"وکړه",
+"پرېښودو",
+"پرېکړه"
 ]
 ],
 "log": [
@@ -687,6 +706,15 @@
 "source": "اریانا نیوز پښتو",
 "cat": "اقتصاد",
 "link": "https://www.ariananews.af/ps/%d8%ad%d8%ac%d9%85-%d8%aa%d8%ac%d8%a7%d8%b1%d8%aa-%d8%a7%d9%81%d8%ba%d8%a7%d9%86%d8%b3%d8%aa%d8%a7%d9%86-%d9%88-%d8%a7%d8%b2%d8%a8%da%a9%d8%b3%d8%aa%d8%a7%d9%86-%d8%a8%d9%87-%db%b1-%db%b3%db%b8-%d9%85/"
+},
+{
+"t": "2026-11-24T07:48:08.338505+00:00",
+"title": "تاجکستان د جزا نړیوالې محکمې پرېښودو پرېکړه وکړه",
+"summary": "تاجکستان چارواکو ویلي چې د جرمونو له نړیوالې محکمې څخه جلا کېږي. د روم اساسنامې غړو د دغه هېواد پر پرېکړه خواشيني څرګنده کړې ده. یاد هېواد وروسته له هغه د دې محکمې پرېښودو اقدام کوي چې امريکا په دې وروستیو کې د ياد قضايي بنسټ د لغو کېدو غوښتنه کړې وه.",
+"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/b253/live/92c42190-e7da-11f1-99a1-253766e7ad8b.jpg",
+"source": "بي بي سي پښتو",
+"cat": "نړۍ",
+"link": "https://www.bbc.com/pashto/articles/c39w9g4ed2vzo?at_medium=RSS&at_campaign=rss"
 }
 ]
 }

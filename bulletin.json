@@ -1,5 +1,5 @@
 {
- "offset": 68976434,
+ "offset": 68976436,
  "owner": 440243088,
  "current": {
   "id": "20261124-1201",
@@ -48,6 +48,13 @@
   "redo": null
  },
  "done": [],
- "yt_device": null,
+ "yt_device": {
+  "device_code": "AF7uZ7BsBDuj9Nxms2C4Eh64ZzxyYWnQ2DK2C_n8ZW98mPCUtdU0Ftjufm13BqyHcN3CkCgCKnOpGC3z0wUuwA",
+  "user_code": "LFF-PJQ-SMW",
+  "expires_in": 1800,
+  "interval": 5,
+  "verification_url": "https://www.google.com/device",
+  "started": 1795506492.8094625
+ },
  "yt_channel": "Zahid Alkozi"
 }
