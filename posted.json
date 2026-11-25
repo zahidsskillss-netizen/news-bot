@@ -157,9 +157,10 @@
 "https://www.bbc.com/pashto/articles/c98r7p34xzx5o?at_medium=RSS&at_campaign=rss",
 "https://shamshadnews.com/how-businesses-improve-visibility-with-better-content-planning-2/",
 "https://www.bbc.com/pashto/articles/c9rkg6rmnr5no?at_medium=RSS&at_campaign=rss",
-"https://shamshadnews.com/mountains-as-changing-environments/"
+"https://shamshadnews.com/mountains-as-changing-environments/",
+"https://www.bbc.com/pashto/articles/cm879354n772o?at_medium=RSS&at_campaign=rss"
 ],
-"last_run": "2026-11-25T15:59:16.768807+00:00",
+"last_run": "2026-11-25T16:03:47.125268+00:00",
 "titles": [
 [
 "اندېښ",
@@ -970,6 +971,31 @@
 "نږدې",
 "نیم",
 "ورسېدل"
+],
+[
+"اړیکې",
+"باجوړ",
+"جنازې",
+"غیابي",
+"لمونځ",
+"لیبیا",
+"نژدې",
+"وروسته",
+"پرې",
+"کډوالو",
+"کښتۍ",
+"کېدو",
+"یوې"
+],
+[
+"باجوړ",
+"جنازه",
+"غیابي",
+"قربانیانو",
+"لیبیا",
+"نژدې",
+"ورکې",
+"کښتۍ"
 ]
 ],
 "log": [
@@ -1224,6 +1250,15 @@
 "source": "بي بي سي پښتو",
 "cat": "نړۍ",
 "link": "https://www.bbc.com/pashto/articles/c98r7p34xzx5o?at_medium=RSS&at_campaign=rss"
+},
+{
+"t": "2026-11-25T16:03:44.124039+00:00",
+"title": "په باجوړ کې د لیبیا نژدې د ورکې شوې کښتۍ د قربانیانو غیابي جنازه",
+"summary": "د باجوړ په سیمه کې وروسته له هغه د غم او خپګان فضا جوړه شوه چې لیبیا ته نژدې د کډوالو یوه کښتۍ وایماده شوه او اړیکه ورسره پرې شوه. تر دې دمه کورنیو او بهرنیو چارواکو په کښتۍ کې د سپرو کسانو د تلفاتو په اړه رسمي معلومات نه دي خپاره کړي، خو سیمه ییزو اوسېدونکو یې غیابي د جنازې لمونځ ادا کړ.",
+"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/458f/live/85abc390-e8e4-11f1-99b6-a35a62fa4264.jpg",
+"source": "بي بي سي پښتو",
+"cat": "ټولنه",
+"link": "https://www.bbc.com/pashto/articles/cm879354n772o?at_medium=RSS&at_campaign=rss"
 }
 ]
 }
