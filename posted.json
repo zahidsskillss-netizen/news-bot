@@ -158,9 +158,10 @@
 "https://shamshadnews.com/how-businesses-improve-visibility-with-better-content-planning-2/",
 "https://www.bbc.com/pashto/articles/c9rkg6rmnr5no?at_medium=RSS&at_campaign=rss",
 "https://shamshadnews.com/mountains-as-changing-environments/",
-"https://www.bbc.com/pashto/articles/cm879354n772o?at_medium=RSS&at_campaign=rss"
+"https://www.bbc.com/pashto/articles/cm879354n772o?at_medium=RSS&at_campaign=rss",
+"https://www.bbc.com/pashto/articles/cm782nvvv7pyo?at_medium=RSS&at_campaign=rss"
 ],
-"last_run": "2026-11-25T16:38:23.022038+00:00",
+"last_run": "2026-11-25T16:42:35.004603+00:00",
 "titles": [
 [
 "اندېښ",
@@ -996,6 +997,30 @@
 "نژدې",
 "ورکې",
 "کښتۍ"
+],
+[
+"اعلان",
+"امریکا",
+"تعرفې",
+"خپلو",
+"سترو",
+"سوداګریزو",
+"شریکانو",
+"نوې",
+"هند",
+"چین",
+"کړې",
+"ګډون"
+],
+[
+"امریکا",
+"تعرفې",
+"خپلو",
+"سترو",
+"سوداګریزو",
+"شریکانو",
+"نوې",
+"ولګولې"
 ]
 ],
 "log": [
@@ -1259,6 +1284,15 @@
 "source": "بي بي سي پښتو",
 "cat": "ټولنه",
 "link": "https://www.bbc.com/pashto/articles/cm879354n772o?at_medium=RSS&at_campaign=rss"
+},
+{
+"t": "2026-11-25T16:42:32.003389+00:00",
+"title": "امریکا پر خپلو سترو سوداګریزو شریکانو نوې تعرفې ولګولې",
+"summary": "متحده ایالاتو د چین، هند او اروپايي ټولنې په ګډون پر یو شمېر مهمو سوداګریزو همکارانو نوي تعرفې اعلان کړې. په دې لړۍ کې د تایلنډ، ویتنام، جاپان، سویلي کوریا او ځینو نورو هېوادونو اقتصادونه هم تر ارزونې لاندې نیول شوي دي.",
+"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/443c/live/71e06d70-e8ee-11f1-a094-5fdc692f3e33.jpg",
+"source": "بي بي سي پښتو",
+"cat": "اقتصاد",
+"link": "https://www.bbc.com/pashto/articles/cm782nvvv7pyo?at_medium=RSS&at_campaign=rss"
 }
 ]
 }
