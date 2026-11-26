@@ -529,6 +529,7 @@ def main():
             state.setdefault("log", []).append({
                 "t": datetime.now(timezone.utc).isoformat(), "title": title, "summary": summary,
                 "img": photo.info.get("src") if photo is not None else None,
+                "imgs": [u for u in dict.fromkeys(page_img + [find_image(e)]) if u][:5],
                 "source": name, "cat": category, "link": link})
             state["log"] = state["log"][-150:]
             save_state(state) if not DRY_RUN else None    # سمدستي ساتل، چې بیا خپور نه شي

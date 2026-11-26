@@ -356,29 +356,48 @@ class Scene:
 
 
 def render(sg, photo, out, fps=30):
-    """صحنه جوړوي: انځور په چوکاټ کې (ورو زوم)، پاس یې ټول متحرک ګرافیک."""
+    """صحنه جوړوي: انځورونه په چوکاټ کې (ورو زوم/حرکت، یو بل ته نرم اوښتل)، پاس یې ټول متحرک ګرافیک.
+    photo: یو انځور، د انځورونو لیست، یا None."""
     sc = Scene(sg, fps)
     D = sc.D
     n = int(round(D * fps))
-    tmp = out + ".photo.jpg"
     pw, ph = PH[2] - PH[0], PH[3] - PH[1]
-    if photo is None:                       # انځور نشته: شین شالید او لوی لوګو
+    pics = [p for p in (photo if isinstance(photo, (list, tuple)) else [photo]) if p is not None]
+    if not pics:                            # انځور نشته: شین شالید او لوی لوګو
         from card import logo_clean
-        photo = side_texture().crop((0, 0, pw, ph)).resize((pw, ph))
+        im = side_texture().crop((0, 0, pw, ph)).resize((pw, ph))
         lg = logo_clean(560)
-        photo.alpha_composite(lg, ((pw - lg.width) // 2, (ph - lg.height) // 2))
-        photo = photo.convert("RGB")
+        im.alpha_composite(lg, ((pw - lg.width) // 2, (ph - lg.height) // 2))
+        pics = [im.convert("RGB")]
+    # هر انځور لږ تر لږه ۵ ثانیې
+    pics = pics[:max(1, min(len(pics), int(D // 5)))]
     from card import cover
-    cover(photo, int(pw * 1.12), int(ph * 1.12)).save(tmp, quality=93)
-    flt = (f"[1:v]scale={int(pw * 1.12)}:{int(ph * 1.12)},"
-           f"crop={pw}:{ph}:'(iw-{pw})/2*(1-t/{D})':'(ih-{ph})/2*(t/{D})',"
-           f"pad={W}:{H}:{PH[0]}:{PH[1]}:color=0x061026,fps={fps}[bg];"
-           f"[bg][0:v]overlay=0:0:format=auto,format=yuv420p[v]")
+    k = len(pics)
+    seg = D / k
+    XF = 0.8
+    L = seg + XF
+    zw, zh = int(pw * 1.14), int(ph * 1.14)
+    ins, chains = [], []
+    for i, pic in enumerate(pics):
+        path = f"{out}.p{i}.jpg"
+        cover(pic, zw, zh).save(path, quality=93)
+        ins += ["-loop", "1", "-t", f"{L:.3f}", "-i", path]
+        if i % 2 == 0:      # کیڼ → ښي او لږ ښکته
+            xe, ye = f"(iw-{pw})*(t/{L:.3f})", f"(ih-{ph})/2*(t/{L:.3f})"
+        else:               # ښي → کیڼ
+            xe, ye = f"(iw-{pw})*(1-t/{L:.3f})", f"(ih-{ph})/2*(1-t/{L:.3f})"
+        chains.append(f"[{i + 1}:v]fps={fps},crop={pw}:{ph}:'{xe}':'{ye}',setsar=1,format=yuv420p[q{i}]")
+    flt = ";".join(chains) + ";"
+    last = "q0"
+    for i in range(1, k):
+        flt += f"[{last}][q{i}]xfade=transition=fade:duration={XF}:offset={i * seg:.3f}[x{i}];"
+        last = f"x{i}"
+    flt += (f"[{last}]trim=0:{D},setpts=PTS-STARTPTS,pad={W}:{H}:{PH[0]}:{PH[1]}:color=0x061026[bg];"
+            f"[bg][0:v]overlay=0:0:format=auto,format=yuv420p[v]")
     cmd = ["ffmpeg", "-y", "-loglevel", "error",
            "-f", "rawvideo", "-pix_fmt", "rgba", "-s", f"{W}x{H}", "-r", str(fps), "-i", "-",
-           "-loop", "1", "-t", str(D), "-i", tmp,
-           "-f", "lavfi", "-t", str(D), "-i", "anullsrc=r=48000:cl=stereo",
-           "-filter_complex", flt, "-map", "[v]", "-map", "2:a", "-t", str(D),
+           *ins, "-f", "lavfi", "-t", str(D), "-i", "anullsrc=r=48000:cl=stereo",
+           "-filter_complex", flt, "-map", "[v]", "-map", f"{k + 1}:a", "-t", str(D),
            "-c:v", "libx264", "-preset", "veryfast", "-crf", "19", "-r", str(fps),
            "-video_track_timescale", "15360", "-c:a", "aac", "-b:a", "128k", "-ar", "48000", "-ac", "2", out]
     p = subprocess.Popen(cmd, stdin=subprocess.PIPE)
@@ -387,5 +406,6 @@ def render(sg, photo, out, fps=30):
     p.stdin.close()
     if p.wait() != 0:
         raise RuntimeError("scene render failed")
-    os.remove(tmp)
+    for i in range(k):
+        os.remove(f"{out}.p{i}.jpg")
     return D

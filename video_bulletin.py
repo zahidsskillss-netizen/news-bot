@@ -33,9 +33,9 @@ STATE_FILE = os.path.join(HERE, "bulletin.json")      # یوازې tick یې ل�
 DONE_FILE = os.path.join(HERE, "bulletin_done.json")  # یوازې render یې لیکي
 POSTED = os.path.join(HERE, "posted.json")
 KEY = bot.TOKEN
-N_NEWS = int(bot.setting("BULLETIN_NEWS") or 5)
+N_NEWS = int(bot.setting("BULLETIN_NEWS") or 8)       # په هر راپور کې تر ۸ خبرونو (لږ تر لږه ۲)
 AUTO_AFTER_MIN = 40      # که تر دې وخته ثبت رانه شي، لیکلی راپور جوړېږي
-SLOTS = {"morning": (7, 0, "سهارني"), "evening": (18, 0, "ماښامني")}
+SLOTS = {"morning": (6, 0, "سهارني"), "noon": (12, 0, "غرمني"), "evening": (18, 0, "ماښامني")}
 PS = str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹")
 OWNER_CODE = "bisram"
 
@@ -95,10 +95,11 @@ def narration(item):
     return f"{item['title']}. {item.get('summary', '')}"
 
 
-def pick_news(hours=14):
+def pick_news(hours=14, used=()):
     log = load(POSTED, {}).get("log", [])
     since = datetime.now(timezone.utc) - timedelta(hours=hours)
-    fresh = [x for x in log if datetime.fromisoformat(x["t"]) >= since]
+    used = set(used)
+    fresh = [x for x in log if datetime.fromisoformat(x["t"]) >= since and x.get("link") not in used]
     fresh.sort(key=lambda x: (x.get("cat") == "کرکټ", bool(x.get("img")), x["t"]), reverse=True)
     out, seen = [], []
     for x in fresh:
@@ -113,7 +114,8 @@ def pick_news(hours=14):
 
 
 def prepare(st, slot):
-    items = pick_news()
+    # تېر راپورونو کې راغلي خبرونه بیا نه راځي؛ سهار شپې خبرونه هم پکې وي
+    items = pick_news(14 if slot == "morning" else 10, st.get("used_links", []))
     if len(items) < 2:
         say(st, "⚠️ د راپور لپاره کافي نوي خبرونه نشته (لږ تر لږه ۲ پکار دي).")
         return
@@ -127,7 +129,9 @@ def prepare(st, slot):
         if i == len(items) - 1:
             script += " دا وو د نن خبرونه. له موږ سره د ملګرتیا مننه، د الله په امان."
         segs.append({"title": it["title"], "summary": it.get("summary", ""), "script": script, "img": it.get("img"),
+                     "imgs": it.get("imgs", []), "link": it.get("link"),
                      "source": it.get("source", ""), "cat": it.get("cat", "")})
+    st["used_links"] = (st.get("used_links", []) + [it.get("link") for it in items if it.get("link")])[-120:]
     st["current"] = {"id": now_kabul().strftime("%Y%m%d-%H%M"), "slot": slot, "label": label,
                      "created": time.time(), "segs": segs, "voices": {}, "status": "waiting",
                      "redo": None}
@@ -155,7 +159,7 @@ def handle(st, msg):
         if OWNER_CODE in text.lower() and not st.get("owner"):
             st["owner"] = chat
             say(st, "✅ تاسو د بصرام ټي وي د ویډیويي راپور مالک ثبت شوئ.\n"
-                    "هره ورځ سهار ۷ او ماښام ۶ بجې به د خبرونو متن درته راشي.\n"
+                    "هره ورځ سهار ۶، غرمه ۱۲ او ماښام ۶ بجې به د خبرونو متن درته راشي.\n"
                     "همدا اوس د ازموینې لپاره: /new")
         return
     if chat != st.get("owner"):
@@ -822,7 +826,13 @@ def render():
                 sg["summary"] = re.sub(r"^.*?لومړی خبر:\s*", "", sg.get("script", ""))
                 sg["summary"] = re.sub(r"\s*دا وو د نن خبرونه.*$", "", sg["summary"])
             import news_scene
-            t += news_scene.render(sg, photos.get(i), f"{WORK}/p{i}.mp4", FPS)
+            import photos as P
+            try:
+                pics = P.gather(sg) or ([photos[i]] if photos.get(i) else [])
+            except Exception as e:
+                print("photos:", e)
+                pics = [photos[i]] if photos.get(i) else []
+            t += news_scene.render(sg, pics, f"{WORK}/p{i}.mp4", FPS)
             parts.append(f"{WORK}/p{i}.mp4")
             print("text segment", i, "ok")
             continue
