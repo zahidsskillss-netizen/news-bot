@@ -35,7 +35,10 @@ SIGNATURE = setting("CHANNEL_SIGNATURE")       # د هر پوسټ په پای ک
 CARD_STYLE = setting("CARD_STYLE") or "1"   # 1-5، یا "auto" چې هر ځل بدل شي
 FB_PAGE_NAME = setting("FB_PAGE_NAME")         # که څو پاڼې لرئ، د پاڼې نوم
 HANDLE = setting("CARD_HANDLE") or ("t.me/" + CHANNEL.lstrip("@") if CHANNEL else "")  # پر کارت لیکل کېږي
-MAX_PER_RUN = int(os.environ.get("MAX_PER_RUN", "5") or 5)        # په هر ځل څو خبرونه
+MAX_PER_RUN = 1                                                  # په هر ځل یو خبر
+MIN_GAP_MIN = int(setting("MIN_GAP_MIN") or 30)                   # د دوو خبرونو ترمنځ لږ تر لږه دقیقې
+MIN_SCORE = int(setting("MIN_SCORE") or 5)                        # له دې ټیټ ارزښت خبرونه نه خپرېږي
+MAX_AGE_H = 8                                                     # له دې زاړه خبرونه پرېښودل کېږي
 GEMINI_KEY = setting("GEMINI_API_KEY")         # اختیاري: د AI لنډیز/ژباړې لپاره
 GEMINI_MODELS = [m for m in [setting("GEMINI_MODEL"), "gemini-flash-latest", "gemini-3.8-flash", "gemini-flash-lite-latest"] if m]
 DRY_RUN = os.environ.get("DRY_RUN") == "1"                        # یوازې ازموینه، نشر نه کوي
@@ -230,10 +233,16 @@ PROMPT = (
     "ورځنۍ لنډیز، سرګرمي یا بل شی وي «نه» ولیکه.\n"
     "- اسلامي: که خبر له اسلامي اصولو سره په ټکر کې وي (لکه شراب، قمار، فحشا، نڅا، کنسرټونه، د موسیقۍ محفلونه، نوې سندرې یا البومونه، "
     "بې‌حیا سرګرمي، یا د دین سپکاوی) «نامناسب» ولیکه، که نه «مناسب».\n"
+    "- ارزښت: له ۱ تر ۱۰ — د افغانانو لپاره دا خبر څومره مهم او په زړه پورې دی (کوچنۍ، محلي، "
+    "تفریحي یا بې‌اهمیته پېښې ټیټه نمره؛ افغانستان، سیمه، لوی نړیوال خبرونه او کرکټ لوړه نمره).\n"
+    "- تکرار: که دا خبر د لاندې «خپاره شوي خبرونو» له کوم یوه سره **همغه پېښه** وي (که څه هم په بل ډول لیکل شوی "
+    "یا له بلې سرچینې وي)، «هو» ولیکه؛ که نوې پېښه یا د پېښې مهم نوی پرمختګ وي، «نه».\n"
     "- برخه: یوه کلمه — سیاست، اقتصاد، امنیت، ټولنه، کرکټ، سپورت، روغتیا، ټکنالوژي، نړۍ، نور.\n"
     "ځواب یوازې په دې بڼه ورکړه:\n"
     "ډول: خبر/نه\n"
     "اسلامي: مناسب/نامناسب\n"
+    "ارزښت: (شمېره)\n"
+    "تکرار: هو/نه\n"
     "برخه: ...\n"
     "سرلیک: (تر ۱۴ ټکو لنډ)\n"
     "لنډیز: (۲ یا ۳ لنډې جملې)\n\n"
@@ -246,12 +255,20 @@ def _parse(out):
     k = re.search(r"ډول\s*[:：]\s*(\S+)", out)
     i = re.search(r"اسلامي\s*[:：]\s*(\S+)", out)
     c = re.search(r"برخه\s*[:：]\s*(\S+)", out)
+    d = re.search(r"تکرار\s*[:：]\s*(\S+)", out)
+    v = re.search(r"ارزښت\s*[:：]\s*([\d۰-۹]+)", out)
     if t and s:
         if k and "نه" in k.group(1):
             return "SKIP:خبر نه دی"
         if i and "نامناسب" in i.group(1):
             return "SKIP:اسلامي اصول"
+        if d and "هو" in d.group(1):
+            return "SKIP:تکراري خبر (بلې سرچینې خپور کړی و)"
         cat = c.group(1).strip("*") if c else ""
+        if v and "کرکټ" not in cat:
+            score = int(v.group(1).translate(str.maketrans("۰۱۲۳۴۵۶۷۸۹", "0123456789")))
+            if score < MIN_SCORE:
+                return f"SKIP:کم ارزښت ({score})"
         return t.group(1).strip().strip("*"), s.group(1).strip().strip("*"), cat
     return None
 
@@ -296,9 +313,10 @@ def _gemini(prompt):
     raise RuntimeError(last)
 
 
-def ai_rewrite(title, summary):
+def ai_rewrite(title, summary, recent=()):
     """خبر په نویو ټکو بیا لیکي. که ناکام شي، None ورکوي."""
-    prompt = PROMPT + f"سرلیک: {title}\nمتن: {summary}"
+    prev = "\n".join(f"- {t}" for t in recent) or "- (هېڅ)"
+    prompt = PROMPT + f"خپاره شوي خبرونه (وروستۍ ورځ):\n{prev}\n\nنوی خبر:\nسرلیک: {title}\nمتن: {summary}"
     for name, fn, ok in (("Gemini", _gemini, GEMINI_KEY),):
         if not ok:
             continue
@@ -389,6 +407,18 @@ def main():
         print(f"📘 فیسبوک: {FB[2]}")
 
     state = load_state()
+    if FB and state.get("fb_queue") and not DRY_RUN:
+        # فیسبوک بیا وصل شو: هغه خبرونه چې یوازې ټلګرام ته تللي وو (وروستي ۵)
+        for q in state.pop("fb_queue")[-5:]:
+            try:
+                ph = download_image([q["img"]]) if q.get("img") else None
+                c = make_card(q["title"], q["summary"], HANDLE, "/tmp/fbq.jpg", CARD_STYLE, photo=ph, source=q.get("source"))
+                if fb.post_photo(FB[0], FB[1], c, fb_caption(q["title"], q["summary"])):
+                    print(f"  📘 پاتې خبر فیسبوک ته ولېږل شو: {q['title'][:50]}")
+                time.sleep(5)
+            except Exception as ex:
+                print("fb queue:", ex)
+        save_state(state)
     seen = set(state["posted"])
     first_run = not state["posted"]
     items = []
@@ -409,12 +439,39 @@ def main():
             if link and link not in seen:
                 items.append((entry_time(e), name, e, link))
 
+    # د هر خبر لومړی لیدل (د زوړوالي لپاره)
+    now = time.time()
+    fs = state.setdefault("first_seen", {})
+    live = {l for _, _, _, l in items}
+    for k in [k for k in fs if k not in live]:
+        del fs[k]
+    fresh = []
+    for t, name, e, link in items:
+        fs.setdefault(link, now)
+        born = t if 0 < t <= now else fs[link]
+        if now - born > MAX_AGE_H * 3600:
+            state["posted"].append(link)            # ډېر زوړ — پرېښودل
+        else:
+            fresh.append((born, name, e, link))
+    items = fresh
     # کرکټ ته لومړیتوب، بیا نوي خبرونه لومړی
     items.sort(key=lambda x: (is_cricket(x[2]), x[0]), reverse=True)
-    to_post = items[:MAX_PER_RUN]
-    print(f"\n🆕 نوي خبرونه: {len(items)} — اوس خپرېږي: {len(to_post)}")
+    last = state.get("last_post_ts", 0)
+    wait = MIN_GAP_MIN * 60 - (now - last)
+    print(f"\n🆕 نوي خبرونه: {len(items)}" + (f" — تر بل خبر {int(wait // 60) + 1} دقیقې پاتې" if wait > 0 else ""))
+    if first_run:
+        for _, _, _, link in items[1:]:
+            state["posted"].append(link)
+        items = items[:1]
+    if wait > 0:
+        items = []
 
-    for _, name, e, link in reversed(to_post):         # زوړ لومړی، چې نوی په سر کې پاتې شي
+    recent = [x["title"] for x in state.get("log", [])
+              if x.get("t", "") >= datetime.fromtimestamp(now - 30 * 3600, timezone.utc).isoformat()][-40:]
+    posted_now, tries = 0, 0
+    for _, name, e, link in items:
+        if posted_now >= MAX_PER_RUN or tries >= 6:
+            break
         title = clean_text(e.get("title", ""), 200)
         if is_duplicate(title, state):
             print(f"  ♻️ دا خبر مخکې خپور شوی، پرېښودل شو: {title[:50]}")
@@ -430,9 +487,9 @@ def main():
             print(f"  ⏭️ متن نه لري، پرېښودل شو: {title[:50]}")
             state["posted"].append(link)
             continue
-        photo = download_image(page_img + [find_image(e)], referer=link)
-        rewritten = ai_rewrite(title, summary)
-        if isinstance(rewritten, str):          # خبر نه دی، یا له اسلامي اصولو سره سمون نه لري
+        tries += 1
+        rewritten = ai_rewrite(title, summary, recent)
+        if isinstance(rewritten, str):          # خبر نه دی، تکراري، کم ارزښت، یا له اسلامي اصولو سره سمون نه لري
             print(f"  ⏭️ پرېښودل شو ({rewritten[5:]}): {title[:50]}")
             state["posted"].append(link)
             continue
@@ -446,6 +503,7 @@ def main():
             print(f"  ♻️ ورته خبر مخکې خپور شوی، پرېښودل شو: {title[:50]}")
             state["posted"].append(link)
             continue
+        photo = download_image(page_img + [find_image(e)], referer=link)
         n = len(state["posted"])
         style = (n % 5) + 1 if CARD_STYLE == "auto" else CARD_STYLE
         card_path = os.path.join("/tmp", f"card_{n}.jpg")
@@ -453,10 +511,17 @@ def main():
         card = make_card(title, summary, HANDLE, card_path, style, photo=photo, source=name)
         ok = publish(build_message(title, summary), card_path=card)
         fb_text = fb_caption(title, summary)
-        if ok and FB and not DRY_RUN:
-            if fb.post_photo(FB[0], FB[1], card, fb_text):
+        if ok and not DRY_RUN:
+            if FB and fb.post_photo(FB[0], FB[1], card, fb_text):
                 print("  📘 فیسبوک ته هم ولېږل شو")
+            else:
+                state.setdefault("fb_queue", []).append({"title": title, "summary": summary,
+                                                          "img": photo.info.get("src") if photo is not None else None,
+                                                          "source": name})
+                state["fb_queue"] = state["fb_queue"][-30:]
         if ok:
+            posted_now += 1
+            state["last_post_ts"] = time.time()
             state["posted"].append(link)
             remember_title(orig_title, state)
             remember_title(title, state)
@@ -468,11 +533,7 @@ def main():
             state["log"] = state["log"][-150:]
             save_state(state) if not DRY_RUN else None    # سمدستي ساتل، چې بیا خپور نه شي
             print(f"  📤 {title[:60]}")
-        time.sleep(3)
 
-    # پاتې زاړه خبرونه هم «لیدل شوي» ګڼو چې بیا را نه شي
-    for _, _, _, link in items[MAX_PER_RUN:]:
-        state["posted"].append(link)
     if first_run:
         print("ℹ️ لومړی ځل: یوازې تر ټولو تازه خبرونه خپاره شول.")
 

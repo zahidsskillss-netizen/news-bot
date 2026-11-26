@@ -34,7 +34,6 @@ jobs:
           CHANNEL_SIGNATURE: ${{ secrets.CHANNEL_SIGNATURE }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MAX_PER_RUN: "5"
         run: python bot.py
 
       - name: Video bulletin (Telegram voices)
