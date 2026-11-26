@@ -821,7 +821,8 @@ def render():
             if not sg.get("summary"):
                 sg["summary"] = re.sub(r"^.*?لومړی خبر:\s*", "", sg.get("script", ""))
                 sg["summary"] = re.sub(r"\s*دا وو د نن خبرونه.*$", "", sg["summary"])
-            t += text_segment(i, sg, photos.get(i), f"{WORK}/p{i}.mp4")
+            import news_scene
+            t += news_scene.render(sg, photos.get(i), f"{WORK}/p{i}.mp4", FPS)
             parts.append(f"{WORK}/p{i}.mp4")
             print("text segment", i, "ok")
             continue
