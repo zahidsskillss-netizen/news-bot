@@ -7,7 +7,10 @@ import bot
 
 UA = {"User-Agent": "BisramTV-NewsBot/1.0 (https://t.me/bisramtv)"}
 BAD = re.compile(r"nude|naked|erotic|sex|bikini|lingerie|alcohol|wine|beer|casino|tattoo|concert|"
-                 r"logo|map|flag_of|coat_of_arms|diagram|chart|svg|icon|signature|document|scan", re.I)
+                 r"logo|map|flag_of|coat_of_arms|diagram|chart|svg|icon|signature|document|scan|"
+                 r"army|military|soldier|troop|marine|navy|nato|isaf|security.forces|ana_|anp_|police|"
+                 r"u\.s\.|us_|american|coalition|isaf|dvids|battalion|regiment|combat|weapon|rifle|"
+                 r"embassy|governor_|ministry_of|portrait|woman|women|girl|actress|model", re.I)
 
 KW_PROMPT = (
     "Give 2 short English image-search queries (2-4 words each) for real photos that illustrate this "
