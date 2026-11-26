@@ -34,6 +34,7 @@ DONE_FILE = os.path.join(HERE, "bulletin_done.json")  # یوازې render یې �
 POSTED = os.path.join(HERE, "posted.json")
 KEY = bot.TOKEN
 N_NEWS = int(bot.setting("BULLETIN_NEWS") or 5)
+AUTO_AFTER_MIN = 40      # که تر دې وخته ثبت رانه شي، لیکلی راپور جوړېږي
 SLOTS = {"morning": (7, 0, "سهارني"), "evening": (18, 0, "ماښامني")}
 PS = str.maketrans("0123456789", "۰۱۲۳۴۵۶۷۸۹")
 OWNER_CODE = "bisram"
@@ -125,7 +126,7 @@ def prepare(st, slot):
                       f"نن {ps_date()} ده. لومړی خبر: ") + script
         if i == len(items) - 1:
             script += " دا وو د نن خبرونه. له موږ سره د ملګرتیا مننه، د الله په امان."
-        segs.append({"title": it["title"], "script": script, "img": it.get("img"),
+        segs.append({"title": it["title"], "summary": it.get("summary", ""), "script": script, "img": it.get("img"),
                      "source": it.get("source", ""), "cat": it.get("cat", "")})
     st["current"] = {"id": now_kabul().strftime("%Y%m%d-%H%M"), "slot": slot, "label": label,
                      "created": time.time(), "segs": segs, "voices": {}, "status": "waiting",
@@ -133,7 +134,9 @@ def prepare(st, slot):
     head = (f"🎙️ <b>د بصرام ټي وي {label} ویډیويي خبرونه</b> — {ps_date()}\n\n"
             "📌 ټول خبرونه په <b>یوه ثبت</b> کې ولولئ (Voice یا د مایک فایل mp3/m4a).\n"
             "⏸️ د هر خبر ترمنځ <b>۲ ثانیې چوپ</b> شئ، چې روباټ یې سم جلا کړي.\n"
-            "(که غواړئ، هر خبر په جلا Voice کې هم لېږلای شئ.)\n")
+            "(که غواړئ، هر خبر په جلا Voice کې هم لېږلای شئ.)\n"
+            f"⏱️ که تر <b>{AUTO_AFTER_MIN} دقیقو</b> ثبت رانه شي، لیکلې ویډیو (له موزیک سره) پخپله جوړېږي او خپرېږي.\n"
+            "همدا اوس بې غږه جوړول: /auto\n")
     body = "\n\n".join(f"<b>{str(i).translate(PS)}.</b> {sg['script']}" for i, sg in enumerate(segs, 1))
     msg = head + "\n" + body
     if len(msg) <= 4000:
@@ -179,6 +182,13 @@ def handle(st, msg):
     elif text == "/build":
         if cur and (cur["voices"] or cur.get("full")):
             cur["status"] = "ready"
+    elif text == "/auto":
+        if cur and cur["status"] == "waiting":
+            cur["auto"] = True
+            cur["status"] = "ready"
+            say(st, "📝 لیکلې ویډیو (له موزیک سره) جوړېږي… (۱۰ تر ۱۵ دقیقې)")
+        else:
+            say(st, "اوس هېڅ راپور د ثبت په انتظار نه دی.")
     elif text == "/channel":
         st["check_channel"] = True
         st["yt_channel"] = None
@@ -302,6 +312,11 @@ def tick():
                 say(st, "ℹ️ تېر راپور نیمګړی پاتې شو. نوی راپور راغی.")
             prepare(st, slot)
     cur = st.get("current")
+    if cur and cur["status"] == "waiting" and not cur["voices"] and not cur.get("full") \
+            and time.time() - cur.get("created", 0) > AUTO_AFTER_MIN * 60:
+        cur["auto"] = True
+        cur["status"] = "ready"
+        say(st, "⏱️ ثبت رانه غی — لیکلې ویډیو (له موزیک سره) پخپله جوړېږي او خپرېږي.")
     done = load(DONE_FILE, {})
     if cur and cur["id"] in done and cur["status"] != "done":
         cur["status"] = "done"
@@ -516,6 +531,172 @@ def segment(i, sg, voice_wav, photo, out):
     return dur(out)
 
 
+# ---------------- لیکلی (بې غږه) راپور ----------------
+def _bg_layers(d, photo):
+    import numpy as np
+    from PIL import Image
+    from card import cover, logo_clean
+    bgimg = cover(photo, int(W * 1.15), int(H * 1.15)) if photo else None
+    if bgimg is None:
+        g = Image.linear_gradient("L").resize((int(W * 1.15), int(H * 1.15)))
+        bgimg = Image.composite(Image.new("RGB", g.size, (13, 71, 161)), Image.new("RGB", g.size, (33, 150, 243)), g)
+    bgimg.save(f"{d}/bg.jpg", quality=93)
+    yy = np.linspace(0, 1, H)[:, None]
+    a = (np.clip((yy - 0.5) / 0.5, 0, 1) ** 1.6 * 200).astype("uint8")
+    shade = np.zeros((H, W, 4), "uint8")
+    shade[..., 3] = np.repeat(a, W, axis=1)
+    over = Image.fromarray(shade, "RGBA")
+    over.alpha_composite(logo_clean(250), (40, 30))
+    over.save(f"{d}/over.png")
+
+
+GLUE = {"د", "په", "له", "تر", "پر", "چې", "او", "یې", "هم", "دا", "دغه", "هغه", "کې", "سره", "یو", "یوه", "خو", "که", "به"}
+POST = {"ته", "کې", "سره", "څخه", "نه", "لپاره", "پورې", "دي", "دی", "ده", "و", "وو"}   # له مخکنۍ کلمې سره پاتې کېږي
+
+
+def chunk_words(text, n=5, max_w=1150, font=None, size=62):
+    """متن په ۴–۵ کلمو ټوټو وېشي (د جملې په پای کې ماتېږي، او له پلنوالي نه نه وځي)."""
+    import motion as m
+    out, cur = [], []
+    words = text.split()
+    for k, w in enumerate(words):
+        if not cur and out and w in POST:
+            out[-1] += " " + w
+            continue
+        cur.append(w)
+        end_sent = w.endswith(("۔", ".", "؟", "!", "،")) and len(cur) >= 2
+        nxt_wide = False
+        if k + 1 < len(words) and len(cur) >= 3:
+            nxt_wide = m.text_layer(" ".join(cur + [words[k + 1]]), font or m.HEAD, size).width > max_w
+        if len(cur) >= n or end_sent or nxt_wide:
+            carry = []
+            while len(cur) > 2 and cur[-1] in GLUE:          # «د»، «په»، «چې»… د ټوټې په پای کې نه پاتې کېږي
+                carry.insert(0, cur.pop())
+            out.append(" ".join(cur))
+            cur = carry
+    if cur:
+        if out and len(cur) <= 2 and len((out[-1] + " " + " ".join(cur)).split()) <= 7:
+            out[-1] += " " + " ".join(cur)
+        else:
+            out.append(" ".join(cur))
+    return out
+
+
+def read_time(chunk):
+    return round(0.42 * len(chunk.split()) + 0.7, 2)
+
+
+def text_segment(i, sg, photo, out):
+    """بې غږه خبر: د خبر متن په Lower third کې ۴–۵ کلمې، یو په بل پسې — لکه څوک چې یې لولي."""
+    import numpy as np
+    from PIL import Image
+    import motion as m
+    d = f"{WORK}/s{i}"
+    os.makedirs(d, exist_ok=True)
+    _bg_layers(d, photo)
+    title = sg["title"].strip()
+    body = (sg.get("summary") or "").strip()
+    TXT = os.path.join(HERE, "assets", "BahijTheSans-Bold.ttf")
+    chunks = [(c, m.HEAD) for c in chunk_words(title, font=m.HEAD, size=64)] + \
+             [(c, TXT) for c in chunk_words(body, font=TXT, size=58)]
+    layers = [np.pad(m.to_np(m.text_layer(c, f, 64 if f == m.HEAD else 58, m.NAVY, pad=6)),
+                     ((0, 0), (0, 28), (0, 0))) for c, f in chunks]          # له ښۍ کږې څنډې لږ لرې
+    lt = m.LowerThird(chunks[0][0], "تازه خبر", sub=f"سرچینه: {sg['source']}" if sg.get("source") else "Bisram TV")
+    lt.bw = max(900, min(1500, max(l.shape[1] for l in layers) + 120))
+    lt.bh, lt.lines = 120, 1
+    lt.head = layers[0]
+    # د هرې ټوټې وخت
+    t0 = 1.7
+    times, t = [], t0
+    for k, (c, _) in enumerate(chunks):
+        rt = read_time(c) + (0.6 if k == 0 else 0)            # سرلیک لږ ډېر پاتې کېږي
+        times.append((t, t + rt))
+        t += rt
+    D = round(t + 0.9, 2)
+    t_out = D - 0.8
+    n_in = int(t0 * FPS)
+    write_rgba_clip(f"{d}/lt_in.mov", lambda tt: lt.frame(tt, 100), n_in)
+    blank = np.zeros((10, 10, 4), np.float32)
+    lt.head = blank
+    hold = (np.clip(lt.frame(1.8, 100), 0, 1) * 255).astype("uint8")
+    Image.fromarray(hold, "RGBA").save(f"{d}/lt_hold.png")
+    lt.head = layers[-1]
+    write_rgba_clip(f"{d}/lt_out.mov", lambda tt: lt.frame(10 - 0.8 + tt, 10), int(0.8 * FPS))
+    # د متن کلیپ (یوازې د پټۍ سیمه، چې ژر جوړ شي)
+    RW, RH = 1500, 150
+    right_x = W - 90 - m.LW - 50                            # د متن ښی څنډه (لکه LowerThird)
+    # (د LowerThird سرلیک هم همدلته دی)
+    cy = H - 190 + 25
+    rx0, ry0 = right_x - RW, int(cy - RH / 2)
+    lay8 = [(np.clip(l, 0, 1) * 255).astype("uint8") for l in layers]
+
+    def tframe(tt):
+        f = np.zeros((RH, RW, 4), np.uint8)
+        k = next((j for j, (a, b) in enumerate(times) if a <= tt < b), len(times) - 1)
+        a, b = times[k]
+        lay = lay8[k]
+        pin = 1.0 if k == 0 else min(1.0, (tt - a) / 0.25)
+        pout = 1.0 if k == len(times) - 1 else min(1.0, max(0.0, (b - tt) / 0.18))
+        al = min(pin, pout)
+        if al <= 0:
+            return f
+        ease = 1 - (1 - pin) ** 3
+        dx = int(50 * (1 - ease))
+        h, w = lay.shape[:2]
+        x = RW - w - dx
+        y = (RH - h) // 2
+        x0, sx = max(0, x), max(0, -x)
+        ww = min(w - sx, RW - x0)
+        hh = min(h, RH - y)
+        f[y:y + hh, x0:x0 + ww] = lay[:hh, sx:sx + ww]
+        f[y:y + hh, x0:x0 + ww, 3] = (f[y:y + hh, x0:x0 + ww, 3] * al).astype(np.uint8)
+        return f
+    n_txt = int((t_out - t0) * FPS) + 1
+    p = subprocess.Popen(["ffmpeg", "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgba",
+                          "-s", f"{RW}x{RH}", "-r", str(FPS), "-i", "-", "-c:v", "qtrle", f"{d}/txt.mov"],
+                         stdin=subprocess.PIPE)
+    for fi in range(n_txt):
+        p.stdin.write(tframe(t0 + fi / FPS).tobytes())
+    p.stdin.close()
+    p.wait()
+    dx_ = random.choice((-1, 1))
+    xexpr = f"(iw-{W})/2+{dx_}*(iw-{W})/2*(t/{D}-0.5)"
+    flt = (
+        f"[0:v]crop={W}:{H}:'{xexpr}':'(ih-{H})/2+(ih-{H})/4*(t/{D}-0.5)',fps={FPS},format=rgba[bg];"
+        f"[bg][1:v]overlay=0:0[b1];"
+        f"[b1][2:v]overlay=0:0:enable='lt(t,{t0})'[b2];"
+        f"[b2][3:v]overlay=0:0:enable='between(t,{t0},{t_out})'[b3];"
+        f"[5:v]setpts=PTS+{t0}/TB[tx];[b3][tx]overlay={rx0}:{ry0}:enable='between(t,{t0},{t_out})':eof_action=pass[b3b];"
+        f"[4:v]setpts=PTS+{t_out}/TB[lo];[b3b][lo]overlay=0:0:enable='gte(t,{t_out})':eof_action=pass[b4];"
+        f"[b4]fade=t=in:st=0:d=0.3,fade=t=out:st={D - 0.3}:d=0.3,format=yuv420p[v]"
+    )
+    ff("-loop", "1", "-t", str(D), "-i", f"{d}/bg.jpg", "-loop", "1", "-t", str(D), "-i", f"{d}/over.png",
+       "-i", f"{d}/lt_in.mov", "-loop", "1", "-t", str(D), "-i", f"{d}/lt_hold.png", "-i", f"{d}/lt_out.mov",
+       "-i", f"{d}/txt.mov", "-f", "lavfi", "-t", str(D), "-i", "anullsrc=r=48000:cl=stereo",
+       "-filter_complex", flt, "-map", "[v]", "-map", "6:a",
+       "-t", str(D), "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-r", str(FPS),
+       "-video_track_timescale", "15360", "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2", out)
+    return dur(out)
+
+
+def add_music(video, out, intro_len):
+    """ټولې ویډیو ته شاته موزیک (له انټرو وروسته پیلېږي، په پای کې ورو کېږي)."""
+    mus = next((os.path.join(HERE, "assets", f) for f in ("bg_music.mp3", "bg_music.m4a", "bg_music.wav")
+                if os.path.exists(os.path.join(HERE, "assets", f))), None)
+    total = vdur(video)
+    if not mus:
+        import motion as m
+        mus = f"{WORK}/pad.wav"
+        m.write_wav(mus, m.pad(total + 1, 110) * 0.6)
+    ms = int(intro_len * 1000)
+    ff("-i", video, "-stream_loop", "-1", "-i", mus, "-filter_complex",
+       f"[1:a]aresample=48000,volume=0.55,afade=t=in:st=0:d=1.2,adelay={ms}|{ms},"
+       f"atrim=0:{total},afade=t=out:st={max(0, total - 2.5)}:d=2.5[mu];"
+       f"[0:a][mu]amix=inputs=2:duration=first:normalize=0[a]",
+       "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
+       "-movflags", "+faststart", out)
+
+
 def normalize(src, out):
     """هر برخه: 1080p/30fps، او غږ دقیق د ویډیو هومره اوږد (چې غږ او انځور سره برابر پاتې شي)."""
     vd = float(subprocess.run(["ffprobe", "-v", "error", "-select_streams", "v:0", "-show_entries",
@@ -606,7 +787,10 @@ def render():
     say(st, "🎬 ویډیو جوړېږي…")
     parts, chapters, t = [], [], 0.0
     full_parts = None
-    if cur.get("full"):
+    auto = bool(cur.get("auto"))
+    if auto:
+        segs = list(enumerate(cur["segs"], 1))
+    elif cur.get("full"):
         src = tg_download(cur["full"]["file_id"], f"{WORK}/full_src")
         ff("-i", src, "-vn", "-ar", "48000", "-ac", "2", f"{WORK}/full.wav")
         full_parts = split_full(f"{WORK}/full.wav", [sg["script"] for sg in cur["segs"]], WORK)
@@ -627,7 +811,20 @@ def render():
     parts.append(f"{WORK}/p0.mp4")
     chapters.append(("00:00", "پیل"))
     # ۲) هر خبر
+    intro_len = t
     for i, sg in segs:
+        if auto:
+            if tr_part and len(parts) > 1:
+                parts.append(tr_part)
+                t += vdur(tr_part)
+            chapters.append((ts(t), sg["title"]))
+            if not sg.get("summary"):
+                sg["summary"] = re.sub(r"^.*?لومړی خبر:\s*", "", sg.get("script", ""))
+                sg["summary"] = re.sub(r"\s*دا وو د نن خبرونه.*$", "", sg["summary"])
+            t += text_segment(i, sg, photos.get(i), f"{WORK}/p{i}.mp4")
+            parts.append(f"{WORK}/p{i}.mp4")
+            print("text segment", i, "ok")
+            continue
         if full_parts:
             wav = full_parts[i - 1]
         else:
@@ -645,7 +842,11 @@ def render():
     t += normalize(os.path.join(HERE, "assets", "outro.mp4"), f"{WORK}/pz.mp4")
     parts.append(f"{WORK}/pz.mp4")
     final = f"{WORK}/bisram_{cur['id']}.mp4"
-    assemble(parts, final)
+    if auto:
+        assemble(parts, f"{WORK}/nomusic.mp4")
+        add_music(f"{WORK}/nomusic.mp4", final, intro_len)
+    else:
+        assemble(parts, final)
     thumb = thumbnail(cur, first_photo, f"{WORK}/thumb.jpg")
 
     # ۴) سرلیک، Description، Tags، Hashtags
@@ -701,14 +902,25 @@ def render():
                files={"video": f})
     else:
         small = f"{WORK}/small.mp4"
-        ff("-i", final, "-vf", "scale=854:480", "-c:v", "libx264", "-preset", "veryfast", "-crf", "30",
-           "-c:a", "aac", "-b:a", "96k", small)
+        ff("-i", final, "-vf", "scale=1280:720", "-c:v", "libx264", "-preset", "veryfast", "-crf", "28",
+           "-c:a", "aac", "-b:a", "128k", small)
         if os.path.getsize(small) < 49 * 1024 * 1024:
             with open(small, "rb") as f:
                 tg("sendVideo", chat_id=st["owner"], caption="(کوچنۍ نسخه) " + title[:900],
                    supports_streaming="true", files={"video": f})
-    # په چینل کې خبر
-    if link:
+    # په چینل کې خبر: که کوچنۍ وي، پخپله ویډیو؛ که نه، انځور او لینک
+    cap = (f"🎬 <b>د بصرام ټي وي {cur['label']} خبرونه</b> — {ps_date()}\n\n"
+           + "\n".join(f"🔹 {sg['title']}" for _, sg in segs)
+           + (f"\n\n▶️ یوټیوب: {link}" if link else "") + "\n\n📢 @bisramtv")[:1000]
+    vid_file = final if os.path.getsize(final) < 49 * 1024 * 1024 else f"{WORK}/small.mp4"
+    sent = False
+    if os.path.exists(vid_file) and os.path.getsize(vid_file) < 49 * 1024 * 1024:
+        with open(vid_file, "rb") as f, open(thumb, "rb") as th:
+            r = tg("sendVideo", chat_id=bot.CHANNEL, caption=cap, parse_mode="HTML", supports_streaming="true",
+                   files={"video": f, "thumbnail": th})
+        sent = r.get("ok")
+        print("channel video:", sent, r.get("description"))
+    if not sent and link:
         with open(thumb, "rb") as f:
             tg("sendPhoto", chat_id=bot.CHANNEL, caption=f"🎬 <b>{cur['label']} ویډیويي خبرونه</b> — {ps_date()}\n\n"
                f"▶️ {link}\n\n📢 @bisramtv", parse_mode="HTML", files={"photo": f})
