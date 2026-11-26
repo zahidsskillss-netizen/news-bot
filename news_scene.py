@@ -124,23 +124,21 @@ def tag_img(text, size, bg, fg, w, h, font=HEAD):
 
 
 def text_lines_img(lines, title):
-    """دوه کرښې متن (هره کلمه جلا، چې یو یو ښکاره شي): [(word_img, x, y)] د BOX په نسبت."""
+    """هره کرښه یو انځور (numpy RGBA) — د توري په توري ښکاره کېدو لپاره: [(arr, x, y)] د BOX په نسبت."""
     font = F(HEAD if title else TEXT, TXT_SIZE + (4 if title else 0))
     col = NAVY2 if title else (12, 18, 36)
     out = []
     cys = [42, 108] if len(lines) == 2 else [75]
-    for li, (ln, cy) in enumerate(zip(lines, cys)):
-        words = ln.split()
-        x = TXT_RIGHT - BOX[0]
-        sp = tw(" ", font)
-        for w in words:                       # ښي نه کیڼ ته
-            ww = tw(w, font)
-            im = Image.new("RGBA", (ww + 20, 90), (0, 0, 0, 0))
-            ImageDraw.Draw(im).text((ww + 10, 45), w, font=font, fill=col, anchor="rm",
-                                    direction="rtl", language="ps")
-            out.append((im, x - ww - 10, cy - 45, li))
-            x -= ww + sp
+    for ln, cy in zip(lines, cys):
+        ww = tw(ln, font) + 30
+        im = Image.new("RGBA", (ww, 96), (0, 0, 0, 0))
+        ImageDraw.Draw(im).text((ww - 10, 48), ln, font=font, fill=col, anchor="rm", direction="rtl", language="ps")
+        out.append((np.array(im), TXT_RIGHT - BOX[0] - ww + 10, cy - 48, len(ln)))
     return out
+
+
+CHAR_T = 0.055        # د هر توري وخت (ثانیې)
+FEATHER = 70          # د ښکاره کېدو نرمه څنډه (پکسل)
 
 
 def paginate(text, title=False):
@@ -195,10 +193,10 @@ class Scene:
         self.t0 = 1.1
         self.times = []
         t = self.t0
-        for k, words in enumerate(self.page_words):
-            n = len(words)
-            reveal = n * 0.30
-            hold = n * 0.22 + (1.6 if k == 0 else 1.0)
+        for k, lines in enumerate(self.page_words):
+            chars = sum(c for *_, c in lines)
+            reveal = chars * CHAR_T + 0.2 * (len(lines) - 1)
+            hold = chars * 0.035 + (1.6 if k == 0 else 1.0)
             self.times.append((t, t + reveal, t + reveal + hold))
             t += reveal + hold
         self.D = round(t + 0.4, 2)
@@ -333,24 +331,28 @@ class Scene:
         if k is None:
             return
         a, r, e = self.times[k]
-        words = self.page_words[k]
-        n = len(words)
-        out_p = 0.0 if k == len(self.times) - 1 else max(0.0, (t - (e - 0.25)) / 0.25)
-        for wi, (im, x, y, li) in enumerate(words):
-            st = a + (r - a) * wi / max(1, n)
-            p = ease((t - st) / 0.22)
-            if p <= 0:
+        lines = self.page_words[k]
+        out_p = 0.0 if k == len(self.times) - 1 else max(0.0, (t - (e - 0.3)) / 0.3)
+        st = a
+        for arr, x, y, chars in lines:
+            dur = chars * CHAR_T
+            q = (t - st) / dur if dur else 1.0
+            st += dur + 0.2
+            if q <= 0:
                 continue
-            al = p * (1 - out_p)
-            if al <= 0:
+            q = min(1.0, q)
+            h, w = arr.shape[:2]
+            # له ښي نه کیڼ ته نرمه پرده (توري په توري)
+            edge = w - q * (w + FEATHER) if q < 1 else -FEATHER
+            ramp = np.clip((np.arange(w) - edge) / FEATHER, 0, 1)
+            al = arr[..., 3].astype(np.float32) * ramp[None, :] * (1 - out_p)
+            if al.max() <= 0:
                 continue
-            w = im.copy()
-            if al < 1:
-                arr = np.array(w)
-                arr[..., 3] = (arr[..., 3] * al).astype(np.uint8)
-                w = Image.fromarray(arr, "RGBA")
-            dy = int(18 * (1 - p)) - int(20 * out_p)
-            f.alpha_composite(w, (BOX[0] + x, BOX[1] + y + dy))
+            img = arr.copy()
+            img[..., 3] = al.astype(np.uint8)
+            rise = ease(min(1.0, (t - (st - dur - 0.2)) / 0.45))
+            dy = int(14 * (1 - rise)) - int(22 * out_p)
+            f.alpha_composite(Image.fromarray(img, "RGBA"), (BOX[0] + x, BOX[1] + y + dy))
 
 
 def render(sg, photo, out, fps=30):

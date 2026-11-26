@@ -690,9 +690,9 @@ def add_music(video, out, intro_len):
         m.write_wav(mus, m.pad(total + 1, 110) * 0.6)
     ms = int(intro_len * 1000)
     ff("-i", video, "-stream_loop", "-1", "-i", mus, "-filter_complex",
-       f"[1:a]aresample=48000,volume=0.55,afade=t=in:st=0:d=1.2,adelay={ms}|{ms},"
-       f"atrim=0:{total},afade=t=out:st={max(0, total - 2.5)}:d=2.5[mu];"
-       f"[0:a][mu]amix=inputs=2:duration=first:normalize=0[a]",
+       f"[1:a]aresample=48000,afade=t=in:st=0:d=1.2,adelay={ms}:all=1,loudnorm=I=-19:TP=-2:LRA=9,"
+       f"aresample=48000,atrim=0:{total},afade=t=out:st={max(0, total - 2.5)}:d=2.5[mu];"
+       f"[0:a][mu]amix=inputs=2:duration=first:normalize=0,alimiter=limit=0.89[a]",
        "-map", "0:v", "-map", "[a]", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-ar", "48000",
        "-movflags", "+faststart", out)
 
