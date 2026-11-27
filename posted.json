@@ -572,9 +572,10 @@
 "https://www.bbc.com/pashto/articles/cmy0e8dw42g6o?at_medium=RSS&at_campaign=rss",
 "https://www.bbc.com/pashto/articles/ck7v27v77e92o?at_medium=RSS&at_campaign=rss",
 "https://www.bbc.com/pashto/articles/cje395pq37kyo?at_medium=RSS&at_campaign=rss",
-"https://www.bbc.com/pashto/articles/cjkgklpgg150o?at_medium=RSS&at_campaign=rss"
+"https://www.bbc.com/pashto/articles/cjkgklpgg150o?at_medium=RSS&at_campaign=rss",
+"https://www.bbc.com/pashto/articles/cmewvyqzq2gro?at_medium=RSS&at_campaign=rss"
 ],
-"last_run": "2026-11-27T14:23:40.335327+00:00",
+"last_run": "2026-11-27T14:28:41.668234+00:00",
 "titles": [
 [
 "اندېښ",
@@ -1783,6 +1784,25 @@
 "ټلویزیوني",
 "ځوان",
 "۱۰"
+],
+[
+"بدخشان",
+"داړلي",
+"دي",
+"واورین",
+"پړانګ",
+"څاروي",
+"یوه",
+"۲۲"
+],
+[
+"بدخشان",
+"واورین",
+"وژلي",
+"پړانګ",
+"څاروي",
+"یوه",
+"۲۲"
 ]
 ],
 "log": [
@@ -2220,10 +2240,34 @@
 "source": "بي بي سي پښتو",
 "cat": "نور",
 "link": "https://www.bbc.com/pashto/articles/cjkgklpgg150o?at_medium=RSS&at_campaign=rss"
+},
+{
+"t": "2026-11-27T14:28:41.665906+00:00",
+"title": "په بدخشان کې یوه واورین پړانګ ۲۲ څاروي وژلي",
+"summary": "د بدخشان د کرنې ریاست خبر ورکړی چې د واخان ولسوالۍ په یوه کلي کې یوه واورین پړانګ پر څارویو برید کړی دی. په دغه پېښه کې یاد وحشي ځناور دوه‌ویشت پسونه او وزې داړلي او له منځه وړي دي.",
+"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/6493/live/102a7850-ea2e-11f1-99b6-a35a62fa4264.jpg",
+"imgs": [
+"https://ichef.bbci.co.uk/news/1200/branded_pashto/6493/live/102a7850-ea2e-11f1-99b6-a35a62fa4264.jpg",
+"https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/6493/live/102a7850-ea2e-11f1-99b6-a35a62fa4264.jpg.webp",
+"https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/bdcc/live/6f7d2130-ea2f-11f1-a094-5fdc692f3e33.png.webp",
+"https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/1891/live/dc397f80-e77d-11f1-823e-6f2dbf55c7cd.jpg.webp",
+"https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/637c/live/9471afb0-ea39-11f1-99a1-253766e7ad8b.jpg.webp"
+],
+"source": "بي بي سي پښتو",
+"cat": "ټولنه",
+"link": "https://www.bbc.com/pashto/articles/cmewvyqzq2gro?at_medium=RSS&at_campaign=rss"
 }
 ],
 "first_seen": {
 "https://www.bbc.com/pashto/articles/cmewvyqzq2gro?at_medium=RSS&at_campaign=rss": 1795789420.3352199
 },
-"last_post_ts": 1795788238.0839996
+"last_post_ts": 1795789721.6658547,
+"fb_queue": [
+{
+"title": "په بدخشان کې یوه واورین پړانګ ۲۲ څاروي وژلي",
+"summary": "د بدخشان د کرنې ریاست خبر ورکړی چې د واخان ولسوالۍ په یوه کلي کې یوه واورین پړانګ پر څارویو برید کړی دی. په دغه پېښه کې یاد وحشي ځناور دوه‌ویشت پسونه او وزې داړلي او له منځه وړي دي.",
+"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/6493/live/102a7850-ea2e-11f1-99b6-a35a62fa4264.jpg",
+"source": "بي بي سي پښتو"
+}
+]
 }
