@@ -572,7 +572,7 @@
 "https://www.bbc.com/pashto/articles/cmy0e8dw42g6o?at_medium=RSS&at_campaign=rss",
 "https://www.bbc.com/pashto/articles/ck7v27v77e92o?at_medium=RSS&at_campaign=rss"
 ],
-"last_run": "2026-11-27T10:56:44.299805+00:00",
+"last_run": "2026-11-27T11:00:46.486567+00:00",
 "titles": [
 [
 "اندېښ",
@@ -2141,16 +2141,6 @@
 "link": "https://www.bbc.com/pashto/articles/ck7v27v77e92o?at_medium=RSS&at_campaign=rss"
 }
 ],
-"first_seen": {
-"https://www.bbc.com/pashto/articles/ck7v27v77e92o?at_medium=RSS&at_campaign=rss": 1795776987.9107604
-},
-"last_post_ts": 1795777004.2985907,
-"fb_queue": [
-{
-"title": "د بن ناستې ۲۵مه کالیزه او د پښتون مشر ټاکنه",
-"summary": "د بن ناستې پنځه ویشتمې کالیزې په مناسبت، اخضر ابراهیمي ویلي چې په دغه غونډه کې پر یوه پښتون مشر د ګډونوالو اجماع شوې وه. په دې ناسته کې د افغانستان د راتلونکي نظام د جوړولو لپاره د څلورو افغان ډلو استازو په جرمني کې خبرې کړې وې.",
-"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/1891/live/dc397f80-e77d-11f1-823e-6f2dbf55c7cd.jpg",
-"source": "بي بي سي پښتو"
-}
-]
+"first_seen": {},
+"last_post_ts": 1795777004.2985907
 }
