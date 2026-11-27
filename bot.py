@@ -428,7 +428,10 @@ def main():
             r = requests.get(url, headers=UA, timeout=30)
             r.raise_for_status()
             feed = feedparser.parse(r.content)
-            print(f"✅ {name}: {len(feed.entries)} خبرونه")
+            newest = max((entry_time(x) for x in feed.entries), default=0)
+            fresh_n = sum(1 for x in feed.entries if (x.get("link") or x.get("id")) not in seen)
+            print(f"✅ {name}: {len(feed.entries)} خبرونه، نوي: {fresh_n}، تر ټولو نوی: "
+                  f"{datetime.fromtimestamp(newest, timezone.utc):%m-%d %H:%M} UTC")
         except Exception as e:
             print(f"⚠️ {name} راونه رسېد: {e}")
             continue
