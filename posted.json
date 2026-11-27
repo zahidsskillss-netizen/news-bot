@@ -576,7 +576,7 @@
 "https://www.bbc.com/pashto/articles/cmewvyqzq2gro?at_medium=RSS&at_campaign=rss",
 "https://www.bbc.com/pashto/articles/c65y1kz9n8jgo?at_medium=RSS&at_campaign=rss"
 ],
-"last_run": "2026-11-27T16:10:27.238289+00:00",
+"last_run": "2026-11-27T16:14:20.942662+00:00",
 "titles": [
 [
 "اندېښ",
@@ -2295,16 +2295,6 @@
 "link": "https://www.bbc.com/pashto/articles/c65y1kz9n8jgo?at_medium=RSS&at_campaign=rss"
 }
 ],
-"first_seen": {
-"https://www.bbc.com/pashto/articles/c65y1kz9n8jgo?at_medium=RSS&at_campaign=rss": 1795795756.2588596
-},
-"last_post_ts": 1795795827.2370796,
-"fb_queue": [
-{
-"title": "د یمني کډوال ژوند په ریاض کې",
-"summary": "ابو خلیل د یمن له جګړې څخه د تښتېدو وروسته د سعودي عرب پلازمېنې ریاض ته ځان رسولی او هلته په کوڅو کې جرابې پلوري. نوموړی وايي چې د یمن په جګړه کې ډېرې کورنۍ د خپلو ماشومانو د لومړنیو اړتیاوو پوره کولو توان نه لري.",
-"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/803e/live/90a4b840-ea30-11f1-a094-5fdc692f3e33.png",
-"source": "بي بي سي پښتو"
-}
-]
+"first_seen": {},
+"last_post_ts": 1795795827.2370796
 }
