@@ -29,10 +29,11 @@
    }
   ],
   "voices": {},
-  "status": "rendering",
+  "status": "done",
   "redo": null,
   "auto": true,
-  "render_started": 1795744322.4213638
+  "render_started": 1795744322.4213638,
+  "video": "https://youtu.be/jVcAiLWJYKU"
  },
  "done": [
   "2026-11-24-evening",
