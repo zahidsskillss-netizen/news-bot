@@ -574,7 +574,7 @@
 "https://www.bbc.com/pashto/articles/cje395pq37kyo?at_medium=RSS&at_campaign=rss",
 "https://www.bbc.com/pashto/articles/cjkgklpgg150o?at_medium=RSS&at_campaign=rss"
 ],
-"last_run": "2026-11-27T14:03:58.085643+00:00",
+"last_run": "2026-11-27T14:08:00.807747+00:00",
 "titles": [
 [
 "اندېښ",
@@ -2222,16 +2222,6 @@
 "link": "https://www.bbc.com/pashto/articles/cjkgklpgg150o?at_medium=RSS&at_campaign=rss"
 }
 ],
-"first_seen": {
-"https://www.bbc.com/pashto/articles/cjkgklpgg150o?at_medium=RSS&at_campaign=rss": 1795788215.2505093
-},
-"last_post_ts": 1795788238.0839996,
-"fb_queue": [
-{
-"title": "د هند په ټلویزیوني خپرونه کې یو افلاس ځوان ۱۰ میلیونه روپۍ وګټلې",
-"summary": "د هند د مهاراشټر ایالت ۲۸ کلن اوسېدونکي بوشن ټاکرې، چې د یوې غریبې کورنۍ غړی دی، د امیتاب بچن په مشهوره ټلویزیوني خپرونه کې لس میلیونه انعام وګاټه. د نوموړي پلار مزدوري کوي او مور یې په سختو ناروغیو اخته ده.",
-"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/fafe/live/44d5cba0-ea19-11f1-99b6-a35a62fa4264.png",
-"source": "بي بي سي پښتو"
-}
-]
+"first_seen": {},
+"last_post_ts": 1795788238.0839996
 }
