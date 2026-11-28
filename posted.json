@@ -575,9 +575,10 @@
 "https://www.bbc.com/pashto/articles/cjkgklpgg150o?at_medium=RSS&at_campaign=rss",
 "https://www.bbc.com/pashto/articles/cmewvyqzq2gro?at_medium=RSS&at_campaign=rss",
 "https://www.bbc.com/pashto/articles/c65y1kz9n8jgo?at_medium=RSS&at_campaign=rss",
-"https://www.bbc.com/pashto/articles/c81dvq3y1pxzo?at_medium=RSS&at_campaign=rss"
+"https://www.bbc.com/pashto/articles/c81dvq3y1pxzo?at_medium=RSS&at_campaign=rss",
+"https://www.bbc.com/pashto/articles/cx1l08vmq4zno?at_medium=RSS&at_campaign=rss"
 ],
-"last_run": "2026-11-28T07:37:31.333579+00:00",
+"last_run": "2026-11-28T07:41:35.705038+00:00",
 "titles": [
 [
 "اندېښ",
@@ -1846,6 +1847,27 @@
 "مشر",
 "ووت",
 "ژوندی"
+],
+[
+"افغانستان",
+"دی",
+"سیمو",
+"لوړ",
+"لوږې",
+"ملتونه",
+"ملګري",
+"ډېر",
+"ګواښ"
+],
+[
+"افغانستان",
+"جدي",
+"دی",
+"لوږې",
+"مخ",
+"ملتونه",
+"ملګري",
+"ګواښ"
 ]
 ],
 "log": [
@@ -2331,8 +2353,34 @@
 "source": "بي بي سي پښتو",
 "cat": "نړۍ",
 "link": "https://www.bbc.com/pashto/articles/c81dvq3y1pxzo?at_medium=RSS&at_campaign=rss"
+},
+{
+"t": "2026-11-28T07:41:35.703082+00:00",
+"title": "ملګري ملتونه: افغانستان د لوږې له جدي ګواښ سره مخ دی",
+"summary": "ملګرو ملتونو په خپل تازه راپور کې خبرداری ورکړی چې افغانستان د هغو هېوادونو په ډله کې دی چې په راتلونکو شپږو میاشتو کې به پکې د لوږې کچه په خطرناکه توګه لوړه شي. د دغه سازمان په خبره، د افریقايي هېوادونو ترڅنګ افغانستان، فلسطین او هایټي د لوږې له خورا لوړ او جدي ګواښ سره مخ دي.",
+"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/ef8d/live/74a59f00-eafe-11f1-a094-5fdc692f3e33.jpg",
+"imgs": [
+"https://ichef.bbci.co.uk/news/1200/branded_pashto/ef8d/live/74a59f00-eafe-11f1-a094-5fdc692f3e33.jpg",
+"https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/0119/live/7c7a5220-eafe-11f1-a094-5fdc692f3e33.jpg.webp",
+"https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/6493/live/102a7850-ea2e-11f1-99b6-a35a62fa4264.jpg.webp",
+"https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/fafe/live/44d5cba0-ea19-11f1-99b6-a35a62fa4264.png.webp",
+"https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/803e/live/90a4b840-ea30-11f1-a094-5fdc692f3e33.png.webp"
+],
+"source": "بي بي سي پښتو",
+"cat": "ټولنه",
+"link": "https://www.bbc.com/pashto/articles/cx1l08vmq4zno?at_medium=RSS&at_campaign=rss"
 }
 ],
-"first_seen": {},
-"last_post_ts": 1795848211.3365378
+"first_seen": {
+"https://www.bbc.com/pashto/articles/cx1l08vmq4zno?at_medium=RSS&at_campaign=rss": 1795851683.068788
+},
+"last_post_ts": 1795851695.7030396,
+"fb_queue": [
+{
+"title": "ملګري ملتونه: افغانستان د لوږې له جدي ګواښ سره مخ دی",
+"summary": "ملګرو ملتونو په خپل تازه راپور کې خبرداری ورکړی چې افغانستان د هغو هېوادونو په ډله کې دی چې په راتلونکو شپږو میاشتو کې به پکې د لوږې کچه په خطرناکه توګه لوړه شي. د دغه سازمان په خبره، د افریقايي هېوادونو ترڅنګ افغانستان، فلسطین او هایټي د لوږې له خورا لوړ او جدي ګواښ سره مخ دي.",
+"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/ef8d/live/74a59f00-eafe-11f1-a094-5fdc692f3e33.jpg",
+"source": "بي بي سي پښتو"
+}
+]
 }
