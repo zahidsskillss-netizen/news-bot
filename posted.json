@@ -576,9 +576,10 @@
 "https://www.bbc.com/pashto/articles/cmewvyqzq2gro?at_medium=RSS&at_campaign=rss",
 "https://www.bbc.com/pashto/articles/c65y1kz9n8jgo?at_medium=RSS&at_campaign=rss",
 "https://www.bbc.com/pashto/articles/c81dvq3y1pxzo?at_medium=RSS&at_campaign=rss",
-"https://www.bbc.com/pashto/articles/cx1l08vmq4zno?at_medium=RSS&at_campaign=rss"
+"https://www.bbc.com/pashto/articles/cx1l08vmq4zno?at_medium=RSS&at_campaign=rss",
+"https://www.bbc.com/pashto/articles/c3vg204nvdgjo?at_medium=RSS&at_campaign=rss"
 ],
-"last_run": "2026-11-28T08:01:08.290526+00:00",
+"last_run": "2026-11-28T08:06:17.634149+00:00",
 "titles": [
 [
 "اندېښ",
@@ -1868,6 +1869,25 @@
 "ملتونه",
 "ملګري",
 "ګواښ"
+],
+[
+"اړولې",
+"ماشومانو",
+"مرګ",
+"چاودنې",
+"ژوبله",
+"ښوونځي",
+"کونړ",
+"یوه"
+],
+[
+"ماشومانو",
+"مرګ",
+"واړوله",
+"چاودنې",
+"ژوبله",
+"ښوونځي",
+"کونړ"
 ]
 ],
 "log": [
@@ -2369,8 +2389,34 @@
 "source": "بي بي سي پښتو",
 "cat": "ټولنه",
 "link": "https://www.bbc.com/pashto/articles/cx1l08vmq4zno?at_medium=RSS&at_campaign=rss"
+},
+{
+"t": "2026-11-28T08:06:17.631894+00:00",
+"title": "کونړ کې د ښوونځي چاودنې ماشومانو ته مرګ ژوبله واړوله",
+"summary": "د کونړ ولایت په مرکز اسداباد کې د اندرسیر سیمې پر یوه منځني ښوونځي چاودنه شوې ده. امنیتي سرچینې وايي چې پدې پېښه کې ماشومانو ته مرګ ژوبله اوښتې، خو د پېښې د دقیق لامل په اړه تر اوسه مالومات نه دي په ډک شوي.",
+"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/4809/live/c67de4b0-eb01-11f1-99a1-253766e7ad8b.jpg",
+"imgs": [
+"https://ichef.bbci.co.uk/news/1200/branded_pashto/4809/live/c67de4b0-eb01-11f1-99a1-253766e7ad8b.jpg",
+"https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/4809/live/c67de4b0-eb01-11f1-99a1-253766e7ad8b.jpg.webp",
+"https://ichef.bbci.co.uk/ace/ws/1024/galileo/p0pq8yhm.jpg.webp",
+"https://ichef.bbci.co.uk/ace/ws/1024/cpsprodpb/08c4/live/00bd9ac0-e9be-11f1-99b6-a35a62fa4264.jpg.webp",
+"https://ichef.bbci.co.uk/ace/ws/1024/cpsprodpb/9b05/live/2a241540-e9bb-11f1-99b6-a35a62fa4264.jpg.webp"
+],
+"source": "بي بي سي پښتو",
+"cat": "امنیت",
+"link": "https://www.bbc.com/pashto/articles/c3vg204nvdgjo?at_medium=RSS&at_campaign=rss"
 }
 ],
-"first_seen": {},
-"last_post_ts": 1795851695.7030396
+"first_seen": {
+"https://www.bbc.com/pashto/articles/c3vg204nvdgjo?at_medium=RSS&at_campaign=rss": 1795853102.1051657
+},
+"last_post_ts": 1795853177.6318598,
+"fb_queue": [
+{
+"title": "کونړ کې د ښوونځي چاودنې ماشومانو ته مرګ ژوبله واړوله",
+"summary": "د کونړ ولایت په مرکز اسداباد کې د اندرسیر سیمې پر یوه منځني ښوونځي چاودنه شوې ده. امنیتي سرچینې وايي چې پدې پېښه کې ماشومانو ته مرګ ژوبله اوښتې، خو د پېښې د دقیق لامل په اړه تر اوسه مالومات نه دي په ډک شوي.",
+"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/4809/live/c67de4b0-eb01-11f1-99a1-253766e7ad8b.jpg",
+"source": "بي بي سي پښتو"
+}
+]
 }
