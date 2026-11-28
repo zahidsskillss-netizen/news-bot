@@ -57,8 +57,10 @@
    }
   ],
   "voices": {},
-  "status": "waiting",
-  "redo": null
+  "status": "rendering",
+  "redo": null,
+  "auto": true,
+  "render_started": 1795832080.4622853
  },
  "done": [
   "2026-11-24-evening",
