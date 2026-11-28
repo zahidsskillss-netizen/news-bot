@@ -2,66 +2,79 @@
  "offset": 68976448,
  "owner": 440243088,
  "current": {
-  "id": "20261128-0601",
-  "slot": "morning",
-  "label": "سهارني",
-  "created": 1795829515.8942907,
+  "id": "20261128-1805",
+  "slot": "evening",
+  "label": "ماښامني",
+  "created": 1795872931.4511795,
   "segs": [
    {
-    "title": "د یمني کډوال ژوند په ریاض کې",
-    "summary": "ابو خلیل د یمن له جګړې څخه د تښتېدو وروسته د سعودي عرب پلازمېنې ریاض ته ځان رسولی او هلته په کوڅو کې جرابې پلوري. نوموړی وايي چې د یمن په جګړه کې ډېرې کورنۍ د خپلو ماشومانو د لومړنیو اړتیاوو پوره کولو توان نه لري.",
-    "script": "السلام علیکم! د بصرام ټي وي سهارني خبرونو ته ښه راغلاست. نن ۲۸ نومبر ۲۰۲۶ ده. لومړی خبر: د یمن جګړې ځپلی ابو خلیل، چې د خپل هېواد له ناورينه تښتېدلی، اوس د سعودي عرب په پلازمېنه ریاض کې په کوڅو کې جرابې پلوري. نوموړی وايي، په یمن کې ګڼې کورنۍ د خپلو ماشومانو د لومړنیو اړتیاوو د پوره کولو توان هم نه لري.",
-    "img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/803e/live/90a4b840-ea30-11f1-a094-5fdc692f3e33.png",
+    "title": "پاپ فرانسېس: شیطان مې لیدلی دی",
+    "summary": "د واتیکان پخواني پاپ فرانسېس په خپلو تازه خپرو شویو خاطرو کې ادعا کړې، چې د خپل ژوند په ترڅ کې یې درې ځله شیطان او د دوزخ دروازې لیدلې دي. نوموړي دا څرګندوونې په خپل نوي کتاب کې کړې، چې په دې وروستیو کې خپور شوی دی.",
+    "script": "السلام علیکم! د بصرام ټي وي ماښامني خبرونو ته ښه راغلاست. نن ۲۸ نومبر ۲۰۲۶ ده. لومړی خبر: د واتیکان پخواني پاپ فرانسېس په خپلو تازه خپرو شویو خاطرو کې ادعا کړې، چې د ژوند په ترڅ کې یې درې ځله شیطان او د دوزخ دروازې لیدلې دي. نوموړي دا څرګندونې په خپل نوي کتاب کې کړې، چې په دې وروستیو کې خپور شوی دی.",
+    "img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/9d20/live/919fa380-e842-11f1-a094-5fdc692f3e33.jpg",
     "imgs": [
-     "https://ichef.bbci.co.uk/news/1200/branded_pashto/803e/live/90a4b840-ea30-11f1-a094-5fdc692f3e33.png",
-     "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/803e/live/90a4b840-ea30-11f1-a094-5fdc692f3e33.png.webp",
-     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/1891/live/dc397f80-e77d-11f1-823e-6f2dbf55c7cd.jpg.webp",
-     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/fafe/live/44d5cba0-ea19-11f1-99b6-a35a62fa4264.png.webp",
-     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/b58d/live/2ad80ce0-cc78-11f1-bc2e-018d645d8d21.jpg.webp"
+     "https://ichef.bbci.co.uk/news/1200/branded_pashto/9d20/live/919fa380-e842-11f1-a094-5fdc692f3e33.jpg",
+     "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/9d20/live/919fa380-e842-11f1-a094-5fdc692f3e33.jpg.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/a43b/live/95519b70-eb15-11f1-90b9-a9d17de9c0bd.jpg.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/1e00/live/47827700-eac7-11f1-99a1-253766e7ad8b.jpg.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/6493/live/102a7850-ea2e-11f1-99b6-a35a62fa4264.jpg.webp"
     ],
-    "link": "https://www.bbc.com/pashto/articles/c65y1kz9n8jgo?at_medium=RSS&at_campaign=rss",
+    "link": "https://www.bbc.com/pashto/articles/c5zjrvdxv1p4o?at_medium=RSS&at_campaign=rss",
     "source": "بي بي سي پښتو",
     "cat": "نړۍ"
    },
    {
-    "title": "په بدخشان کې یوه واورین پړانګ ۲۲ څاروي وژلي",
-    "summary": "د بدخشان د کرنې ریاست خبر ورکړی چې د واخان ولسوالۍ په یوه کلي کې یوه واورین پړانګ پر څارویو برید کړی دی. په دغه پېښه کې یاد وحشي ځناور دوه‌ویشت پسونه او وزې داړلي او له منځه وړي دي.",
-    "script": "د بدخشان د کرنې ریاست وايي، چې د دغه ولایت په واخان ولسوالۍ کې یوه واورین پړانګ پر څارویو برید کړی دی. په دغه برید کې یاد وحشي ځناور دوه‌ویشت پسونه او وزې داړلي او له منځه وړي دي.",
-    "img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/6493/live/102a7850-ea2e-11f1-99b6-a35a62fa4264.jpg",
+    "title": "کونړ کې د ښوونځي چاودنې ماشومانو ته مرګ ژوبله واړوله",
+    "summary": "د کونړ ولایت په مرکز اسداباد کې د اندرسیر سیمې پر یوه منځني ښوونځي چاودنه شوې ده. امنیتي سرچینې وايي چې پدې پېښه کې ماشومانو ته مرګ ژوبله اوښتې، خو د پېښې د دقیق لامل په اړه تر اوسه مالومات نه دي په ډک شوي.",
+    "script": "د کونړ په مرکز اسداباد کې د اندرسیر سیمې پر یوه منځني ښوونځي چاودنه شوې ده. امنیتي سرچینې وايي چې په دې پېښه کې ماشومانو ته مرګ ژوبله اوښتې ده. د چاودنې دقیق لامل تر اوسه نه دی په ډک شوی او په دې اړه پلټنې روانې دي.",
+    "img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/4809/live/c67de4b0-eb01-11f1-99a1-253766e7ad8b.jpg",
     "imgs": [
-     "https://ichef.bbci.co.uk/news/1200/branded_pashto/6493/live/102a7850-ea2e-11f1-99b6-a35a62fa4264.jpg",
-     "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/6493/live/102a7850-ea2e-11f1-99b6-a35a62fa4264.jpg.webp",
-     "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/bdcc/live/6f7d2130-ea2f-11f1-a094-5fdc692f3e33.png.webp",
-     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/1891/live/dc397f80-e77d-11f1-823e-6f2dbf55c7cd.jpg.webp",
-     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/637c/live/9471afb0-ea39-11f1-99a1-253766e7ad8b.jpg.webp"
+     "https://ichef.bbci.co.uk/news/1200/branded_pashto/4809/live/c67de4b0-eb01-11f1-99a1-253766e7ad8b.jpg",
+     "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/4809/live/c67de4b0-eb01-11f1-99a1-253766e7ad8b.jpg.webp",
+     "https://ichef.bbci.co.uk/ace/ws/1024/galileo/p0pq8yhm.jpg.webp",
+     "https://ichef.bbci.co.uk/ace/ws/1024/cpsprodpb/08c4/live/00bd9ac0-e9be-11f1-99b6-a35a62fa4264.jpg.webp",
+     "https://ichef.bbci.co.uk/ace/ws/1024/cpsprodpb/9b05/live/2a241540-e9bb-11f1-99b6-a35a62fa4264.jpg.webp"
     ],
-    "link": "https://www.bbc.com/pashto/articles/cmewvyqzq2gro?at_medium=RSS&at_campaign=rss",
+    "link": "https://www.bbc.com/pashto/articles/c3vg204nvdgjo?at_medium=RSS&at_campaign=rss",
+    "source": "بي بي سي پښتو",
+    "cat": "امنیت"
+   },
+   {
+    "title": "ملګري ملتونه: افغانستان د لوږې له جدي ګواښ سره مخ دی",
+    "summary": "ملګرو ملتونو په خپل تازه راپور کې خبرداری ورکړی چې افغانستان د هغو هېوادونو په ډله کې دی چې په راتلونکو شپږو میاشتو کې به پکې د لوږې کچه په خطرناکه توګه لوړه شي. د دغه سازمان په خبره، د افریقايي هېوادونو ترڅنګ افغانستان، فلسطین او هایټي د لوږې له خورا لوړ او جدي ګواښ سره مخ دي.",
+    "script": "ملګرو ملتونو په خپل تازه راپور کې خبرداری ورکړی، چې افغانستان د هغو هېوادونو په ډله کې دی چې په راتلونکو شپږو میاشتو کې به پکې د لوږې کچه په خطرناکه توګه لوړه شي. د دغه سازمان په خبره، د افریقايي هېوادونو ترڅنګ افغانستان، فلسطین او هایټي د لوږې له خورا لوړ او جدي ګواښ سره مخ دي.",
+    "img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/ef8d/live/74a59f00-eafe-11f1-a094-5fdc692f3e33.jpg",
+    "imgs": [
+     "https://ichef.bbci.co.uk/news/1200/branded_pashto/ef8d/live/74a59f00-eafe-11f1-a094-5fdc692f3e33.jpg",
+     "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/0119/live/7c7a5220-eafe-11f1-a094-5fdc692f3e33.jpg.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/6493/live/102a7850-ea2e-11f1-99b6-a35a62fa4264.jpg.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/fafe/live/44d5cba0-ea19-11f1-99b6-a35a62fa4264.png.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/803e/live/90a4b840-ea30-11f1-a094-5fdc692f3e33.png.webp"
+    ],
+    "link": "https://www.bbc.com/pashto/articles/cx1l08vmq4zno?at_medium=RSS&at_campaign=rss",
     "source": "بي بي سي پښتو",
     "cat": "ټولنه"
    },
    {
-    "title": "د هند په ټلویزیوني خپرونه کې یو افلاس ځوان ۱۰ میلیونه روپۍ وګټلې",
-    "summary": "د هند د مهاراشټر ایالت ۲۸ کلن اوسېدونکي بوشن ټاکرې، چې د یوې غریبې کورنۍ غړی دی، د امیتاب بچن په مشهوره ټلویزیوني خپرونه کې لس میلیونه انعام وګاټه. د نوموړي پلار مزدوري کوي او مور یې په سختو ناروغیو اخته ده.",
-    "script": "د هند په مهاراشټر ایالت کې یو ۲۸ کلن افلاس ځوان، بوشن ټاکرې، د امیتاب بچن په مشهوره ټلویزیوني خپرونه کې لس میلیونه انعام وګاټه. د نوموړي پلار مزدوري کوي او مور یې په سختو ناروغیو اخته ده. دا وو د نن خبرونه. له موږ سره د ملګرتیا مننه، د الله په امان.",
-    "img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/fafe/live/44d5cba0-ea19-11f1-99b6-a35a62fa4264.png",
+    "title": "د حماس د مشر زوی له صهیونیستي برید ژوندی ووت",
+    "summary": "د حماس غورځنګ چارواکو تایید کړې چې د دې ډلې د سیاسي مشر خلیل الحیه زوی عزالدین الحیه د جمعې په ورځ په یوه هوایی برید کې له مرګه ژوندی پاتې شوی دی. د یادې ډقې په وینا، په دې برید کې د عزالدین مېرمنې په ګډون یو شمېر کسان ټپیان شوي دي.",
+    "script": "د حماس غورځنګ چارواکو تایید کړې، چې د دې ډلې د سیاسي مشر خلیل الحیه زوی, عزالدین الحیه، د جمعې په ورځ په یوه هوايي برید کې له مرګه ژوندی پاتې شوی دی. د یادې ډلې په خبره، په دې برید کې د عزالدین د مېرمنې په ګډون یو شمېر کسان ټپیان شوي دي. دا وو د نن خبرونه. له موږ سره د ملګرتیا مننه، د الله په امان.",
+    "img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/1e00/live/47827700-eac7-11f1-99a1-253766e7ad8b.jpg",
     "imgs": [
-     "https://ichef.bbci.co.uk/news/1200/branded_pashto/fafe/live/44d5cba0-ea19-11f1-99b6-a35a62fa4264.png",
-     "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/fafe/live/44d5cba0-ea19-11f1-99b6-a35a62fa4264.png.webp",
-     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/1891/live/dc397f80-e77d-11f1-823e-6f2dbf55c7cd.jpg.webp",
-     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/637c/live/9471afb0-ea39-11f1-99a1-253766e7ad8b.jpg.webp",
-     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/3dfc/live/68cad6e0-e8e3-11f1-a3b9-79c60ec9ab33.jpg.webp"
+     "https://ichef.bbci.co.uk/news/1200/branded_pashto/1e00/live/47827700-eac7-11f1-99a1-253766e7ad8b.jpg",
+     "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/1e00/live/47827700-eac7-11f1-99a1-253766e7ad8b.jpg.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/6493/live/102a7850-ea2e-11f1-99b6-a35a62fa4264.jpg.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/803e/live/90a4b840-ea30-11f1-a094-5fdc692f3e33.png.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/1891/live/dc397f80-e77d-11f1-823e-6f2dbf55c7cd.jpg.webp"
     ],
-    "link": "https://www.bbc.com/pashto/articles/cjkgklpgg150o?at_medium=RSS&at_campaign=rss",
+    "link": "https://www.bbc.com/pashto/articles/c81dvq3y1pxzo?at_medium=RSS&at_campaign=rss",
     "source": "بي بي سي پښتو",
-    "cat": "نور"
+    "cat": "نړۍ"
    }
   ],
   "voices": {},
-  "status": "done",
-  "redo": null,
-  "auto": true,
-  "render_started": 1795832080.4622853,
-  "video": "https://youtu.be/7ZuF65nhJsE"
+  "status": "waiting",
+  "redo": null
  },
  "done": [
   "2026-11-24-evening",
@@ -73,7 +86,8 @@
   "2026-11-27-noon",
   "2026-11-27-evening",
   "2026-11-28-morning",
-  "2026-11-28-noon"
+  "2026-11-28-noon",
+  "2026-11-28-evening"
  ],
  "yt_device": null,
  "yt_channel": "Bisram Tv",
@@ -84,6 +98,10 @@
   "https://www.bbc.com/pashto/articles/ck7v27v77e92o?at_medium=RSS&at_campaign=rss",
   "https://www.bbc.com/pashto/articles/c65y1kz9n8jgo?at_medium=RSS&at_campaign=rss",
   "https://www.bbc.com/pashto/articles/cmewvyqzq2gro?at_medium=RSS&at_campaign=rss",
-  "https://www.bbc.com/pashto/articles/cjkgklpgg150o?at_medium=RSS&at_campaign=rss"
+  "https://www.bbc.com/pashto/articles/cjkgklpgg150o?at_medium=RSS&at_campaign=rss",
+  "https://www.bbc.com/pashto/articles/c5zjrvdxv1p4o?at_medium=RSS&at_campaign=rss",
+  "https://www.bbc.com/pashto/articles/c3vg204nvdgjo?at_medium=RSS&at_campaign=rss",
+  "https://www.bbc.com/pashto/articles/cx1l08vmq4zno?at_medium=RSS&at_campaign=rss",
+  "https://www.bbc.com/pashto/articles/c81dvq3y1pxzo?at_medium=RSS&at_campaign=rss"
  ]
 }
