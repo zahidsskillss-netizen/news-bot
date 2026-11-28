@@ -577,7 +577,7 @@
 "https://www.bbc.com/pashto/articles/c65y1kz9n8jgo?at_medium=RSS&at_campaign=rss",
 "https://www.bbc.com/pashto/articles/c81dvq3y1pxzo?at_medium=RSS&at_campaign=rss"
 ],
-"last_run": "2026-11-28T06:43:31.338398+00:00",
+"last_run": "2026-11-28T06:47:27.252702+00:00",
 "titles": [
 [
 "اندېښ",
@@ -2333,16 +2333,6 @@
 "link": "https://www.bbc.com/pashto/articles/c81dvq3y1pxzo?at_medium=RSS&at_campaign=rss"
 }
 ],
-"first_seen": {
-"https://www.bbc.com/pashto/articles/c81dvq3y1pxzo?at_medium=RSS&at_campaign=rss": 1795848191.177607
-},
-"last_post_ts": 1795848211.3365378,
-"fb_queue": [
-{
-"title": "د حماس د مشر زوی له صهیونیستي برید ژوندی ووت",
-"summary": "د حماس غورځنګ چارواکو تایید کړې چې د دې ډلې د سیاسي مشر خلیل الحیه زوی عزالدین الحیه د جمعې په ورځ په یوه هوایی برید کې له مرګه ژوندی پاتې شوی دی. د یادې ډقې په وینا، په دې برید کې د عزالدین مېرمنې په ګډون یو شمېر کسان ټپیان شوي دي.",
-"img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/1e00/live/47827700-eac7-11f1-99a1-253766e7ad8b.jpg",
-"source": "بي بي سي پښتو"
-}
-]
+"first_seen": {},
+"last_post_ts": 1795848211.3365378
 }
