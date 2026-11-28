@@ -2,50 +2,63 @@
  "offset": 68976448,
  "owner": 440243088,
  "current": {
-  "id": "20261127-1802",
-  "slot": "evening",
-  "label": "ماښامني",
-  "created": 1795786373.6723776,
+  "id": "20261128-0601",
+  "slot": "morning",
+  "label": "سهارني",
+  "created": 1795829515.8942907,
   "segs": [
    {
-    "title": "ترکیې د مکې ګډ دفاعي تړون تصویب کړ",
-    "summary": "د ترکیې ولسمشر رجب طیب اردوغان د سعودي عربستان، ترکیې او پاکستان ترمنځ د مکې ګډ دفاعي تړون په رسمي توګه منظور کړ. دا پرېکړه په اسلام اباد کې د یادو درېیو هېوادونو د تر سره کېدونکو غونډو په درشل کې شوې ده.",
-    "script": "السلام علیکم! د بصرام ټي وي ماښامني خبرونو ته ښه راغلاست. نن ۲۷ نومبر ۲۰۲۶ ده. لومړی خبر: ترکیې د سعودي عربستان، ترکیې او پاکستان ترمنځ د مکې ګډ دفاعي تړون په رسمي توګه تصویب کړ. د ترکیې ولسمشر رجب طیب اردوغان دغه تړون منظور کړی دی. دا پرېکړه په اسلام اباد کې د یادو درېیو هېوادونو د غونډو په درشل کې شوې ده.",
-    "img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/637c/live/9471afb0-ea39-11f1-99a1-253766e7ad8b.jpg",
+    "title": "د یمني کډوال ژوند په ریاض کې",
+    "summary": "ابو خلیل د یمن له جګړې څخه د تښتېدو وروسته د سعودي عرب پلازمېنې ریاض ته ځان رسولی او هلته په کوڅو کې جرابې پلوري. نوموړی وايي چې د یمن په جګړه کې ډېرې کورنۍ د خپلو ماشومانو د لومړنیو اړتیاوو پوره کولو توان نه لري.",
+    "script": "السلام علیکم! د بصرام ټي وي سهارني خبرونو ته ښه راغلاست. نن ۲۸ نومبر ۲۰۲۶ ده. لومړی خبر: د یمن جګړې ځپلی ابو خلیل، چې د خپل هېواد له ناورينه تښتېدلی، اوس د سعودي عرب په پلازمېنه ریاض کې په کوڅو کې جرابې پلوري. نوموړی وايي، په یمن کې ګڼې کورنۍ د خپلو ماشومانو د لومړنیو اړتیاوو د پوره کولو توان هم نه لري.",
+    "img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/803e/live/90a4b840-ea30-11f1-a094-5fdc692f3e33.png",
     "imgs": [
-     "https://ichef.bbci.co.uk/news/1200/branded_pashto/637c/live/9471afb0-ea39-11f1-99a1-253766e7ad8b.jpg",
-     "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/637c/live/9471afb0-ea39-11f1-99a1-253766e7ad8b.jpg.webp",
+     "https://ichef.bbci.co.uk/news/1200/branded_pashto/803e/live/90a4b840-ea30-11f1-a094-5fdc692f3e33.png",
+     "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/803e/live/90a4b840-ea30-11f1-a094-5fdc692f3e33.png.webp",
      "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/1891/live/dc397f80-e77d-11f1-823e-6f2dbf55c7cd.jpg.webp",
-     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/3dfc/live/68cad6e0-e8e3-11f1-a3b9-79c60ec9ab33.jpg.webp",
-     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/4ee1/live/ff4027f0-e90c-11f1-a094-5fdc692f3e33.png.webp"
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/fafe/live/44d5cba0-ea19-11f1-99b6-a35a62fa4264.png.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/b58d/live/2ad80ce0-cc78-11f1-bc2e-018d645d8d21.jpg.webp"
     ],
-    "link": "https://www.bbc.com/pashto/articles/cje395pq37kyo?at_medium=RSS&at_campaign=rss",
+    "link": "https://www.bbc.com/pashto/articles/c65y1kz9n8jgo?at_medium=RSS&at_campaign=rss",
     "source": "بي بي سي پښتو",
     "cat": "نړۍ"
    },
    {
-    "title": "د بن ناستې ۲۵مه کالیزه او د پښتون مشر ټاکنه",
-    "summary": "د بن ناستې پنځه ویشتمې کالیزې په مناسبت، اخضر ابراهیمي ویلي چې په دغه غونډه کې پر یوه پښتون مشر د ګډونوالو اجماع شوې وه. په دې ناسته کې د افغانستان د راتلونکي نظام د جوړولو لپاره د څلورو افغان ډلو استازو په جرمني کې خبرې کړې وې.",
-    "script": "د بن ناستې د پنځه ویشتمې کالیزې په مناسبت، اخضر ابراهیمي ویلي چې په دغه غونډه کې پر یوه پښتون مشر د ګډونوالو اجماع شوې وه. د یادونې وړ ده چې په دغه ناسته کې د افغانستان د راتلونکي نظام د جوړولو لپاره، د څلورو افغان ډلو استازو په جرمني کې خبرې کړې وې. دا وو د نن خبرونه. له موږ سره د ملګرتیا مننه، د الله په امان.",
-    "img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/1891/live/dc397f80-e77d-11f1-823e-6f2dbf55c7cd.jpg",
+    "title": "په بدخشان کې یوه واورین پړانګ ۲۲ څاروي وژلي",
+    "summary": "د بدخشان د کرنې ریاست خبر ورکړی چې د واخان ولسوالۍ په یوه کلي کې یوه واورین پړانګ پر څارویو برید کړی دی. په دغه پېښه کې یاد وحشي ځناور دوه‌ویشت پسونه او وزې داړلي او له منځه وړي دي.",
+    "script": "د بدخشان د کرنې ریاست وايي، چې د دغه ولایت په واخان ولسوالۍ کې یوه واورین پړانګ پر څارویو برید کړی دی. په دغه برید کې یاد وحشي ځناور دوه‌ویشت پسونه او وزې داړلي او له منځه وړي دي.",
+    "img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/6493/live/102a7850-ea2e-11f1-99b6-a35a62fa4264.jpg",
     "imgs": [
-     "https://ichef.bbci.co.uk/news/1200/branded_pashto/1891/live/dc397f80-e77d-11f1-823e-6f2dbf55c7cd.jpg",
-     "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/1891/live/dc397f80-e77d-11f1-823e-6f2dbf55c7cd.jpg.webp",
-     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/3dfc/live/68cad6e0-e8e3-11f1-a3b9-79c60ec9ab33.jpg.webp",
-     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/4ee1/live/ff4027f0-e90c-11f1-a094-5fdc692f3e33.png.webp",
-     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/894c/live/137df2e0-e99b-11f1-99a1-253766e7ad8b.jpg.webp"
+     "https://ichef.bbci.co.uk/news/1200/branded_pashto/6493/live/102a7850-ea2e-11f1-99b6-a35a62fa4264.jpg",
+     "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/6493/live/102a7850-ea2e-11f1-99b6-a35a62fa4264.jpg.webp",
+     "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/bdcc/live/6f7d2130-ea2f-11f1-a094-5fdc692f3e33.png.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/1891/live/dc397f80-e77d-11f1-823e-6f2dbf55c7cd.jpg.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/637c/live/9471afb0-ea39-11f1-99a1-253766e7ad8b.jpg.webp"
     ],
-    "link": "https://www.bbc.com/pashto/articles/ck7v27v77e92o?at_medium=RSS&at_campaign=rss",
+    "link": "https://www.bbc.com/pashto/articles/cmewvyqzq2gro?at_medium=RSS&at_campaign=rss",
     "source": "بي بي سي پښتو",
-    "cat": "سیاست"
+    "cat": "ټولنه"
+   },
+   {
+    "title": "د هند په ټلویزیوني خپرونه کې یو افلاس ځوان ۱۰ میلیونه روپۍ وګټلې",
+    "summary": "د هند د مهاراشټر ایالت ۲۸ کلن اوسېدونکي بوشن ټاکرې، چې د یوې غریبې کورنۍ غړی دی، د امیتاب بچن په مشهوره ټلویزیوني خپرونه کې لس میلیونه انعام وګاټه. د نوموړي پلار مزدوري کوي او مور یې په سختو ناروغیو اخته ده.",
+    "script": "د هند په مهاراشټر ایالت کې یو ۲۸ کلن افلاس ځوان، بوشن ټاکرې، د امیتاب بچن په مشهوره ټلویزیوني خپرونه کې لس میلیونه انعام وګاټه. د نوموړي پلار مزدوري کوي او مور یې په سختو ناروغیو اخته ده. دا وو د نن خبرونه. له موږ سره د ملګرتیا مننه، د الله په امان.",
+    "img": "https://ichef.bbci.co.uk/news/1200/branded_pashto/fafe/live/44d5cba0-ea19-11f1-99b6-a35a62fa4264.png",
+    "imgs": [
+     "https://ichef.bbci.co.uk/news/1200/branded_pashto/fafe/live/44d5cba0-ea19-11f1-99b6-a35a62fa4264.png",
+     "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/fafe/live/44d5cba0-ea19-11f1-99b6-a35a62fa4264.png.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/1891/live/dc397f80-e77d-11f1-823e-6f2dbf55c7cd.jpg.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/637c/live/9471afb0-ea39-11f1-99a1-253766e7ad8b.jpg.webp",
+     "https://ichef.bbci.co.uk/ace/ws/660/cpsprodpb/3dfc/live/68cad6e0-e8e3-11f1-a3b9-79c60ec9ab33.jpg.webp"
+    ],
+    "link": "https://www.bbc.com/pashto/articles/cjkgklpgg150o?at_medium=RSS&at_campaign=rss",
+    "source": "بي بي سي پښتو",
+    "cat": "نور"
    }
   ],
   "voices": {},
-  "status": "done",
-  "redo": null,
-  "auto": true,
-  "render_started": 1795789188.7157393,
-  "video": "https://youtu.be/LdgCdsQ4Cmc"
+  "status": "waiting",
+  "redo": null
  },
  "done": [
   "2026-11-24-evening",
@@ -55,7 +68,8 @@
   "2026-11-26-evening",
   "2026-11-27-morning",
   "2026-11-27-noon",
-  "2026-11-27-evening"
+  "2026-11-27-evening",
+  "2026-11-28-morning"
  ],
  "yt_device": null,
  "yt_channel": "Bisram Tv",
@@ -63,6 +77,9 @@
   "https://www.bbc.com/pashto/articles/cw8dveq00j7ro?at_medium=RSS&at_campaign=rss",
   "https://www.bbc.com/pashto/articles/c9gklrxeg00eo?at_medium=RSS&at_campaign=rss",
   "https://www.bbc.com/pashto/articles/cje395pq37kyo?at_medium=RSS&at_campaign=rss",
-  "https://www.bbc.com/pashto/articles/ck7v27v77e92o?at_medium=RSS&at_campaign=rss"
+  "https://www.bbc.com/pashto/articles/ck7v27v77e92o?at_medium=RSS&at_campaign=rss",
+  "https://www.bbc.com/pashto/articles/c65y1kz9n8jgo?at_medium=RSS&at_campaign=rss",
+  "https://www.bbc.com/pashto/articles/cmewvyqzq2gro?at_medium=RSS&at_campaign=rss",
+  "https://www.bbc.com/pashto/articles/cjkgklpgg150o?at_medium=RSS&at_campaign=rss"
  ]
 }
