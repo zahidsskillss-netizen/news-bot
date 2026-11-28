@@ -577,9 +577,10 @@
 "https://www.bbc.com/pashto/articles/c65y1kz9n8jgo?at_medium=RSS&at_campaign=rss",
 "https://www.bbc.com/pashto/articles/c81dvq3y1pxzo?at_medium=RSS&at_campaign=rss",
 "https://www.bbc.com/pashto/articles/cx1l08vmq4zno?at_medium=RSS&at_campaign=rss",
-"https://www.bbc.com/pashto/articles/c3vg204nvdgjo?at_medium=RSS&at_campaign=rss"
+"https://www.bbc.com/pashto/articles/c3vg204nvdgjo?at_medium=RSS&at_campaign=rss",
+"https://www.bbc.com/pashto/articles/cvglr1xng5z9o?at_medium=RSS&at_campaign=rss"
 ],
-"last_run": "2026-11-28T11:26:47.024415+00:00",
+"last_run": "2026-11-28T11:30:46.160922+00:00",
 "titles": [
 [
 "اندېښ",
@@ -2407,6 +2408,8 @@
 "link": "https://www.bbc.com/pashto/articles/c3vg204nvdgjo?at_medium=RSS&at_campaign=rss"
 }
 ],
-"first_seen": {},
+"first_seen": {
+"https://www.bbc.com/pashto/articles/cvglr1xng5z9o?at_medium=RSS&at_campaign=rss": 1795865437.517271
+},
 "last_post_ts": 1795853177.6318598
 }
